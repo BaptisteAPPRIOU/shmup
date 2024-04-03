@@ -1,2 +1,2 @@
 # shmup
-Projet Shoot'em pu
+Project Shoot'em up
