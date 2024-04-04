@@ -11,8 +11,8 @@ def main():
     max_lifeboats = 10
     max_sloops = 4
     max_ships = 2
-    vessels = {'lifeboats': [], 'sloops': [], 'ships': [], 'galion': None}                      # Create a dictionary to store all vessels
-    cooldown = 0                                                                                # Cooldown for spawning new vessels      
+    vessels = {'lifeboats': [], 'sloops': [], 'ships': [], 'galion': None}                                  # Create a dictionary to store all vessels
+    cooldown = 0                                                                                            # Cooldown for spawning new vessels      
 
     running = True
     while running:
@@ -26,17 +26,17 @@ def main():
         map_game.screen.fill((255, 255, 255))  
         map_game.draw()  
 
-        if cooldown <= 0:                                                                       # Check if cooldown is over       
-            if len(vessels['lifeboats']) < max_lifeboats:                                       # Check if number of lifeboats is less than the maximum   
-                if random.random() < 0.05:                                                      # Randomly spawn a lifeboat   
+        if cooldown <= 0:                                                                                   # Check if cooldown is over       
+            if len(vessels['lifeboats']) < max_lifeboats:                                                   # Check if number of lifeboats is less than the maximum   
+                if random.random() < 0.05:                                                                  # Randomly spawn a lifeboat   
                     new_lifeboat = Lifeboat(map_game.screen, hit_points=100, damage=10, speed=2, value=10)
-                    while new_lifeboat.check_overlap(vessels['lifeboats']):                     # Check if lifeboat overlaps with other lifeboats
+                    while new_lifeboat.check_overlap(vessels['lifeboats']):                                 # Check if lifeboat overlaps with other lifeboats
                         new_lifeboat.spawn()
                     vessels['lifeboats'].append(new_lifeboat)
                     cooldown = random.randint(10, 90)
                     print("Number of lifeboats:", len(vessels['lifeboats']))
 
-            if len(vessels['lifeboats']) >= max_lifeboats - max_sloops and len(vessels['sloops']) < max_sloops:
+            if len(vessels['lifeboats']) >= max_lifeboats - max_sloops and len(vessels['sloops']) < max_sloops:                 
                 if random.random() < 0.05:
                     new_sloop = Sloop(map_game.screen, hit_points=100, damage=10, speed=1.5, value=20)
                     while new_sloop.check_overlap(vessels['lifeboats'] + vessels['sloops']):
@@ -62,12 +62,12 @@ def main():
                     cooldown = random.randint(10, 90)
                     print("Galion spawned")
 
-        for vessel_type in vessels.values():
-            if isinstance(vessel_type, list):
-                for vessel in vessel_type:
+        for vessel_type in vessels.values():                                                                # Iterate through all vessels      
+            if isinstance(vessel_type, list):                                                               # Check if vessel is a list        
+                for vessel in vessel_type:                                                                  # Iterate through each vessel in the list     
                     vessel.move()
                     vessel.draw()
-            elif isinstance(vessel_type, Galion) and vessel_type is not None:
+            elif isinstance(vessel_type, Galion) and vessel_type is not None:                               # Check if vessel is a Galion and not None
                 vessel_type.move()
                 vessel_type.draw()
 
