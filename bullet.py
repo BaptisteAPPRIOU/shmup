@@ -3,8 +3,8 @@ import pygame
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((10, 20))
-        self.image.fill((255, 0, 0))
+        cannon_ball = pygame.image.load("images/cannon_ball.png")
+        self.image = cannon_ball
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
