@@ -1,8 +1,8 @@
-import enemy_creator
+from enemy import Enemy
 import pygame
 import random
 
-class Sloop(enemy_creator.Enemy):
+class Sloop(Enemy):
     def __init__(self, screen, hit_points, damage, speed, value):
         self.screen = screen
         self.speed = speed

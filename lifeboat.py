@@ -1,8 +1,8 @@
-import enemy_creator
+from enemy import Enemy
 import pygame
 import random
 
-class Lifeboat(enemy_creator.Enemy):
+class Lifeboat(Enemy):
     def __init__(self, screen, hit_points, damage, speed, value):
         self.screen = screen
         self.width = 30
