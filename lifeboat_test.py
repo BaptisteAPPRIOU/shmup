@@ -18,7 +18,8 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         for _ in range(max_attempts):
             self.rect.x = random.randint(80, 520 - self.rect.width)
             self.rect.y = random.randint(-1500, -300)
-            if not self.check_overlap(self.vessels) and not self.check_pre_spawn():
+            if (not self.check_overlap(self.vessels)) and (not self.check_pre_spawn()):
+                print("Lifeboat spawned at", self.rect.x, self.rect.y)
                 break
         else:
             print("Error: Could not spawn Lifeboat after", max_attempts, "attempts.")

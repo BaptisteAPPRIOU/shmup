@@ -1,6 +1,6 @@
 import pygame
 from lifeboat_test import Lifeboat
-from sloops_test import Sloop
+from sloop_test import Sloop
 
 class Main:
     def __init__(self):
@@ -10,9 +10,14 @@ class Main:
         self.beach = pygame.Rect(60, 550, 480, 90)
         self.vessels = pygame.sprite.Group()
 
+    def spawn_sloop(self,numb_sloops):
+        for _ in range(numb_sloops):
+            sloop = Sloop(self.screen, self.vessels, speed=3)
+            self.vessels.add(sloop)
+
     def run(self):
         for _ in range(10):
-            lifeboat = Lifeboat(self.screen, self.vessels, speed=4)
+            lifeboat = Lifeboat(self.screen, self.vessels, speed=3)
             self.vessels.add(lifeboat)
 
             sloop = Sloop(self.screen, self.vessels, speed=3)
@@ -33,7 +38,7 @@ class Main:
 
             for vessel in self.vessels:
                 vessel.move()
-                print(vessel.rect.y)
+                #print(vessel.rect.y)
                 self.screen.blit(vessel.image, vessel.rect)
 
             pygame.display.flip()
