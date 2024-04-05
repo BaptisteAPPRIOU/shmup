@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+from tutorial import Tutorial
 
 def main():
 
@@ -41,6 +42,7 @@ def main():
                 if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == button_play:
                         print("Play button clicked")
+                        Tutorial()
                     elif event.ui_element == button_leaderboard:
                         print("Leaderboard button clicked")
                     elif event.ui_element == button_quit:
