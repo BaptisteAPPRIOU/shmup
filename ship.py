@@ -1,32 +1,27 @@
 from enemy import Enemy
 import pygame
 import random
+import os
 
-class Ship(Enemy):
+class Ship(Enemy, pygame.sprite.Sprite):
+    speed = 0.75
+    width = 110
+    height = 150
 
-    def __init__(self, screen, hit_points, damage, speed, value):
+    def __init__(self, screen, vessels, speed, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((110, 150))
+        ship_image = pygame.image.load(os.path.join("images", "ship.png"))
+        self.image = ship_image
+        self.rect = self.image.get_rect()
         self.screen = screen
         self.speed = speed
-        self.width = 65
-        self.height = 100
-        self.spawn()
+        self.vessels = vessels
+        self.rect.x = x
+        self.rect.y = y
 
-    def spawn(self):
-        self.x = random.randint(80, 520 - self.width)
-        self.y = -self.height
-
-    def check_overlap(self, other_ships):
-        for ship in other_ships:
-            if pygame.Rect(self.x, self.y, self.width, self.height).colliderect(
-                pygame.Rect(ship.x, ship.y, ship.width, ship.height)):
-                return True
-        return False    
+    def move(self):
+        self.rect.y += self.speed
 
     def attack(self):
         pass
-
-    def move(self):
-        self.y += self.speed
-
-    def draw(self):
-        pygame.draw.rect(self.screen, "GREEN", (self.x, self.y, self.width, self.height))

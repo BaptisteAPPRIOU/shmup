@@ -1,31 +1,27 @@
 from enemy import Enemy
 import pygame
 import random
+import os
 
-class Sloop(Enemy):
-    def __init__(self, screen, hit_points, damage, speed, value):
+class Sloop(Enemy, pygame.sprite.Sprite):
+    speed = 1.5
+    width = 45
+    height = 65
+
+    def __init__(self, screen, vessels, speed, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((45, 65))
+        sloop_image = pygame.image.load(os.path.join("images", "sloop.png"))
+        self.image = sloop_image
+        self.rect = self.image.get_rect()
         self.screen = screen
         self.speed = speed
-        self.width = 45
-        self.height = 65
-        self.spawn()
+        self.vessels = vessels
+        self.rect.x = x
+        self.rect.y = y
 
-    def spawn(self):
-        self.x = random.randint(80, 520 - self.width)
-        self.y = -self.height
-
-    def check_overlap(self, other_sloops):
-        for sloop in other_sloops:
-            if pygame.Rect(self.x, self.y, self.width, self.height).colliderect(
-                pygame.Rect(sloop.x, sloop.y, sloop.width, sloop.height)):
-                return True
-        return False
+    def move(self):
+        self.rect.y += self.speed
 
     def attack(self):
         pass
-
-    def move(self):
-        self.y += self.speed
-
-    def draw(self):
-        pygame.draw.rect(self.screen, "BLUE", (self.x, self.y, self.width, self.height))
