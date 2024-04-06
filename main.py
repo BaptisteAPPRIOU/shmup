@@ -3,8 +3,10 @@ from lifeboat import Lifeboat
 from sloop import Sloop
 from enemy_wave import Wave
 from ship import Ship
+from pirate import Pirate
+from bullet import Bullet
 import time
-
+  
 class Main:
     def __init__(self):
         pygame.init()
@@ -13,6 +15,12 @@ class Main:
         self.beach = pygame.Rect(60, 550, 540, 350)
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.vessels = pygame.sprite.Group()
+
+        self.all_sprites = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
+        self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())   # Create player pirate instance and add it to sprite group
+        self.all_sprites.add(self.pirate)
+
 
     def run(self):                                                              # Main game loop
         waves = [                                                               # List of waves
@@ -34,6 +42,8 @@ class Main:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                    if event.key == pygame.K_SPACE:
+                        self.pirate.shoot()
 
             waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
@@ -41,6 +51,9 @@ class Main:
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "YELLOW", self.beach)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
+
+            self.all_sprites.update()                                           # Update all sprites
+            self.all_sprites.draw(self.screen)                                  # Draw all sprites
 
             for vessel in self.vessels:                                         # Move and draw all vessels
                 vessel.move()
