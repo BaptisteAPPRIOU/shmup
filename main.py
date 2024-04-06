@@ -1,80 +1,64 @@
 import pygame
-from map_game import mapGame
 from lifeboat import Lifeboat
 from sloop import Sloop
+from enemy_wave import Wave
 from ship import Ship
-from galion import Galion
-import random
+import time
 
-def main():
-    map_game = mapGame()
-    max_lifeboats = 10
-    max_sloops = 4
-    max_ships = 2
-    vessels = {'lifeboats': [], 'sloops': [], 'ships': [], 'galion': None}                                  # Create a dictionary to store all vessels
-    cooldown = 0                                                                                            # Cooldown for spawning new vessels      
+class Main:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((600, 900), pygame.NOFRAME)
+        self.statistics_bar = pygame.Rect(0, 0, 60, 900)
+        self.beach = pygame.Rect(60, 550, 540, 350)
+        self.wall = pygame.Rect(60, 800, 540, 10)
+        self.vessels = pygame.sprite.Group()
 
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+    def run(self):                                                              # Main game loop
+        waves = [                                                               # List of waves
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),                        
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
+            Wave(self.screen, self.vessels, [Lifeboat], [10], 5),
+            Wave(self.screen, self.vessels, [Lifeboat], [20], 5),
+            Wave(self.screen, self.vessels, [Sloop], [3], 5)
+        ]
+
+        clock = pygame.time.Clock()
+        running = True
+        current_wave = 0
+        while running:
+            dt = clock.tick(60) / 1000                                          # Convert milliseconds to seconds
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     running = False
-        
-        map_game.screen.fill((255, 255, 255))  
-        map_game.draw()  
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
 
-        if cooldown <= 0:                                                                                   # Check if cooldown is over       
-            if len(vessels['lifeboats']) < max_lifeboats:                                                   # Check if number of lifeboats is less than the maximum   
-                if random.random() < 0.05:                                                                  # Randomly spawn a lifeboat   
-                    new_lifeboat = Lifeboat(map_game.screen, hit_points=100, damage=10, speed=2, value=10)
-                    while new_lifeboat.check_overlap(vessels['lifeboats']):                                 # Check if lifeboat overlaps with other lifeboats
-                        new_lifeboat.spawn()
-                    vessels['lifeboats'].append(new_lifeboat)
-                    cooldown = random.randint(10, 90)
-                    print("Number of lifeboats:", len(vessels['lifeboats']))
+            waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
-            if len(vessels['lifeboats']) >= max_lifeboats - max_sloops and len(vessels['sloops']) < max_sloops:                 
-                if random.random() < 0.05:
-                    new_sloop = Sloop(map_game.screen, hit_points=100, damage=10, speed=1.5, value=20)
-                    while new_sloop.check_overlap(vessels['lifeboats'] + vessels['sloops']):
-                        new_sloop.spawn()
-                    vessels['sloops'].append(new_sloop)
-                    cooldown = random.randint(10, 90)
-                    print("Number of sloops:", len(vessels['sloops']))
+            self.screen.fill((255, 255, 255))
+            pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
+            pygame.draw.rect(self.screen, "YELLOW", self.beach)
+            pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            if len(vessels['sloops']) >= max_sloops - max_ships and len(vessels['ships']) < max_ships:
-                if random.random() < 0.05:
-                    new_ship = Ship(map_game.screen, hit_points=100, damage=10, speed=1, value=30)
-                    while new_ship.check_overlap(vessels['lifeboats'] + vessels['sloops'] + vessels['ships']):
-                        new_ship.spawn()
-                    vessels['ships'].append(new_ship)
-                    cooldown = random.randint(10, 90)
-                    print("Number of ships:", len(vessels['ships']))
+            for vessel in self.vessels:                                         # Move and draw all vessels
+                vessel.move()
+                self.screen.blit(vessel.image, vessel.rect)
 
-            if len(vessels['ships']) == max_ships and vessels['galion'] is None:
-                if random.random() < 0.05:
-                    galion = Galion(map_game.screen, hit_points=100, damage=10, speed=0.5, value=50)
-                    galion.spawn()
-                    vessels['galion'] = galion
-                    cooldown = random.randint(10, 90)
-                    print("Galion spawned")
+            pygame.display.flip()
+            pygame.time.Clock().tick(60)
 
-        for vessel_type in vessels.values():                                                                # Iterate through all vessels      
-            if isinstance(vessel_type, list):                                                               # Check if vessel is a list        
-                for vessel in vessel_type:                                                                  # Iterate through each vessel in the list     
-                    vessel.move()
-                    vessel.draw()
-            elif isinstance(vessel_type, Galion) and vessel_type is not None:                               # Check if vessel is a Galion and not None
-                vessel_type.move()
-                vessel_type.draw()
+            if all(count == 0 for count in waves[current_wave].counts):             # Check if all enemies in the current wave have been spawned
+                current_wave += 1
 
-        cooldown -= 1
-        map_game.update_display() 
-        
-    map_game.quit()
+            if current_wave == len(waves):                                          # Check if all waves have been spawned
+                if any(w.current_wave < len(w.enemy_types) for w in waves):         # Check if there are more waves to spawn
+                    current_wave -= 1
+                else:
+                    break
+
+        pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    Main().run()
