@@ -11,13 +11,14 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.speedy = -10
         self.vessels = vessels
+        self.mask = pygame.mask.from_surface(self.image)
         
     def update(self):
         self.rect.y += self.speedy
         if self.rect.bottom < 0:
             self.kill()
 
-        collisions = pygame.sprite.spritecollide(self, self.vessels, True)
+        collisions = pygame.sprite.spritecollide(self, self.vessels, True, pygame.sprite.collide_mask)
         if collisions:
             for collision in collisions:
                 collision.kill()

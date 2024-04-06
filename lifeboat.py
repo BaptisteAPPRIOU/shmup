@@ -11,7 +11,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
 
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
-        lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png"))
+        lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
         self.image = lifeboat_image
         self.rect = self.image.get_rect()
@@ -20,6 +20,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.vessels = vessels
         self.rect.x = x
         self.rect.y = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def move(self):
         self.rect.y += self.speed

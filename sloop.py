@@ -11,7 +11,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((45, 65))
-        sloop_image = pygame.image.load(os.path.join("images", "sloop.png"))
+        sloop_image = pygame.image.load(os.path.join("images", "sloop.png")).convert_alpha()
         self.image = sloop_image
         self.rect = self.image.get_rect()
         self.screen = screen
@@ -19,6 +19,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.vessels = vessels
         self.rect.x = x
         self.rect.y = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def move(self):
         self.rect.y += self.speed
