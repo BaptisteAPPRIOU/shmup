@@ -7,6 +7,7 @@ from pirate import Pirate
 from bullet import Bullet
 import time
 from explosion import Explosion
+from water import Water
   
 class Main:
     def __init__(self):
@@ -23,9 +24,11 @@ class Main:
             pygame.transform.scale(pygame.image.load("images/water2.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),
         ]
-        self.current_water_index = 0
-        self.water_timer = 0
-        self.water_delay = 300  # Delay in milliseconds between switching water images
+        self.water_sprites = pygame.sprite.Group()
+        for y in range(0, 540, 24):  # Use the height of your water images
+            for x in range(72, 610, 24):  # Use the width of your water images
+                water_sprite = Water(x, y, self.water_images)
+                self.water_sprites.add(water_sprite)
 
         self.all_sprites = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
@@ -59,22 +62,17 @@ class Main:
             waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
             # Update water animation
-            self.water_timer += dt
-            if self.water_timer >= self.water_delay:
-                self.current_water_index = (self.current_water_index + 1) % len(self.water_images)
-                self.water_timer = 0
+            self.water_sprites.update()
 
             # self.screen.fill((255, 255, 255))
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
             # Draw water
-            for y in range(0, 550, 24):  # Use the height of your water images
-                for x in range(60, 600, 24):  # Use the width of your water images
-                    self.screen.blit(self.water_images[self.current_water_index], (x, y))
+            self.water_sprites.draw(self.screen)
 
             # Draw beach
-            for y in range(550, 900, self.beach.get_height()):      
+            for y in range(540, 900, self.beach.get_height()):      
                 for x in range(60, 600, self.beach.get_width()):  
                     self.screen.blit(self.beach, (x, y))
 
