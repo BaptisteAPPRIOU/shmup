@@ -14,11 +14,3 @@ class Enemy(ABC):
     @abstractmethod
     def move(self):
         pass
-
-    # @abstractmethod
-    # def check_overlap(self, other_enemies):
-    #     pass
-
-    @abstractmethod
-    def spawn(self):
-        pass
