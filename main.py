@@ -24,7 +24,7 @@ class Main:
 
     def run(self):                                                              # Main game loop
         waves = [                                                               # List of waves
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),                        
+            Wave(self.screen, self.vessels, [Sloop], [5], 5),                        
             Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [10], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [20], 5),
@@ -58,6 +58,9 @@ class Main:
             for vessel in self.vessels:                                         # Move and draw all vessels
                 vessel.move()
                 self.screen.blit(vessel.image, vessel.rect)
+                if isinstance(vessel,Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel,Ship):                                    # Check if the vessel is a lifeboat
+                    vessel.attack()
+
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)

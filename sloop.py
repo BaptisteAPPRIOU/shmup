@@ -2,9 +2,12 @@ from enemy import Enemy
 import pygame
 import random
 import os
+import time
+from cannon_ball_enemy import CannonBallEnemy 
+
 
 class Sloop(Enemy, pygame.sprite.Sprite):
-    speed = 1.5
+    speed = 1
     width = 45
     height = 65
 
@@ -19,10 +22,22 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.vessels = vessels
         self.rect.x = x
         self.rect.y = y
-        self.mask = pygame.mask.from_surface(self.image)
+        self.mask = pygame.mask.from_surface(self.image)                                                                                    # Create a mask from the image to use for collision detection
+        self.last_shot = pygame.time.get_ticks()
+        self.shoot_delay = 1000
+
 
     def move(self):
         self.rect.y += self.speed
 
     def attack(self):
-        pass
+        if self.rect.y >= 0:
+            now = pygame.time.get_ticks()
+            if now - self.last_shot > self.shoot_delay:
+                self.shoot_delay = random.randint(500, 2000)
+                for offset in [-10, 10]:  # Offsets for the three cannons
+                    bullet = CannonBallEnemy(self.rect.centerx + offset, self.rect.bottom)
+                    bullet.rect.centerx = self.rect.centerx + offset
+                    bullet.rect.bottom = self.rect.bottom + 15
+                    self.vessels.add(bullet)
+                self.last_shot = now
