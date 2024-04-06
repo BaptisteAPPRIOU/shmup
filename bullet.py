@@ -1,5 +1,9 @@
 import pygame
 from pygame.sprite import Sprite
+from explosion import Explosion
+from lifeboat import Lifeboat
+from sloop import Sloop
+from ship import Ship
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, vessels):
@@ -21,7 +25,15 @@ class Bullet(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.vessels, True, pygame.sprite.collide_mask)
         if collisions:
             for collision in collisions:
+                # Check if the collided sprite is an enemy vessel
+                if isinstance(collision, (Lifeboat, Sloop, Ship)):
+                    # Create an explosion at the position of the collision
+                    explosion = Explosion(collision.rect.centerx, collision.rect.centery)
+                    self.vessels.add(explosion)
+                # Remove the bullet and the collided sprite
                 collision.kill()
             self.kill()
+
+
 
     
