@@ -24,11 +24,11 @@ class Wave:
                                
                 if self.timer >= 3:                                                 # Delay in seconds between enemy spawns
                     self.timer = 0                                                  # Reset timer             
-                    x = random.randint(80, 520 - enemy_type.width)                  # Random x-coordinate for enemy spawn       
+                    x = random.randint(120, 520 - enemy_type.width)                  # Random x-coordinate for enemy spawn       
                     y = random.randint(-1500, -300)                                 # Random y-coordinate for enemy spawn
                     
                     while self.check_overlap(x, y, enemy_type):                     # Check if the enemy overlaps with other enemies
-                        x = random.randint(80, 520 - enemy_type.width)              # Random x-coordinate for enemy spawn
+                        x = random.randint(120, 520 - enemy_type.width)              # Random x-coordinate for enemy spawn
                         y = random.randint(-1500, -300)                             # Random y-coordinate for enemy spawn
                     enemy = enemy_type(self.screen, self.vessels, speed=enemy_type.speed, x=x, y=y)             # Create an enemy object
                     

@@ -12,8 +12,8 @@ from water import Water
 class Main:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((600, 900), pygame.NOFRAME)
-        self.statistics_bar = pygame.Rect(0, 0, 60, 900)
+        self.screen = pygame.display.set_mode((640, 900), pygame.NOFRAME)
+        self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.vessels = pygame.sprite.Group()
         self.beach = pygame.image.load("images/beach.png")
@@ -26,7 +26,7 @@ class Main:
         ]
         self.water_sprites = pygame.sprite.Group()
         for y in range(0, 540, 24):                                                                                             # Use the height of your water images
-            for x in range(72, 610, 24):                                                                                        # Use the width of your water images
+            for x in range(112, 650, 24):                                                                                        # Use the width of your water images
                 water_sprite = Water(x, y, self.water_images)
                 self.water_sprites.add(water_sprite)
 
@@ -34,7 +34,6 @@ class Main:
         self.bullets = pygame.sprite.Group()
         self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.all_sprites.add(self.pirate)
-
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
@@ -69,7 +68,7 @@ class Main:
             self.water_sprites.draw(self.screen)                                # Draw water sprites   
 
             for y in range(540, 900, self.beach.get_height()):                  # Draw beach  
-                for x in range(60, 600, self.beach.get_width()):  
+                for x in range(100, 640, self.beach.get_width()):  
                     self.screen.blit(self.beach, (x, y))
 
             self.all_sprites.update()                                           # Update all sprites

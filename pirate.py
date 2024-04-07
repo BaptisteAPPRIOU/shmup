@@ -10,7 +10,6 @@ class Pirate(pygame.sprite.Sprite):
         pirate_image = pygame.transform.scale(pirate_image, (64, 64))
 
         self.image = pirate_image
-        # self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT
@@ -31,8 +30,8 @@ class Pirate(pygame.sprite.Sprite):
 
         if self.rect.right > self.WIDTH:                                        # Adjusted to allow the pirate to move up to x = 540
             self.rect.right = self.WIDTH
-        elif self.rect.left < 60:                                               # Adjusted to start movement from x = 60
-            self.rect.left = 60
+        elif self.rect.left < 100:                                               # Adjusted to start movement from x = 60
+            self.rect.left = 100
 
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top, self.vessels)
