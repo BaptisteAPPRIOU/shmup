@@ -5,6 +5,7 @@ import os
 import time
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
+from coin import Coin
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 2
@@ -26,6 +27,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 1000
         self.hit_points = 200
+        self.value = 100
 
 
     def move(self):
@@ -55,4 +57,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
+        # Create a coin sprite at the position of the destroyed lifeboat
+        coin = Coin(self.rect.centerx, self.rect.centery, self.value)  # Pass the value of the coin
+        self.vessels.add(coin)  # Add the coin sprite to the vessels group
 

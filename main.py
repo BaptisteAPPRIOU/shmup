@@ -8,6 +8,7 @@ from bullet import Bullet
 import time
 from explosion import Explosion
 from water import Water
+from coin import Coin
   
 class Main:
     def __init__(self):
@@ -16,6 +17,7 @@ class Main:
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.vessels = pygame.sprite.Group()
+        self.explosions = pygame.sprite.Group() 
         self.beach = pygame.image.load("images/beach.png")
         self.dock = pygame.image.load("images/dock.png")
 
@@ -48,6 +50,7 @@ class Main:
 
         self.all_sprites = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
         self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.all_sprites.add(self.pirate)
 
@@ -98,8 +101,17 @@ class Main:
                     explosion.update()
                     self.screen.blit(explosion.image, explosion.rect)
                     if explosion.finished:                                          # Check if explosion animation has finished
-                         self.vessels.remove(explosion)
-                         self.vessels.remove(Lifeboat)
+                        for vessel in self.vessels:
+                            if vessel.rect.colliderect(explosion.rect):
+                                self.vessels.remove(vessel)
+                                self.vessels.remove(explosion)
+                                coin = Coin(explosion.rect.centerx, explosion.rect.centery, 100)
+                                self.coins.add(coin)
+                                break  # Break the loop after adding the coin
+                        break  # Break the loop after processing the explosion
+
+            self.coins.update()                                                     # Update coin sprites
+            self.coins.draw(self.screen)                                            # Draw coin sprites
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)

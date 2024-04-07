@@ -21,7 +21,7 @@ class Bullet(pygame.sprite.Sprite):
         
     def update(self):
         self.rect.y += self.speedy
-        if self.rect.bottom < 0:
+        if self.rect.bottom < 0 or self.rect.top > 1000:
             self.kill()
 
         collisions = pygame.sprite.spritecollide(self, self.vessels, False, pygame.sprite.collide_mask)                 # Check for collisions between the bullet and the vessels
