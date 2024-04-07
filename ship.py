@@ -29,6 +29,8 @@ class Ship(Enemy, pygame.sprite.Sprite):
 
     def move(self):
         self.rect.y += self.speed
+        if self.rect.bottom >= 480:
+            self.speed = 0
 
     def attack(self, y_offsets=[-20, 15, -20]):
         if self.rect.y >= 0:

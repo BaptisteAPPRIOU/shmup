@@ -12,11 +12,12 @@ from water import Water
 class Main:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((640, 900), pygame.NOFRAME)
+        self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.vessels = pygame.sprite.Group()
         self.beach = pygame.image.load("images/beach.png")
+        self.dock = pygame.image.load("images/dock.png")
 
         self.water_images = [
             pygame.transform.scale(pygame.image.load("images/water.png").convert_alpha(), (24, 24)),
@@ -24,11 +25,26 @@ class Main:
             pygame.transform.scale(pygame.image.load("images/water2.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),
         ]
-        self.water_sprites = pygame.sprite.Group()
-        for y in range(0, 540, 24):                                                                                             # Use the height of your water images
-            for x in range(112, 650, 24):                                                                                        # Use the width of your water images
+
+        self.background_sprites = pygame.sprite.Group()
+        for y in range(0, 540, 24):                                                                                            
+            for x in range(112, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
-                self.water_sprites.add(water_sprite)
+                self.background_sprites.add(water_sprite)
+        
+        for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites    
+            for x in range(100, 640, self.beach.get_width()):  
+                beach_sprite = pygame.sprite.Sprite()
+                beach_sprite.image = self.beach
+                beach_sprite.rect = beach_sprite.image.get_rect(topleft=(x, y))
+                self.background_sprites.add(beach_sprite)
+
+        dock_width = self.dock.get_width()
+        for x in range(100, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites               
+            dock_sprite = pygame.sprite.Sprite()
+            dock_sprite.image = self.dock
+            dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
+            self.background_sprites.add(dock_sprite)
 
         self.all_sprites = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
@@ -60,16 +76,12 @@ class Main:
 
             waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
-            self.water_sprites.update()                                         # Update water sprites
+            self.background_sprites.update()                                         # Update water sprites
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            self.water_sprites.draw(self.screen)                                # Draw water sprites   
-
-            for y in range(540, 900, self.beach.get_height()):                  # Draw beach  
-                for x in range(100, 640, self.beach.get_width()):  
-                    self.screen.blit(self.beach, (x, y))
+            self.background_sprites.draw(self.screen)                                # Draw water sprites   
 
             self.all_sprites.update()                                           # Update all sprites
             self.all_sprites.draw(self.screen)                                  # Draw all sprites
