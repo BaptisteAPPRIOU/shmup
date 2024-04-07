@@ -25,21 +25,21 @@ class Main:
             pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),
         ]
         self.water_sprites = pygame.sprite.Group()
-        for y in range(0, 540, 24):  # Use the height of your water images
-            for x in range(72, 610, 24):  # Use the width of your water images
+        for y in range(0, 540, 24):                                                                                             # Use the height of your water images
+            for x in range(72, 610, 24):                                                                                        # Use the width of your water images
                 water_sprite = Water(x, y, self.water_images)
                 self.water_sprites.add(water_sprite)
 
         self.all_sprites = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
-        self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())   # Create player pirate instance and add it to sprite group
+        self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.all_sprites.add(self.pirate)
 
 
-    def run(self):                                                              # Main game loop
-        waves = [                                                               # List of waves
+    def run(self):                                                                                                              # Main game loop
+        waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, [Lifeboat], [5], 5),                        
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5), 
             Wave(self.screen, self.vessels, [Lifeboat], [10], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [20], 5),
             Wave(self.screen, self.vessels, [Sloop], [3], 5)
@@ -49,7 +49,7 @@ class Main:
         running = True
         current_wave = 0
         while running:
-            dt = clock.tick(60) / 1000                                          # Convert milliseconds to seconds
+            dt = clock.tick(60) / 1000                                                                                          # Convert milliseconds to seconds
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -61,24 +61,19 @@ class Main:
 
             waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
-            # Update water animation
-            self.water_sprites.update()
+            self.water_sprites.update()                                         # Update water sprites
 
-            # self.screen.fill((255, 255, 255))
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            # Draw water
-            self.water_sprites.draw(self.screen)
+            self.water_sprites.draw(self.screen)                                # Draw water sprites   
 
-            # Draw beach
-            for y in range(540, 900, self.beach.get_height()):      
+            for y in range(540, 900, self.beach.get_height()):                  # Draw beach  
                 for x in range(60, 600, self.beach.get_width()):  
                     self.screen.blit(self.beach, (x, y))
 
             self.all_sprites.update()                                           # Update all sprites
             self.all_sprites.draw(self.screen)                                  # Draw all sprites
-
 
             for vessel in self.vessels:
                 if not isinstance(vessel, Explosion):
@@ -87,13 +82,13 @@ class Main:
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
 
-            # Update and draw explosions
-            for explosion in self.vessels.copy():  # Use copy() to avoid modifying the original while iterating
+            for explosion in self.vessels.copy():                                   # Use copy() to avoid modifying the original while iterating
                 if isinstance(explosion, Explosion):
                     explosion.update()
                     self.screen.blit(explosion.image, explosion.rect)
-                    if explosion not in self.vessels:  # Check if explosion has finished animating
-                        explosion.kill()
+                    if explosion.finished:                                          # Check if explosion animation has finished
+                         self.vessels.remove(explosion)
+                         self.vessels.remove(Lifeboat)
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)

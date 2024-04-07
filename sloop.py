@@ -3,7 +3,8 @@ import pygame
 import random
 import os
 import time
-from cannon_ball_enemy import CannonBallEnemy 
+from cannon_ball_enemy import CannonBallEnemy
+from explosion import Explosion 
 
 
 class Sloop(Enemy, pygame.sprite.Sprite):
@@ -25,6 +26,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)                                                                                    # Create a mask from the image to use for collision detection
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 1000
+        self.hit_points = 400
 
 
     def move(self):
@@ -41,3 +43,14 @@ class Sloop(Enemy, pygame.sprite.Sprite):
                     bullet.rect.bottom = self.rect.bottom + 15
                     self.vessels.add(bullet)
                 self.last_shot = now
+
+    def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the sloop
+        self.hit_points -= damage
+        if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero
+            self.destroy()
+
+    def destroy(self):                                                                                                      # Method to destroy the sloop
+        explosion = Explosion(self.rect.centerx, self.rect.centery)
+        self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
+        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
+        self.kill()

@@ -3,7 +3,8 @@ import random
 from enemy import Enemy
 import os
 import time
-from cannon_ball_enemy import CannonBallEnemy 
+from cannon_ball_enemy import CannonBallEnemy
+from explosion import Explosion 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 2
@@ -24,6 +25,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 1000
+        self.hit_points = 200
 
 
     def move(self):
@@ -39,4 +41,16 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
                 self.vessels.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
+
+
+    def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        
+        self.hit_points -= damage
+        if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero        
+            self.destroy()
+            
+    def destroy(self):                                                                                                      # Method to destroy the lifeboat      
+        explosion = Explosion(self.rect.centerx, self.rect.centery)
+        self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
+        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
+        self.kill()
 

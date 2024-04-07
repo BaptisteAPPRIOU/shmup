@@ -23,15 +23,15 @@ class Pirate(pygame.sprite.Sprite):
     def update(self):
         self.speedx = 0
         keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_q] or keystate[pygame.K_LEFT]:         # Changed to allow the pirate to move with the keys "q" and "d"
+        if keystate[pygame.K_q] or keystate[pygame.K_LEFT]:                     # Changed to allow the pirate to move with the keys "q" and "d"
             self.speedx = -8
-        if keystate[pygame.K_d] or keystate[pygame.K_RIGHT]:
+        if keystate[pygame.K_d] or keystate[pygame.K_RIGHT]:                    # Changed to allow the pirate to move with the keys "q" and "d"     
             self.speedx = 8
         self.rect.x += self.speedx
 
-        if self.rect.right > self.WIDTH:                    # Adjusted to allow the pirate to move up to x = 540
+        if self.rect.right > self.WIDTH:                                        # Adjusted to allow the pirate to move up to x = 540
             self.rect.right = self.WIDTH
-        elif self.rect.left < 60:                           # Adjusted to start movement from x = 60
+        elif self.rect.left < 60:                                               # Adjusted to start movement from x = 60
             self.rect.left = 60
 
     def shoot(self):
