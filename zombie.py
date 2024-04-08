@@ -18,7 +18,7 @@ class Zombie(pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 2000  # 2 seconds interval for shooting gas
 
-    def update(self):
+    def update(self, player_x, player_y):
         self.rect.y += self.speed
         self.animation_counter += 1
         if self.animation_counter >= self.animation_delay:
@@ -40,4 +40,5 @@ class Zombie(pygame.sprite.Sprite):
 
     def shoot_poison_gas(self):
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
+        poison_gas.change_y = 5
         self.gas_sprites.add(poison_gas)
