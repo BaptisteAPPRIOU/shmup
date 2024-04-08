@@ -1,6 +1,8 @@
 import pygame
 import os
 from zombie import Zombie
+from zombie_2 import Zombie_2
+from pirate import Pirate
 
 
 class Main:
@@ -11,11 +13,16 @@ class Main:
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.gas_sprites = pygame.sprite.Group()  # Create a sprite group for gas_sprites
         self.all_sprites = pygame.sprite.Group()  # Create a sprite group for all sprites
-        self.zombie = Zombie(300, 100, self.gas_sprites)  # Create a zombie instance
+        self.all_sprites2 = pygame.sprite.Group()                                           # Create sprite group        
+        self.bullets = pygame.sprite.Group()                                                # Create bullet sprite group
+        self.zombie = Zombie(300, 100, self.gas_sprites)                                    # Create a zombie instance
+        self.zombie_2 = Zombie_2(500, 100, self.gas_sprites)                                # Create a zombie instance
         self.beach = pygame.image.load(os.path.join("images", "beach.png")).convert()
         self.water = pygame.image.load(os.path.join("images", "water.png")).convert()
-        self.all_sprites.add(self.zombie)  # Add the zombie to the sprite group
-
+        self.all_sprites.add(self.zombie)                                                   # Add the zombie to the sprite group
+        self.all_sprites.add(self.zombie_2)                                                 # Add the zombie to the sprite group
+        self.pirate = Pirate(self.all_sprites2, self.bullets, 640, 900)
+        self.all_sprites2.add(self.pirate)   
         self.gas_timer = 0
         self.gas_interval = 2000  # 1 second interval
 
@@ -32,14 +39,20 @@ class Main:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                    if event.key == pygame.K_SPACE:
+                        self.pirate.shoot()
+                    
 
             # Update the zombie
-            self.all_sprites.update()
+            self.all_sprites.update(self.pirate.rect.centerx, self.pirate.rect.centery) 
+            self.all_sprites2.update()
+            self.bullets.update()
             self.gas_sprites.update()
 
             self.gas_timer += dt 
             if self.gas_timer >= self.gas_interval:
-                self.zombie.shoot_poison_gas()
+                # self.zombie.shoot_poison_gas()
+                self.zombie.aim_at_pirate(self.pirate.rect.centerx, self.pirate.rect.centery)
                 self.gas_timer = 0
 
             for y in range(0,900, self.water.get_height()):
@@ -52,12 +65,15 @@ class Main:
 
             self.all_sprites.draw(self.screen)                                  # Draw all sprites
             self.gas_sprites.draw(self.screen)                                  # Draw gas_sprites
+            self.all_sprites2.draw(self.screen)                                  # Draw all sprites
+            self.bullets.draw(self.screen)                                      # Draw bullets
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
             # Draw the zombie
             self.all_sprites.draw(self.screen)
+            self.all_sprites2.draw(self.screen)
             pygame.display.flip()
             clock.tick(60)
 
