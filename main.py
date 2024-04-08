@@ -51,12 +51,6 @@ class Main:
             self.bullets.update()
             self.gas_sprites.update()
 
-            # self.gas_timer += dt 
-            # if self.gas_timer >= self.gas_interval:
-            #     # self.zombie.shoot_poison_gas()
-            #     self.zombie.aim_at_pirate(self.pirate.rect.centerx, self.pirate.rect.centery)
-            #     self.gas_timer = 0
-
             for y in range(0,900, self.water.get_height()):
                 for x in range(0, 640, self.water.get_width()):
                     self.screen.blit(self.water, (x, y))
