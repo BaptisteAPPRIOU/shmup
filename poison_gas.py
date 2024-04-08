@@ -11,11 +11,14 @@ class PoisonGas(pygame.sprite.Sprite):
         self.speed = 4
         self.animation_delay = 3
         self.animation_counter = 0
+        self.change_x = 0
+        self.change_y = 0
 
     def update(self):
-        self.rect.y += self.speed
+        self.rect.x += self.change_x
+        self.rect.y += self.change_y
         self.animation_counter += 1
-        if self.animation_counter >= self.animation_delay:
+        if self.animation_counter >= self.animation_delay:  # Change the image every 3 frames
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
