@@ -6,7 +6,7 @@ import os
 class Pirate(pygame.sprite.Sprite):
     def __init__(self, all_sprites, bullets,vessels, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
-        pirate_image = pygame.image.load("images/pirate.png")
+        pirate_image = pygame.image.load("images/pirate.png").convert_alpha()
         pirate_image = pygame.transform.scale(pirate_image, (64, 64))
 
         self.image = pirate_image

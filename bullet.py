@@ -9,7 +9,7 @@ from cannon_ball_enemy import CannonBallEnemy
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, vessels):
         pygame.sprite.Sprite.__init__(self)
-        cannon_ball = pygame.image.load("images/cannon_ball.png")
+        cannon_ball = pygame.image.load("images/cannon_ball.png").convert_alpha()
         self.image = cannon_ball
         self.rect = self.image.get_rect()
         self.rect.bottom = y

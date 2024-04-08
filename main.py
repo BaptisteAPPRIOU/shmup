@@ -13,6 +13,7 @@ from coin import Coin
 class Main:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
@@ -23,8 +24,10 @@ class Main:
         self.bullets = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
 
-        self.beach = pygame.image.load("images/beach.png")
-        self.dock = pygame.image.load("images/dock.png")
+        self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
+
+        self.beach = pygame.image.load("images/beach.png").convert_alpha()
+        self.dock = pygame.image.load("images/dock.png").convert_alpha()
 
         self.water_images = [
             pygame.transform.scale(pygame.image.load("images/water.png").convert_alpha(), (24, 24)),
@@ -110,6 +113,11 @@ class Main:
                                 self.vessels.remove(explosion)
                                 coin = Coin(explosion.rect.centerx, explosion.rect.centery, 100)
                                 self.coins.add(coin)
+
+            for coin in self.coins.copy():
+                if pygame.sprite.collide_rect(coin, self.pirate):
+                    self.coins.remove(coin)
+                    self.coin_sound.play()
 
             self.coins.update()                                                     # Update coin sprites
             self.coins.draw(self.screen)                                            # Draw coin sprites

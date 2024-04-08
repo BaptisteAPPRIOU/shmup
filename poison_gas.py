@@ -22,5 +22,5 @@ class PoisonGas(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
-        if self.rect.top > 900:
+        if self.rect.top > 900 or self.rect.left < 100 or self.rect.right > 640:
             self.kill()

@@ -5,7 +5,8 @@ import os
 import time
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion
-from zombie import Zombie 
+from zombie import Zombie
+from zombie2 import Zombie_2 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 5
@@ -59,14 +60,21 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
 
-    def spawn_zombie(self, dt):                                                                                                 
-        if len(self.zombies) < 4:  # Change 3 to the desired number of zombies
+    def spawn_zombie(self, dt):
+        # Spawn zombie type 1
+        if len(self.zombies) < 2:  # Change 2 to the desired number of zombies for type 1
             self.timer += dt
-            if self.timer >= 10:
-                print("Spawning Zombie")
+            if self.timer >= 10:  # Spawn interval for type 1 zombies
                 zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
                 self.zombies.add(zombie)
-                self.timer = 0
-            # Optionally, introduce a delay between spawns
+                self.timer -= 10  # Subtract the spawn interval
+        # Spawn zombie type 2
+        if len(self.zombies) < 4:  # Change 4 to the desired number of zombies for type 2
+            self.timer += dt
+            if self.timer >= 15:  # Spawn interval for type 2 zombies
+                zombie = Zombie_2(self.rect.centerx, self.rect.bottom, self.vessels)
+                self.zombies.add(zombie)
+                self.timer -= 15  # Subtract the spawn interval
+        # Update and draw zombies
         self.zombies.update(self.rect.centerx, self.rect.bottom)
         self.zombies.draw(self.screen)
