@@ -51,6 +51,7 @@ class Main:
         self.all_sprites = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.zombies = pygame.sprite.Group()
         self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.all_sprites.add(self.pirate)
 
@@ -102,13 +103,14 @@ class Main:
                     self.screen.blit(explosion.image, explosion.rect)
                     if explosion.finished:                                          # Check if explosion animation has finished
                         for vessel in self.vessels:
+                            print(self.vessels)
+
                             if vessel.rect.colliderect(explosion.rect):
                                 self.vessels.remove(vessel)
+                                print("Vessels" ,vessel)
                                 self.vessels.remove(explosion)
                                 coin = Coin(explosion.rect.centerx, explosion.rect.centery, 100)
                                 self.coins.add(coin)
-                                break  # Break the loop after adding the coin
-                        break  # Break the loop after processing the explosion
 
             self.coins.update()                                                     # Update coin sprites
             self.coins.draw(self.screen)                                            # Draw coin sprites
