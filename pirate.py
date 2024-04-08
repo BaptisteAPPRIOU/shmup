@@ -8,9 +8,7 @@ class Pirate(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         pirate_image = pygame.image.load("Images/pirate.png")
         pirate_image = pygame.transform.scale(pirate_image, (64, 64))
-
         self.image = pirate_image
-        # self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT
@@ -18,6 +16,10 @@ class Pirate(pygame.sprite.Sprite):
         self.all_sprites = all_sprites
         self.bullets = bullets
         self.WIDTH = WIDTH
+        self.hit_points = 100
+        self.score = 0
+        self.lives = 3
+        self.damages = 10
 
     def update(self):
         self.speedx = 0
