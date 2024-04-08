@@ -22,8 +22,6 @@ class Main:
         self.pirate_group = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
-        # self.zombies = pygame.sprite.Group()
-
 
         self.beach = pygame.image.load("images/beach.png")
         self.dock = pygame.image.load("images/dock.png")
@@ -81,21 +79,20 @@ class Main:
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
-            waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
+            waves[current_wave].spawn_waves(dt)                                     # Spawn waves of enemies
 
-            self.background_sprites.update()                                         # Update water sprites
-            self.screen.fill((0, 0, 0))                                               # Fill the screen with black color
+            self.background_sprites.update()                                        # Update water sprites
+            self.screen.fill((0, 0, 0))                                             # Fill the screen with black color
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            self.background_sprites.draw(self.screen)                                # Draw water sprites   
+            self.background_sprites.draw(self.screen)                               # Draw water sprites   
 
-            self.pirate_group.update()                                           # Update all sprites
-            self.pirate_group.draw(self.screen)                                  # Draw all sprites
-            
+            self.pirate_group.update()                                              # Update all sprites
+            self.pirate_group.draw(self.screen)                                     # Draw all sprites
 
-            for vessel in self.vessels:
+            for vessel in self.vessels:                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
                     vessel.move()
                     self.screen.blit(vessel.image, vessel.rect)

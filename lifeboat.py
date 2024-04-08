@@ -8,7 +8,7 @@ from explosion import Explosion
 from zombie import Zombie 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
-    speed = 2
+    speed = 5
     width = 45
     height = 55
 
@@ -29,12 +29,13 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.shoot_delay = 1000
         self.hit_points = 200
         self.value = 100
+        self.timer = 0
 
     def move(self):
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
-            self.spawn_zombie()
+            self.spawn_zombie(0.1)
 
     def attack(self):
         if self.rect.y >=0:                                                                                                 # Check if the lifeboat is on the screen
@@ -58,11 +59,14 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
 
-    def spawn_zombie(self):
-        # Spawn a Zombie at the position of the Lifeboat
-        if not self.zombies:
-            print("Spawning Zombie")
-            zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
-            self.zombies.add(zombie)
+    def spawn_zombie(self, dt):                                                                                                 
+        if len(self.zombies) < 4:  # Change 3 to the desired number of zombies
+            self.timer += dt
+            if self.timer >= 10:
+                print("Spawning Zombie")
+                zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
+                self.zombies.add(zombie)
+                self.timer = 0
+            # Optionally, introduce a delay between spawns
         self.zombies.update(self.rect.centerx, self.rect.bottom)
         self.zombies.draw(self.screen)
