@@ -13,7 +13,7 @@ class PoisonGas(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-    def update(self):
+    def move(self):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
         self.animation_counter += 1

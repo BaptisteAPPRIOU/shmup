@@ -16,8 +16,15 @@ class Main:
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
+
         self.vessels = pygame.sprite.Group()
-        self.explosions = pygame.sprite.Group() 
+        self.explosions = pygame.sprite.Group()
+        self.pirate_group = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
+        # self.zombies = pygame.sprite.Group()
+
+
         self.beach = pygame.image.load("images/beach.png")
         self.dock = pygame.image.load("images/dock.png")
 
@@ -48,12 +55,8 @@ class Main:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.all_sprites = pygame.sprite.Group()
-        self.bullets = pygame.sprite.Group()
-        self.coins = pygame.sprite.Group()
-        self.zombies = pygame.sprite.Group()
-        self.pirate = Pirate(self.all_sprites, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
-        self.all_sprites.add(self.pirate)
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
+        self.pirate_group.add(self.pirate)
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
@@ -81,14 +84,16 @@ class Main:
             waves[current_wave].spawn_waves(dt)                                 # Spawn waves of enemies
 
             self.background_sprites.update()                                         # Update water sprites
+            self.screen.fill((0, 0, 0))                                               # Fill the screen with black color
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
             self.background_sprites.draw(self.screen)                                # Draw water sprites   
 
-            self.all_sprites.update()                                           # Update all sprites
-            self.all_sprites.draw(self.screen)                                  # Draw all sprites
+            self.pirate_group.update()                                           # Update all sprites
+            self.pirate_group.draw(self.screen)                                  # Draw all sprites
+            
 
             for vessel in self.vessels:
                 if not isinstance(vessel, Explosion):
@@ -103,11 +108,8 @@ class Main:
                     self.screen.blit(explosion.image, explosion.rect)
                     if explosion.finished:                                          # Check if explosion animation has finished
                         for vessel in self.vessels:
-                            print(self.vessels)
-
                             if vessel.rect.colliderect(explosion.rect):
                                 self.vessels.remove(vessel)
-                                print("Vessels" ,vessel)
                                 self.vessels.remove(explosion)
                                 coin = Coin(explosion.rect.centerx, explosion.rect.centery, 100)
                                 self.coins.add(coin)

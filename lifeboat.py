@@ -21,6 +21,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.screen = screen
         self.speed = speed
         self.vessels = vessels
+        self.zombies = pygame.sprite.Group()
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
@@ -59,5 +60,9 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
 
     def spawn_zombie(self):
         # Spawn a Zombie at the position of the Lifeboat
-        zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
-        self.vessels.add(zombie)
+        if not self.zombies:
+            print("Spawning Zombie")
+            zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
+            self.zombies.add(zombie)
+        self.zombies.update(self.rect.centerx, self.rect.bottom)
+        self.zombies.draw(self.screen)

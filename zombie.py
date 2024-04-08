@@ -24,10 +24,8 @@ class Zombie(pygame.sprite.Sprite):
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-
         if self.rect.bottom > 900:
-            self.rect.y = 0
-
+            self.kill()
         self.attack()
 
     def move(self):
