@@ -12,6 +12,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 5
     width = 45
     height = 55
+    value = 100
 
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -31,12 +32,14 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.hit_points = 200
         self.value = 100
         self.timer = 0
+        self.check_zombie_spawn = False
+        
 
-    def move(self):
+    def move(self):   
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
-            self.spawn_zombie(0.1)
+            self. check_zombie_spawn = True
 
     def attack(self):
         if self.rect.y >=0:                                                                                                 # Check if the lifeboat is on the screen
@@ -60,7 +63,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
 
-    def spawn_zombie(self, dt):
+    def spawn_zombie(self, dt, piratex, piratey):
         # Spawn zombie type 1
         if len(self.zombies) < 2:  # Change 2 to the desired number of zombies for type 1
             self.timer += dt
@@ -76,5 +79,9 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 self.zombies.add(zombie)
                 self.timer -= 15  # Subtract the spawn interval
         # Update and draw zombies
-        self.zombies.update(self.rect.centerx, self.rect.bottom)
+        self.zombies.update(piratex, piratey)
         self.zombies.draw(self.screen)
+
+    def get_coordinates(self, piratex, piratey):
+        if self.check_zombie_spawn == True:
+            self.spawn_zombie(0.1,piratex, piratey)

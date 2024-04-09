@@ -19,3 +19,6 @@ class CannonBallEnemy(pygame.sprite.Sprite):
 
     def move(self):
         self.rect.y += self.speed
+
+    def get_coordinates(self, a, b):
+        pass

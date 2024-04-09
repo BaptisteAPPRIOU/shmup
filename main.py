@@ -26,6 +26,11 @@ class Main:
 
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
 
+        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 15)  # Create a font object
+        self.user_label = self.font.render("User: user", 1, (0, 255, 255))
+        self.score_label = self.font.render("SCORE : ", 1, (0, 255, 255))
+        self.score_label2 = self.font.render(str(Lifeboat.value), 1, (0, 255, 255))
+
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
 
@@ -64,15 +69,17 @@ class Main:
             Wave(self.screen, self.vessels, [Lifeboat], [5], 5),                        
             Wave(self.screen, self.vessels, [Lifeboat], [5], 5), 
             Wave(self.screen, self.vessels, [Lifeboat], [10], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [20], 5),
-            Wave(self.screen, self.vessels, [Sloop], [3], 5)
+            Wave(self.screen, self.vessels, [Lifeboat], [20], 5)
+            
         ]
 
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
+        total_score = 0  
+        self.score_label2 = self.font.render(str(total_score), 1, (0, 255, 255))  
         while running:
-            dt = clock.tick(60) / 1000                                                                                          # Convert milliseconds to seconds
+            dt = clock.tick(60) / 1000  
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -82,58 +89,75 @@ class Main:
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
-            waves[current_wave].spawn_waves(dt)                                     # Spawn waves of enemies
+            waves[current_wave].spawn_waves(dt)                                                                                     # Spawn waves of enemies
 
-            self.background_sprites.update()                                        # Update water sprites
-            self.screen.fill((0, 0, 0))                                             # Fill the screen with black color
+            self.background_sprites.update()                                                                                        # Update water sprites
+            self.screen.fill((0, 0, 0))                                                                                             # Fill the screen with black color
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            self.background_sprites.draw(self.screen)                               # Draw water sprites   
+            self.background_sprites.draw(self.screen)                                                                               # Draw water sprites
 
-            self.pirate_group.update()                                              # Update all sprites
-            self.pirate_group.draw(self.screen)                                     # Draw all sprites
+            self.pirate_group.update()                                                                                              # Update pirate sprite
+            self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
 
-            for vessel in self.vessels:                                             # Loop through all vessels
+            for vessel in self.vessels:                                                                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
-                    vessel.move()
+                    vessel.move()                                                              # Move the vessel
+                    vessel.get_coordinates(self.pirate.rect.centerx, self.pirate.rect.centery)
                     self.screen.blit(vessel.image, vessel.rect)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
 
-            for explosion in self.vessels.copy():                                   # Use copy() to avoid modifying the original while iterating
+            for explosion in self.vessels.copy():                                                                                   # Use copy() to avoid modifying the original while iterating
                 if isinstance(explosion, Explosion):
                     explosion.update()
                     self.screen.blit(explosion.image, explosion.rect)
-                    if explosion.finished:                                          # Check if explosion animation has finished
+                    if explosion.finished:                                                                                          # Check if explosion animation has finished
                         for vessel in self.vessels:
                             if vessel.rect.colliderect(explosion.rect):
                                 self.vessels.remove(vessel)
                                 self.vessels.remove(explosion)
-                                coin = Coin(explosion.rect.centerx, explosion.rect.centery, 100)
-                                self.coins.add(coin)
+                                coin_value = 0
+                            if isinstance(vessel, Lifeboat):
+                                coin_value = 100
+                                print("Coin value",coin_value)       
+                            elif isinstance(vessel, Sloop):
+                                coin_value = 300
+                            elif isinstance(vessel, Ship):
+                                coin_value = 500
+                            print(coin_value)
+                            coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
+                            self.coins.add(coin)
 
-            for coin in self.coins.copy():
-                if pygame.sprite.collide_rect(coin, self.pirate):
+            for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
+                if pygame.sprite.collide_mask(coin, self.pirate):
+                    total_score += coin_value 
+                    self.score_label2 = self.font.render(str(total_score), 1, (0, 255, 255))                                    # Update score label
                     self.coins.remove(coin)
                     self.coin_sound.play()
 
-            self.coins.update()                                                     # Update coin sprites
-            self.coins.draw(self.screen)                                            # Draw coin sprites
+            self.coins.update()  # Update coin sprites
+            self.coins.draw(self.screen)  # Draw coin sprites
+
+            self.screen.blit(self.user_label, (10, 50))
+            self.screen.blit(self.score_label, (10, 100))
+            self.screen.blit(self.score_label2, (10, 130))
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
 
-            if all(count == 0 for count in waves[current_wave].counts):             # Check if all enemies in the current wave have been spawned
+            if all(count == 0 for count in waves[current_wave].counts):  # Check if all enemies in the current wave have been spawned
                 current_wave += 1
 
-            if current_wave == len(waves):                                          # Check if all waves have been spawned
-                if any(w.current_wave < len(w.enemy_types) for w in waves):         # Check if there are more waves to spawn
+            if current_wave == len(waves):  # Check if all waves have been spawned
+                if any(w.current_wave < len(w.enemy_types) for w in waves):  # Check if there are more waves to spawn
                     current_wave -= 1
                 else:
                     break
 
         pygame.quit()
+
 if __name__ == "__main__":
     Main().run()

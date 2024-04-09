@@ -17,6 +17,7 @@ class Coin(pygame.sprite.Sprite):
         self.finished = False
         self.speed = 5
         self.value = value
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         self.move()

@@ -24,3 +24,6 @@ class PoisonGas(pygame.sprite.Sprite):
 
         if self.rect.top > 900 or self.rect.left < 100 or self.rect.right > 640:
             self.kill()
+
+    def get_coordinates(self, a, b):
+        pass

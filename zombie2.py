@@ -35,7 +35,6 @@ class Zombie_2(pygame.sprite.Sprite):
             self.shoot_delay = random.randint(1000, 3000)               # Randomize the shoot delay
             self.last_shot = now
             self.shoot_poison_gas(pirate_x, pirate_y)
-            print(pirate_x, pirate_y)
 
     def shoot_poison_gas(self, pirate_x, pirate_y):                     # Shoot poison gas
         target_x = pirate_x - self.rect.centerx
