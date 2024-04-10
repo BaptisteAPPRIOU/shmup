@@ -7,7 +7,7 @@ from ship import Ship
 from cannon_ball_enemy import CannonBallEnemy
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, vessels):
+    def __init__(self, x, y, vessels, zombies):
         pygame.sprite.Sprite.__init__(self)
         cannon_ball = pygame.image.load("images/cannon_ball.png").convert_alpha()
         self.image = cannon_ball
@@ -16,6 +16,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.speedy = -10
         self.vessels = vessels
+        self.zombies = zombies
         self.mask = pygame.mask.from_surface(self.image)
         self.damage = 100
         
@@ -40,6 +41,14 @@ class Bullet(pygame.sprite.Sprite):
                         self.vessels.add(explosion)
                         collision.kill()
                     self.kill()
+
+        zombie_collisions = pygame.sprite.spritecollide(self, self.zombies, False, pygame.sprite.collide_mask)         # Check for collisions between the bullet and the zombies
+        if zombie_collisions:
+            for zombie in zombie_collisions:
+                zombie.update_hit_points(self.damage)                                                                    # Update the hit points of the zombie
+                if zombie.hit_points <= 0:
+                    zombie.kill()
+                self.kill()
 
     def set_damage(self, damage):
         self.damage = damage

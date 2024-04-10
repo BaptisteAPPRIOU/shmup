@@ -4,7 +4,7 @@ import sys
 import os
 
 class Pirate(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, bullets,vessels, WIDTH, HEIGHT):
+    def __init__(self, all_sprites, bullets,vessels,zombies, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
         pirate_image = pygame.image.load("images/pirate.png").convert_alpha()
         pirate_image = pygame.transform.scale(pirate_image, (64, 64))
@@ -18,6 +18,7 @@ class Pirate(pygame.sprite.Sprite):
         self.bullets = bullets
         self.WIDTH = WIDTH
         self.vessels = vessels
+        self.zombies = zombies
 
     def update(self):
         self.speedx = 0
@@ -34,6 +35,6 @@ class Pirate(pygame.sprite.Sprite):
             self.rect.left = 100
 
     def shoot(self):
-        bullet = Bullet(self.rect.centerx, self.rect.top, self.vessels)
+        bullet = Bullet(self.rect.centerx, self.rect.top, self.vessels, self.zombies)
         self.all_sprites.add(bullet)
         self.bullets.add(bullet)
