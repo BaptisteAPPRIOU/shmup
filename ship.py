@@ -10,6 +10,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
     speed = 4
     width = 110
     height = 150
+    value = 500
 
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)

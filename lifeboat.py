@@ -4,13 +4,15 @@ from enemy import Enemy
 import os
 import time
 from cannon_ball_enemy import CannonBallEnemy
-from explosion import Explosion 
-from coin import Coin
+from explosion import Explosion
+from zombie import Zombie
+from zombie2 import Zombie_2 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
-    speed = 2
+    speed = 5
     width = 45
     height = 55
+    value = 100
 
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -21,6 +23,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.screen = screen
         self.speed = speed
         self.vessels = vessels
+        self.zombies = pygame.sprite.Group()
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
@@ -28,12 +31,15 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.shoot_delay = 1000
         self.hit_points = 200
         self.value = 100
+        self.timer = 0
+        self.check_zombie_spawn = False
+        
 
-
-    def move(self):
+    def move(self):   
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
+            self. check_zombie_spawn = True
 
     def attack(self):
         if self.rect.y >=0:                                                                                                 # Check if the lifeboat is on the screen
@@ -46,7 +52,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 self.vessels.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
 
-
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        
         self.hit_points -= damage
         if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero        
@@ -57,7 +62,26 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
-        # Create a coin sprite at the position of the destroyed lifeboat
-        coin = Coin(self.rect.centerx, self.rect.centery, self.value)  # Pass the value of the coin
-        self.vessels.add(coin)  # Add the coin sprite to the vessels group
 
+    def spawn_zombie(self, dt, piratex, piratey):
+        # Spawn zombie type 1
+        if len(self.zombies) < 2:  # Change 2 to the desired number of zombies for type 1
+            self.timer += dt
+            if self.timer >= 10:  # Spawn interval for type 1 zombies
+                zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
+                self.zombies.add(zombie)
+                self.timer -= 10  # Subtract the spawn interval
+        # Spawn zombie type 2
+        if len(self.zombies) < 4:  # Change 4 to the desired number of zombies for type 2
+            self.timer += dt
+            if self.timer >= 15:  # Spawn interval for type 2 zombies
+                zombie = Zombie_2(self.rect.centerx, self.rect.bottom, self.vessels)
+                self.zombies.add(zombie)
+                self.timer -= 15  # Subtract the spawn interval
+        # Update and draw zombies
+        self.zombies.update(piratex, piratey)
+        self.zombies.draw(self.screen)
+
+    def get_coordinates(self, piratex, piratey):
+        if self.check_zombie_spawn == True:
+            self.spawn_zombie(0.1,piratex, piratey)

@@ -11,6 +11,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
     speed = 1
     width = 45
     height = 65
+    value = 300
 
     def __init__(self, screen, vessels, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
