@@ -73,8 +73,8 @@ class Main:
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, [Lifeboat], [2], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [3], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
+            Wave(self.screen, self.vessels, [Sloop], [3], 5),
+            Wave(self.screen, self.vessels, [Ship], [5], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [8], 5),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
 
@@ -83,7 +83,6 @@ class Main:
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
-        # coin = Coin(-100, -100, 0)
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         while running:
 
@@ -116,13 +115,10 @@ class Main:
             
                 
             for vessel in self.vessels:                                                                                             # Loop through all vessels
-                #print (vessel)
                 if not isinstance(vessel, Explosion):
                     vessel.move()                                                              # Move the vessel
-                    vessel.get_coordinates(self.pirate.rect.centerx, self.pirate.rect.centery)
                     self.screen.blit(vessel.image, vessel.rect)
                     if vessel.get_spawn_value() == True:
-                        print("Spawn can zombie")
                         if self.timer >= 4:
                             lucky_number = random.randint(1, 5)
                             print(self.timer)

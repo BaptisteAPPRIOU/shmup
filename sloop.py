@@ -1,8 +1,7 @@
-from enemy import Enemy
 import pygame
 import random
 import os
-import time
+from enemy import Enemy
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
@@ -28,12 +27,15 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 1000
         self.hit_points = 400
+        self.value = 300
+        self.check_zombie_spawn = False
 
 
     def move(self):
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
+            self. check_zombie_spawn = True
 
     def attack(self):
         if self.rect.y >= 0:
@@ -57,3 +59,6 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
+        
+    def get_spawn_value(self):
+        return self.check_zombie_spawn

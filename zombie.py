@@ -1,7 +1,6 @@
 import pygame
-import os
-from poison_gas import PoisonGas
 import random
+from poison_gas import PoisonGas
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, zombies):
@@ -18,7 +17,7 @@ class Zombie(pygame.sprite.Sprite):
         self.shoot_delay = 2000  # 2 seconds interval for shooting gas
 
     def update(self, player_x, player_y):
-        self.move()  # Call the move method in the update method
+        self.move()                 # Call the move method in the update method
         self.animation_counter += 1
         if self.animation_counter >= self.animation_delay:
             self.animation_counter = 0
@@ -38,7 +37,7 @@ class Zombie(pygame.sprite.Sprite):
             self.last_shot = now
             self.shoot_poison_gas()
 
-    def shoot_poison_gas(self):
+    def shoot_poison_gas(self):     # Method to shoot poison gas 
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
         poison_gas.change_y = 5
         self.zombies.add(poison_gas)

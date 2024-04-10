@@ -1,12 +1,9 @@
 import pygame
 import random
-from enemy import Enemy
 import os
-import time
+from enemy import Enemy
 from cannon_ball_enemy import CannonBallEnemy
-from explosion import Explosion
-from zombie import Zombie
-from zombie2 import Zombie_2 
+from explosion import Explosion 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 5
@@ -31,7 +28,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.shoot_delay = 1000
         self.hit_points = 200
         self.value = 100
-        self.timer = 0
         self.check_zombie_spawn = False
         
 
@@ -62,30 +58,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
-
-    def spawn_zombie(self, dt, piratex, piratey):
-        # Spawn zombie type 1
-        if len(self.zombies) < 2:  # Change 2 to the desired number of zombies for type 1
-            self.timer += dt
-            if self.timer >= 10:  # Spawn interval for type 1 zombies
-                zombie = Zombie(self.rect.centerx, self.rect.bottom, self.vessels)
-                self.zombies.add(zombie)
-                self.timer -= 10  # Subtract the spawn interval
-        # Spawn zombie type 2
-        if len(self.zombies) < 4:  # Change 4 to the desired number of zombies for type 2
-            self.timer += dt
-            if self.timer >= 15:  # Spawn interval for type 2 zombies
-                zombie = Zombie_2(self.rect.centerx, self.rect.bottom, self.vessels)
-                self.zombies.add(zombie)
-                self.timer -= 15  # Subtract the spawn interval
-        # Update and draw zombies
-        self.zombies.update(piratex, piratey)
-        self.zombies.draw(self.screen)
-
-    def get_coordinates(self, piratex, piratey):
-        # if self.check_zombie_spawn == True:
-        #     self.spawn_zombie(0.1,piratex, piratey)
-        pass
     
     def get_spawn_value(self):
         return self.check_zombie_spawn
