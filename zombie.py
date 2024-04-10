@@ -4,7 +4,7 @@ from poison_gas import PoisonGas
 import random
 
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, x, y, vessels):
+    def __init__(self, x, y, zombies):
         super().__init__()
         self.images = [pygame.image.load(f"images/zombie1_{i}.png").convert_alpha() for i in range(1, 5)]
         self.index = 0
@@ -13,7 +13,7 @@ class Zombie(pygame.sprite.Sprite):
         self.speed = 1
         self.animation_delay = 5
         self.animation_counter = 0
-        self.vessels = vessels
+        self.zombies = zombies
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 2000  # 2 seconds interval for shooting gas
 
@@ -41,4 +41,4 @@ class Zombie(pygame.sprite.Sprite):
     def shoot_poison_gas(self):
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
         poison_gas.change_y = 5
-        self.vessels.add(poison_gas)
+        self.zombies.add(poison_gas)
