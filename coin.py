@@ -34,3 +34,6 @@ class Coin(pygame.sprite.Sprite):
             if self.index >= len(self.images):
                 self.index = 0
         self.image = self.images[self.index]
+
+    def get_coordinates(self, a, b):
+        pass

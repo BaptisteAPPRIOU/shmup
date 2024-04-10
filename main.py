@@ -9,7 +9,7 @@ import time
 from explosion import Explosion
 from water import Water
 from coin import Coin
-  
+
 class Main:
     def __init__(self):
         pygame.init()
@@ -17,19 +17,22 @@ class Main:
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
+        self.total_score = 57
+
 
         self.vessels = pygame.sprite.Group()
         self.explosions = pygame.sprite.Group()
         self.pirate_group = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.cannon_ball_enemies = pygame.sprite.Group()
 
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
 
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 15)  # Create a font object
         self.user_label = self.font.render("User: user", 1, (0, 255, 255))
         self.score_label = self.font.render("SCORE : ", 1, (0, 255, 255))
-        self.score_label2 = self.font.render(str(Lifeboat.value), 1, (0, 255, 255))
+        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
 
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
@@ -42,20 +45,20 @@ class Main:
         ]
 
         self.background_sprites = pygame.sprite.Group()
-        for y in range(0, 540, 24):                                                                                            
+        for y in range(0, 540, 24):
             for x in range(112, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
                 self.background_sprites.add(water_sprite)
-        
-        for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites    
-            for x in range(100, 640, self.beach.get_width()):  
+
+        for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites
+            for x in range(100, 640, self.beach.get_width()):
                 beach_sprite = pygame.sprite.Sprite()
                 beach_sprite.image = self.beach
                 beach_sprite.rect = beach_sprite.image.get_rect(topleft=(x, y))
                 self.background_sprites.add(beach_sprite)
 
         dock_width = self.dock.get_width()
-        for x in range(100, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites               
+        for x in range(100, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
             dock_sprite = pygame.sprite.Sprite()
             dock_sprite.image = self.dock
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
@@ -66,20 +69,21 @@ class Main:
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),                        
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5), 
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [10], 5),
             Wave(self.screen, self.vessels, [Lifeboat], [20], 5)
-            
+
         ]
 
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
-        total_score = 0  
-        self.score_label2 = self.font.render(str(total_score), 1, (0, 255, 255))  
+        # coin = Coin(-100, -100, 0)
+        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         while running:
-            dt = clock.tick(60) / 1000  
+
+            dt = clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -105,6 +109,7 @@ class Main:
             for vessel in self.vessels:                                                                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
                     vessel.move()                                                              # Move the vessel
+
                     vessel.get_coordinates(self.pirate.rect.centerx, self.pirate.rect.centery)
                     self.screen.blit(vessel.image, vessel.rect)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
@@ -116,27 +121,32 @@ class Main:
                     self.screen.blit(explosion.image, explosion.rect)
                     if explosion.finished:                                                                                          # Check if explosion animation has finished
                         for vessel in self.vessels:
-                            if vessel.rect.colliderect(explosion.rect):
-                                self.vessels.remove(vessel)
-                                self.vessels.remove(explosion)
-                                coin_value = 0
-                            if isinstance(vessel, Lifeboat):
-                                coin_value = 100
-                                print("Coin value",coin_value)       
-                            elif isinstance(vessel, Sloop):
-                                coin_value = 300
-                            elif isinstance(vessel, Ship):
-                                coin_value = 500
-                            print(coin_value)
-                            coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
-                            self.coins.add(coin)
+
+                            if isinstance(vessel, Ship) or isinstance(vessel, Sloop) or isinstance(vessel, Lifeboat):
+                                if vessel.rect.colliderect(explosion.rect):
+                                    self.vessels.remove(vessel)
+                                    self.vessels.remove(explosion)
+                                    coin_value = 0
+                                if isinstance(vessel, Lifeboat):
+                                    coin_value = 100
+                                    print("Coin value",coin_value)
+                                elif isinstance(vessel, Sloop):
+                                    coin_value = 300
+                                elif isinstance(vessel, Ship):
+                                    coin_value = 500
+                                coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
+                                self.coins.add(coin)
+                                print(coin_value)
+                            else:
+                                pass
 
             for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
                 if pygame.sprite.collide_mask(coin, self.pirate):
-                    total_score += coin_value 
-                    self.score_label2 = self.font.render(str(total_score), 1, (0, 255, 255))                                    # Update score label
+                    self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
                     self.coins.remove(coin)
                     self.coin_sound.play()
+                    self.total_score += coin_value
+                    print("Total score",self.total_score)
 
             self.coins.update()  # Update coin sprites
             self.coins.draw(self.screen)  # Draw coin sprites
