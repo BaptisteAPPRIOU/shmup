@@ -22,3 +22,6 @@ class CannonBallEnemy(pygame.sprite.Sprite):
 
     def get_coordinates(self, a, b):
         pass
+    
+    def get_spawn_value(self):
+        pass

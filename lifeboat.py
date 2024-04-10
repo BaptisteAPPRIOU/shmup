@@ -83,5 +83,9 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.zombies.draw(self.screen)
 
     def get_coordinates(self, piratex, piratey):
-        if self.check_zombie_spawn == True:
-            self.spawn_zombie(0.1,piratex, piratey)
+        # if self.check_zombie_spawn == True:
+        #     self.spawn_zombie(0.1,piratex, piratey)
+        pass
+    
+    def get_spawn_value(self):
+        return self.check_zombie_spawn
