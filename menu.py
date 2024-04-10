@@ -2,7 +2,7 @@ import pygame
 import pygame_gui
 from tutorial import Tutorial
 
-def main():
+class menu():
 
     pygame.init()
     clock = pygame.time.Clock()
@@ -55,4 +55,5 @@ def main():
         pygame.display.flip()
     pygame.quit()
     
-main()
+if __name__ == "__main__":
+    menu()
