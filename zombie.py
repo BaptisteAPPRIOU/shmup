@@ -1,9 +1,9 @@
 import pygame
-import random
 from poison_gas import PoisonGas
+import random
 
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, x, y, zombies):
+    def __init__(self, x, y, zombies, poison_gas):
         super().__init__()
         self.images = [pygame.image.load(f"images/zombie1_{i}.png").convert_alpha() for i in range(1, 5)]
         self.index = 0
@@ -15,15 +15,18 @@ class Zombie(pygame.sprite.Sprite):
         self.zombies = zombies
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 2000  # 2 seconds interval for shooting gas
+        self.hit_points = 150
+        self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
+        self.poison_gas = poison_gas
 
     def update(self, player_x, player_y):
-        self.move()                 # Call the move method in the update method
+        self.move()  # Call the move method in the update method
         self.animation_counter += 1
         if self.animation_counter >= self.animation_delay:
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-        if self.rect.bottom > 900:
+        if self.rect.bottom > 1000:
             self.kill()
         self.attack()
 
@@ -37,7 +40,12 @@ class Zombie(pygame.sprite.Sprite):
             self.last_shot = now
             self.shoot_poison_gas()
 
-    def shoot_poison_gas(self):     # Method to shoot poison gas 
+    def shoot_poison_gas(self):
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
         poison_gas.change_y = 5
-        self.zombies.add(poison_gas)
+        self.poison_gas.add(poison_gas)
+
+    def update_hit_points(self, damage):
+        self.hit_points -= damage
+        if self.hit_points <= 0:
+            self.kill()

@@ -1,11 +1,10 @@
 import pygame
-import os
 import math
 import random
 from poison_gas import PoisonGas
 
 class Zombie_2(pygame.sprite.Sprite):
-    def __init__(self, x, y, gas_sprites):
+    def __init__(self, x, y, zombies, poison_gas):
         super().__init__()
         self.images = [pygame.image.load(f"images/zombie2_{i}.png").convert_alpha() for i in range(1, 5)]   # Load zombie images
         self.index = 0
@@ -14,9 +13,14 @@ class Zombie_2(pygame.sprite.Sprite):
         self.speed = 1
         self.animation_delay = 5
         self.animation_counter = 0
-        self.gas_sprites = gas_sprites
+        self.zombies = zombies
+        self.poison_gas = poison_gas
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 2000  # 2 seconds interval for shooting gas
+        self.hit_points = 350
+        self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
+        self.hit_points = 350
+        self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
 
     def update(self, pirate_x, pirate_y):                                 # Update the zombie and attack
         self.rect.y += self.speed
@@ -25,9 +29,14 @@ class Zombie_2(pygame.sprite.Sprite):
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-        if self.rect.bottom > 900:
+        if self.rect.bottom > 1000:
             self.kill()
         self.attack(pirate_x, pirate_y)
+
+    def update_hit_points(self, damage):                                # Update the hit points of the zombie
+        self.hit_points -= damage
+        if self.hit_points <= 0:
+            self.kill()
 
     def attack(self, pirate_x, pirate_y):                                 # Attack the player
         now = pygame.time.get_ticks()
@@ -43,4 +52,9 @@ class Zombie_2(pygame.sprite.Sprite):
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
         poison_gas.change_x = math.cos(angle) * 5
         poison_gas.change_y = math.sin(angle) * 5
-        self.gas_sprites.add(poison_gas)
+        self.poison_gas.add(poison_gas)
+
+    def update_hit_points(self, damage):                                # Update the hit points of the zombie
+        self.hit_points -= damage
+        if self.hit_points <= 0:
+            self.kill()
