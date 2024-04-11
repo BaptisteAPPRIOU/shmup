@@ -27,8 +27,6 @@ class PoisonGas(pygame.sprite.Sprite):
 
     def get_coordinates(self, a, b):
         pass
-    
-
 
     def update_hit_points(self, damage):
         pass

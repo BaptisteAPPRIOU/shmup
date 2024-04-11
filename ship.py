@@ -7,12 +7,12 @@ from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
 class Ship(Enemy, pygame.sprite.Sprite):
-    speed = 4
+    speed = 2
     width = 110
     height = 150
     value = 500
 
-    def __init__(self, screen, vessels, explosions, speed, x, y):
+    def __init__(self, screen, vessels,cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((110, 150))
         ship_image = pygame.image.load(os.path.join("images", "ship.png")).convert_alpha()
@@ -28,6 +28,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
         self.shoot_delay = 1000
         self.hit_points = 600
         self.explosions = explosions
+        self.cannon_ball_enemy = cannon_ball_enemy
         self.check_zombie_spawn = False
 
     def move(self):
@@ -45,7 +46,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
                     bullet = CannonBallEnemy(self.rect.centerx + offset, self.rect.bottom)
                     bullet.rect.centerx = self.rect.centerx + offset
                     bullet.rect.bottom = self.rect.bottom + y_offsets[i]
-                    self.vessels.add(bullet)
+                    self.cannon_ball_enemy.add(bullet)
                 self.last_shot = now
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the ship

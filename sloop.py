@@ -8,12 +8,12 @@ from explosion import Explosion
 
 
 class Sloop(Enemy, pygame.sprite.Sprite):
-    speed = 1
+    speed = 3
     width = 45
     height = 65
     value = 300
 
-    def __init__(self, screen, vessels, explosions, speed, x, y):
+    def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((45, 65))
         sloop_image = pygame.image.load(os.path.join("images", "sloop.png")).convert_alpha()
@@ -30,6 +30,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.hit_points = 400
         self.explosions = explosions
         self.check_zombie_spawn = False
+        self.cannon_ball_enemy = cannon_ball_enemy
 
 
     def move(self):
@@ -47,7 +48,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
                     bullet = CannonBallEnemy(self.rect.centerx + offset, self.rect.bottom)
                     bullet.rect.centerx = self.rect.centerx + offset
                     bullet.rect.bottom = self.rect.bottom + 15
-                    self.vessels.add(bullet)
+                    self.cannon_ball_enemy.add(bullet)
                 self.last_shot = now
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the sloop

@@ -9,12 +9,12 @@ from zombie import Zombie
 from zombie2 import Zombie_2 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
-    speed = 5
+    speed = 4
     width = 45
     height = 55
     value = 100
 
-    def __init__(self, screen, vessels, explosions, speed, x, y):
+    def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
@@ -34,6 +34,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.timer = 0
         self.check_zombie_spawn = False
         self.explosions = explosions
+        self.cannon_ball_enemy = cannon_ball_enemy
         
 
     def move(self):   
@@ -50,7 +51,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet = CannonBallEnemy(self.rect.centerx, self.rect.bottom)                                               # Create a new bullet instance
                 bullet.rect.centerx = self.rect.centerx                                                                     # Center the bullet horizontally
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
-                self.vessels.add(bullet)                                                                                    # Add the bullet to the vessels group
+                self.cannon_ball_enemy.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        

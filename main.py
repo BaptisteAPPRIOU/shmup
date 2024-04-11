@@ -68,15 +68,15 @@ class Main:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate_group.add(self.pirate)
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, [Lifeboat], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, [Sloop], [3], 5, self.explosions),
-            Wave(self.screen, self.vessels, [Ship], [5], 5, self.explosions),
-            Wave(self.screen, self.vessels, [Lifeboat], [8], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [8], 5, self.explosions),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
         ]
 
@@ -113,6 +113,8 @@ class Main:
             self.zombies.draw(self.screen)
             self.poison_gas.update()
             self.poison_gas.draw(self.screen)
+            self.cannon_ball_enemies.update()                                                                                      # Update cannon ball enemy sprites
+            self.cannon_ball_enemies.draw(self.screen)                                                                             # Draw cannon ball enemy sprites
 
             self.timer += dt
             
@@ -144,7 +146,27 @@ class Main:
                     self.total_score += 10
                 elif explosion.type == "ship":
                     self.total_score += 15
-                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
+                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
+
+            for bullet in self.cannon_ball_enemies:
+                if pygame.sprite.collide_mask(bullet, self.pirate):
+                    self.pirate.health -= 10
+                    bullet.kill()  
+                    print("Pirate health", self.pirate.health)
+                    if self.pirate.health <= 0:
+                        self.pirate.kill()
+                        print("Game Over")
+                        running = False
+            
+            for gas in self.poison_gas:
+                if pygame.sprite.collide_mask(gas, self.pirate):
+                    self.pirate.health -= 10
+                    gas.kill()  
+                    print("Pirate health", self.pirate.health)
+                    if self.pirate.health <= 0:
+                        self.pirate.kill()
+                        print("Game Over")
+                        running = False  
 
                 # if explosion.finished:
                 #     for vessel in self.vessels.copy():
@@ -174,16 +196,7 @@ class Main:
             #         self.total_score += coin_value
             #         # print("Total score",self.total_score)
 
-            for vessel in self.vessels:
-                if isinstance(vessel, Lifeboat):
-                    if isinstance(vessel, Lifeboat):
-                        if pygame.sprite.collide_rect(self.pirate, vessel):
-                            self.pirate.health -= 10
-                            if self.pirate.health <= 0:
-                                self.pirate.kill()
-                                print("Game Over")
-                                running = False
-                            print("Lifeboat collision")
+            
                     
                 # if pygame.sprite.collide_rect(self.pirate, poison_gas):
                 #     print("hit")
