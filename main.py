@@ -158,18 +158,24 @@ class Main:
                 if isinstance(vessel, Coin):
                     if pygame.sprite.collide_mask(vessel, self.pirate):
                         print("Coin value", vessel.get_value())
-                        if vessel.get_value() == 'rouge':
+                        if vessel.get_value() == 'blue':
                             print("Speed boost")
                             self.speed = 3
                             self.speed_boost_duration = 5
-                        elif vessel.get_value() == 'vert':
+                        elif vessel.get_value() == 'red':
                             print("Damage boost")
                             self.pirate.damage += self.pirate.damage*4
                             self.damage_boost_duration = 5
-                        elif vessel.get_value() == 'bleu':  # Check if the coin is blue
+                        elif vessel.get_value() == 'green':  # Check if the coin is blue
                             print("Health boost")
                             self.pirate.health += 50000  # Increase health by 10000
                             self.health_boost_duration = 5
+                        elif vessel.get_value() == 'black':
+                            print("Poison gas")
+                            for zombie in self.zombies:
+                                zombie.kill()
+                            for gas in self.poison_gas:
+                                gas.kill()
                         vessel.kill()
                         cpt = 1
 
