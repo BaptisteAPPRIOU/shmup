@@ -6,12 +6,12 @@ from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
 class Ship(Enemy, pygame.sprite.Sprite):
-    speed = 4
+    speed = 3
     width = 110
     height = 150
     value = 500
 
-    def __init__(self, screen, vessels, speed, x, y):
+    def __init__(self, screen, vessels, cannon_ball_enemy, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((110, 150))
         ship_image = pygame.image.load(os.path.join("images", "ship.png")).convert_alpha()
@@ -20,6 +20,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
         self.screen = screen
         self.speed = speed
         self.vessels = vessels
+        self.cannon_ball_enemy = cannon_ball_enemy
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)                                                                                    # Create a mask from the image to use for collision detection
@@ -44,7 +45,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
                     bullet = CannonBallEnemy(self.rect.centerx + offset, self.rect.bottom)
                     bullet.rect.centerx = self.rect.centerx + offset
                     bullet.rect.bottom = self.rect.bottom + y_offsets[i]
-                    self.vessels.add(bullet)
+                    self.cannon_ball_enemy.add(bullet)
                 self.last_shot = now
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the ship
