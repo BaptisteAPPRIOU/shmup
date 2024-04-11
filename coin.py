@@ -1,8 +1,9 @@
 import pygame
+import random
 
 
 class Coin(pygame.sprite.Sprite):
-    def __init__(self, x, y, value):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         for num in range(1, 7):
@@ -16,8 +17,14 @@ class Coin(pygame.sprite.Sprite):
         self.counter = 0
         self.finished = False
         self.speed = 5
-        self.value = value
         self.mask = pygame.mask.from_surface(self.image)
+        randomvalue = random.randint(1, 3)
+        if randomvalue == 1:
+            self.value = 'rouge'
+        elif randomvalue == 2:
+            self.value = 'vert'
+        elif randomvalue == 3:
+            self.value = 'bleu'
 
     def update(self):
         self.move()
@@ -25,6 +32,7 @@ class Coin(pygame.sprite.Sprite):
 
     def move(self):
         self.rect.y += self.speed
+        self.animate()
 
     def animate(self):
         self.counter += 1
@@ -36,4 +44,10 @@ class Coin(pygame.sprite.Sprite):
         self.image = self.images[self.index]
 
     def get_coordinates(self, a, b):
+        pass
+
+    def get_value(self):
+        return self.value
+    
+    def get_spawn_value(self):
         pass
