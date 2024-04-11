@@ -12,7 +12,7 @@ class Pirate(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT
         self.speedx = 0
-        self.health = 1000
+        self.health = 100
         self.all_sprites = all_sprites
         self.bullets = bullets
         self.WIDTH = WIDTH

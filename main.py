@@ -14,8 +14,9 @@ class Main:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
-        self.statistics_bar = pygame.Rect(0, 0, 100, 900)
+        self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA) 
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.total_score = 0
         self.timer = 0
@@ -31,20 +32,47 @@ class Main:
         self.zombies = pygame.sprite.Group()
         self.poison_gas = pygame.sprite.Group()
         self.blood = pygame.sprite.Group()
+        self.static_coin = pygame.sprite.Group()
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         # FONTS AND LABELS
-        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 15) 
-        self.user_label = self.font.render("User: user", 1, (0, 255, 255))
-        self.score_label = self.font.render("SCORE : ", 1, (0, 255, 255))
-        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
-        self.health_label = self.font.render("HEALTH : ", 1, (0, 255, 255))
-        self.health = self.font.render(str(self.health), 1, (0, 255, 255))
-        self.life_label = self.font.render("LIVES : ", 1, (0, 255, 255))
-        self.life = self.font.render(str(self.life), 1, (0, 255, 255))
+        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 17) 
+        self.user_label = self.font.render("User: user", 1, (0, 0, 0))
+        self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
+        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
+        # self.health_label = self.font.render("HEALTH : ", 1, (0, 0, 0))
+        # self.health = self.font.render(str(self.health), 1, (0, 0, 0))
+        # self.life_label = self.font.render("LIVES : ", 1, (0, 0, 0))
+        # self.life = self.font.render(str(self.life), 1, (0, 0, 0))
         # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
+        self.health_bar = pygame.image.load("images/health_10.png").convert_alpha()
+        self.health_bar = pygame.transform.scale(self.health_bar, (100, 15))
+        self.life_heart = pygame.image.load("images/life_3.png").convert_alpha()
+        self.life_heart = pygame.transform.scale(self.life_heart, (96, 32))
+
+        self.health_images = {
+        100: pygame.transform.scale(pygame.image.load("images/health_10.png").convert_alpha(),(100, 15)),
+        90: pygame.transform.scale(pygame.image.load("images/health_9.png").convert_alpha(),(100, 15)),
+        80: pygame.transform.scale(pygame.image.load("images/health_8.png").convert_alpha(),(100, 15)),
+        70: pygame.transform.scale(pygame.image.load("images/health_7.png").convert_alpha(),(100, 15)),
+        60: pygame.transform.scale(pygame.image.load("images/health_6.png").convert_alpha(),(100, 15)),
+        50: pygame.transform.scale(pygame.image.load("images/health_5.png").convert_alpha(),(100, 15)),
+        40: pygame.transform.scale(pygame.image.load("images/health_4.png").convert_alpha(),(100, 15)),
+        30: pygame.transform.scale(pygame.image.load("images/health_3.png").convert_alpha(),(100, 15)),
+        20: pygame.transform.scale(pygame.image.load("images/health_2.png").convert_alpha(),(100, 15)),
+        10: pygame.transform.scale(pygame.image.load("images/health_1.png").convert_alpha(),(100, 15)),
+        110: pygame.transform.scale(pygame.image.load("images/health_immune.png").convert_alpha(),(100, 15))
+    }
+        self.life_images = {
+            3: pygame.transform.scale(pygame.image.load("images/life_3.png").convert_alpha(), (96, 32)),
+            2: pygame.transform.scale(pygame.image.load("images/life_2.png").convert_alpha(), (96, 32)),
+            1: pygame.transform.scale(pygame.image.load("images/life_1.png").convert_alpha(), (96, 32)),
+            0: pygame.transform.scale(pygame.image.load("images/life_0.png").convert_alpha(), (96, 32))
+        }
+
+        self.red_coin_images = [pygame.transform.scale(pygame.image.load(f"images/red_coin{i}.png").convert_alpha(), (32, 32)) for i in range(1, 7)]
 
         self.water_images = [
             pygame.transform.scale(pygame.image.load("images/water.png").convert_alpha(), (24, 24)),
@@ -55,12 +83,12 @@ class Main:
 
         self.background_sprites = pygame.sprite.Group()
         for y in range(0, 540, 24):
-            for x in range(112, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
+            for x in range(0, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
                 self.background_sprites.add(water_sprite)
   
         for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites
-            for x in range(100, 640, self.beach.get_width()):
+            for x in range(0, 640, self.beach.get_width()):
                 beach_sprite = pygame.sprite.Sprite()
                 beach_sprite.image = self.beach
                 beach_sprite.rect = beach_sprite.image.get_rect(topleft=(x, y))
@@ -92,14 +120,18 @@ class Main:
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
         ]
 
+        if not self.static_coin:
+            static_coin =Coin(30,500)
+            self.static_coin.add(static_coin)
+
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
-        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
+        self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
         while running:
 
             counter = 0
-            dt = clock.tick(60) / 1000
+            dt = clock.tick(60)/1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -112,9 +144,10 @@ class Main:
             waves[current_wave].spawn_waves(dt)                                                                                     # Spawn waves of enemies
 
             self.screen.fill((0, 0, 0))                                                                                             # Fill the screen with black color
+            self.screen.blit(self.surface, (0, 0))                                                                                  # Blit the surface with transparency to the screen
 
-            pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
+            self.statiscs_bar = pygame.draw.rect(self.surface,(255,255,255,33),(0,0,100,1000))
 
             self.background_sprites.update()                                                                                        # Update water sprites
             self.background_sprites.draw(self.screen)                                                                               # Draw water sprite
@@ -130,6 +163,8 @@ class Main:
             self.coins.draw(self.screen) 
             self.blood.update()
             self.blood.draw(self.screen)
+            self.static_coin.update()
+            self.static_coin.draw(self.screen)
 
             self.timer += dt
             
@@ -159,7 +194,7 @@ class Main:
                     self.total_score += 10
                 elif explosion.type == "ship":
                     self.total_score += 15
-                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
+                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
 
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
@@ -172,8 +207,40 @@ class Main:
                             self.pirate.kill()
                             print("Game Over")
                             running = False
-            self.health = self.font.render(str(self.pirate.health), 1, (0, 255, 255))
-            self.life = self.font.render(str(self.pirate.life), 1, (0, 255, 255))
+            # self.health = self.font.render(str(self.pirate.health), 1, (0, 0, 0))
+            self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
+
+            if self.pirate.health > 100:
+                self.health_bar = self.health_images[110]
+            elif self.pirate.health == 100:
+                self.health_bar = self.health_images[100]
+            elif self.pirate.health == 90:
+                self.health_bar = self.health_images[90]
+            elif self.pirate.health == 80:
+                self.health_bar = self.health_images[80]
+            elif self.pirate.health == 70:
+                self.health_bar = self.health_images[70]
+            elif self.pirate.health == 60:
+                self.health_bar = self.health_images[60]
+            elif self.pirate.health == 50:
+                self.health_bar = self.health_images[50]
+            elif self.pirate.health == 40:
+                self.health_bar = self.health_images[40]
+            elif self.pirate.health == 30:
+                self.health_bar = self.health_images[30]
+            elif self.pirate.health == 20:
+                self.health_bar = self.health_images[20]
+            elif self.pirate.health == 10:
+                self.health_bar = self.health_images[10]
+
+            if self.pirate.life == 3:
+                self.life_heart = self.life_images[3]
+            elif self.pirate.life == 2:
+                self.life_heart = self.life_images[2]
+            elif self.pirate.life == 1:
+                self.life_heart = self.life_images[1]
+            elif self.pirate.life == 0:
+                self.life_heart = self.life_images[0]
             
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
@@ -233,10 +300,14 @@ class Main:
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))
             self.screen.blit(self.score_label2, (10, 130))
-            self.screen.blit(self.health_label, (10, 160))
-            self.screen.blit(self.health, (10, 190))
-            self.screen.blit(self.life_label, (10, 220))
-            self.screen.blit(self.life, (10, 250))
+            # self.screen.blit(self.health_label, (10, 160))
+            # self.screen.blit(self.health, (10, 190))
+            # self.screen.blit(self.life_label, (10, 220))
+            # self.screen.blit(self.life, (10, 250))
+            self.screen.blit(self.surface, (0, 0))
+            self.screen.blit(self.health_bar, (2, 190))
+            self.screen.blit(self.life_heart, (5, 210))
+            
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
