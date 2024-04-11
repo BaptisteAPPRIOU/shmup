@@ -58,8 +58,10 @@ class Sloop(Enemy, pygame.sprite.Sprite):
 
     def destroy(self):                                                                                                      # Method to destroy the sloop
         explosion = Explosion(self.rect.centerx, self.rect.centery, "sloop")
-        Bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
-        self.vessels.add(Bonus)  
+        Bonus_luck = random.randint(1, 4)
+        if Bonus_luck == 1:
+            Bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+            self.vessels.add(Bonus)
         self.explosions.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
