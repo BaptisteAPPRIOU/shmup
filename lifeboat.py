@@ -40,7 +40,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
-            self. check_zombie_spawn = True
+            self.check_zombie_spawn = True
 
     def attack(self):
         if self.rect.y >=0:                                                                                                 # Check if the lifeboat is on the screen
@@ -59,7 +59,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
             self.destroy()
             
     def destroy(self):
-        explosion = Explosion(self.rect.centerx, self.rect.centery)
+        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
         self.explosions.add(explosion)  # Add explosion to explosions group
         self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
