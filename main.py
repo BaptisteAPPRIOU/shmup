@@ -29,6 +29,7 @@ class Main:
         self.coins = pygame.sprite.Group()
         self.cannon_ball_enemies = pygame.sprite.Group()
         self.zombies = pygame.sprite.Group()
+        self.poison_gas = pygame.sprite.Group()
 
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
 
@@ -67,15 +68,15 @@ class Main:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels, self.zombies, self.cannon_ball_enemies, self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate_group.add(self.pirate)
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, [Lifeboat], [2], 5),
-            Wave(self.screen, self.vessels, [Sloop], [3], 5),
-            Wave(self.screen, self.vessels, [Ship], [5], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [8], 5),
+            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Lifeboat], [2], 5),
+            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Sloop], [3], 5),
+            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Ship], [5], 5),
+            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Lifeboat], [8], 5),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
 
         ]
@@ -105,15 +106,17 @@ class Main:
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
             self.background_sprites.draw(self.screen)                                                                               # Draw water sprites
-
             self.pirate_group.update()                                                                                              # Update pirate sprite
             self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
             self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery)
             self.zombies.draw(self.screen)
+            self.poison_gas.update()
+            self.poison_gas.draw(self.screen)
+            self.cannon_ball_enemies.update()
+            self.cannon_ball_enemies.draw(self.screen)
 
             self.timer += dt
             
-                
             for vessel in self.vessels:                                                                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
                     vessel.move()                                                              # Move the vessel
@@ -121,12 +124,10 @@ class Main:
                     if vessel.get_spawn_value() == True:
                         if self.timer >= 4:
                             lucky_number = random.randint(1, 5)
-                            print(self.timer)
                             if lucky_number == (1 or 2 or 3 or 4):
-                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 1)
+                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 1, self.poison_gas)
                             elif lucky_number == 5:
-                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2)
-                            print (self.timer)
+                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2, self.poison_gas)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
             
@@ -146,14 +147,12 @@ class Main:
                                     coin_value = 0
                                 if isinstance(vessel, Lifeboat):
                                     coin_value = 100
-                                    # print("Coin value",coin_value)
                                 elif isinstance(vessel, Sloop):
                                     coin_value = 300
                                 elif isinstance(vessel, Ship):
                                     coin_value = 500
                                 coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
                                 self.coins.add(coin)
-                                # print(coin_value)
                             else:
                                 pass
 
@@ -176,8 +175,25 @@ class Main:
                                 running = False
                             print("Lifeboat collision")
                     
-                # if pygame.sprite.collide_rect(self.pirate, poison_gas):
-                #     print("hit")
+            for bullet in self.cannon_ball_enemies:
+                if pygame.sprite.collide_mask(bullet, self.pirate):
+                    self.pirate.health -= 10
+                    bullet.kill()  
+                    print("Pirate health", self.pirate.health)
+                    if self.pirate.health <= 0:
+                        self.pirate.kill()
+                        print("Game Over")
+                        running = False
+            
+            for gas in self.poison_gas:
+                if pygame.sprite.collide_mask(gas, self.pirate):
+                    self.pirate.health -= 10
+                    gas.kill()  
+                    print("Pirate health", self.pirate.health)
+                    if self.pirate.health <= 0:
+                        self.pirate.kill()
+                        print("Game Over")
+                        running = False
 
             self.coins.update()  # Update coin sprites
             self.coins.draw(self.screen)  # Draw coin sprites
