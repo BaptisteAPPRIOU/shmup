@@ -19,7 +19,7 @@ class Main:
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
-        self.total_score = 57
+        self.total_score = 0
         self.timer = 0
 
         self.vessels = pygame.sprite.Group()
@@ -73,12 +73,11 @@ class Main:
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, [Lifeboat], [2], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [3], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5),
-            Wave(self.screen, self.vessels, [Lifeboat], [8], 5),
+            Wave(self.screen, self.vessels, [Lifeboat], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, [Lifeboat], [3], 5, self.explosions),
+            Wave(self.screen, self.vessels, [Lifeboat], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, [Lifeboat], [8], 5, self.explosions),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
-
         ]
 
         clock = pygame.time.Clock()
@@ -117,7 +116,6 @@ class Main:
 
             self.timer += dt
             
-                
             for vessel in self.vessels:                                                                                             # Loop through all vessels
                 #print (vessel)
                 if not isinstance(vessel, Explosion):
@@ -125,52 +123,48 @@ class Main:
                     # vessel.get_coordinates(self.pirate.rect.centerx, self.pirate.rect.centery)
                     self.screen.blit(vessel.image, vessel.rect)
                     if vessel.get_spawn_value() == True:
-                        print("Spawn can zombie")
                         if self.timer >= 4:
                             lucky_number = random.randint(1, 5)
-                            print(self.timer)
                             if lucky_number == (1 or 2 or 3 or 4):
                                 SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 1, self.poison_gas)
                             elif lucky_number == 5:
                                 SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2, self.poison_gas)
-                            print (self.timer)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
             
             if self.timer >= 4:
                 self.timer -= 4
 
-            for explosion in self.vessels.copy():                                                                                   # Use copy() to avoid modifying the original while iterating
-                if isinstance(explosion, Explosion):
-                    explosion.update()
-                    self.screen.blit(explosion.image, explosion.rect)
-                    if explosion.finished:                                                                                          # Check if explosion animation has finished
-                        for vessel in self.vessels:
-                            if isinstance(vessel, Ship) or isinstance(vessel, Sloop) or isinstance(vessel, Lifeboat):
-                                if vessel.rect.colliderect(explosion.rect):
-                                    self.vessels.remove(vessel)
-                                    self.vessels.remove(explosion)
-                                    coin_value = 0
-                                if isinstance(vessel, Lifeboat):
-                                    coin_value = 100
-                                    # print("Coin value",coin_value)
-                                elif isinstance(vessel, Sloop):
-                                    coin_value = 300
-                                elif isinstance(vessel, Ship):
-                                    coin_value = 500
-                                coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
-                                self.coins.add(coin)
-                                # print(coin_value)
-                            else:
-                                pass
+            for explosion in self.explosions.copy():
+                explosion.update()
+                self.screen.blit(explosion.image, explosion.rect)
+                if explosion.finished:
+                    for vessel in self.vessels.copy():
+                        if vessel.rect.colliderect(explosion.rect):
+                            if isinstance(vessel, Lifeboat):
+                                self.total_score += 100
+                            elif isinstance(vessel, Sloop):
+                                self.total_score += 300
+                            elif isinstance(vessel, Ship):
+                                self.total_score += 500
+                            self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
+                            self.vessels.remove(vessel)
+                            print(explosion)
+                        elif isinstance(vessel, Lifeboat):
+                            self.total_score += 100
 
-            for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
-                if pygame.sprite.collide_mask(coin, self.pirate):
-                    self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
-                    self.coins.remove(coin)
-                    self.coin_sound.play()
-                    self.total_score += coin_value
-                    # print("Total score",self.total_score)
+                                    # coin_value = 0
+                                # coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
+                                # self.coins.add(coin)
+                                # print(coin_value)
+
+            # for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
+            #     if pygame.sprite.collide_mask(coin, self.pirate):
+            #         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
+            #         self.coins.remove(coin)
+            #         self.coin_sound.play()
+            #         self.total_score += coin_value
+            #         # print("Total score",self.total_score)
 
             for vessel in self.vessels:
                 if isinstance(vessel, Lifeboat):

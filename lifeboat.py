@@ -14,7 +14,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
     height = 55
     value = 100
 
-    def __init__(self, screen, vessels, speed, x, y):
+    def __init__(self, screen, vessels, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
@@ -33,6 +33,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.value = 100
         self.timer = 0
         self.check_zombie_spawn = False
+        self.explosions = explosions
         
 
     def move(self):   
@@ -57,11 +58,12 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero        
             self.destroy()
             
-    def destroy(self):                                                                                                      # Method to destroy the lifeboat      
+    def destroy(self):
         explosion = Explosion(self.rect.centerx, self.rect.centery)
-        self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
-        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
+        self.explosions.add(explosion)  # Add explosion to explosions group
+        self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
+
 
     # def get_coordinates(self, piratex, piratey):
     #     # if self.check_zombie_spawn == True:

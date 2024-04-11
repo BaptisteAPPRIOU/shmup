@@ -5,12 +5,13 @@ import sys
 import os
 
 class Wave:
-    def __init__(self, screen, vessels, enemy_types, counts, pause_duration):                       
+    def __init__(self, screen, vessels, enemy_types, counts, pause_duration, explosions):                       
         self.screen = screen
         self.vessels = vessels
         self.enemy_types = enemy_types
         self.counts = counts
         self.pause_duration = pause_duration
+        self.explosions = explosions
         self.timer = 0
         self.current_wave = 0
 
@@ -30,7 +31,7 @@ class Wave:
                     while self.check_overlap(x, y, enemy_type):                     # Check if the enemy overlaps with other enemies
                         x = random.randint(120, 520 - enemy_type.width)              # Random x-coordinate for enemy spawn
                         y = random.randint(-1500, -300)                             # Random y-coordinate for enemy spawn
-                    enemy = enemy_type(self.screen, self.vessels, speed=enemy_type.speed, x=x, y=y)             # Create an enemy object
+                    enemy = enemy_type(self.screen, self.vessels,self.explosions, speed=enemy_type.speed, x=x, y=y)             # Create an enemy object
                     
                     self.vessels.add(enemy)                                         # Add the enemy to the vessels group
                     self.counts[self.current_wave] -= 1                             # Decrement the number of enemies left to spawn
