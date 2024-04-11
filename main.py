@@ -74,8 +74,8 @@ class Main:
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, [Lifeboat], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, [Lifeboat], [3], 5, self.explosions),
-            Wave(self.screen, self.vessels, [Lifeboat], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, [Sloop], [3], 5, self.explosions),
+            Wave(self.screen, self.vessels, [Ship], [5], 5, self.explosions),
             Wave(self.screen, self.vessels, [Lifeboat], [8], 5, self.explosions),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
         ]
@@ -138,20 +138,28 @@ class Main:
             for explosion in self.explosions.copy():
                 explosion.update()
                 self.screen.blit(explosion.image, explosion.rect)
-                if explosion.finished:
-                    for vessel in self.vessels.copy():
-                        if vessel.rect.colliderect(explosion.rect):
-                            if isinstance(vessel, Lifeboat):
-                                self.total_score += 100
-                            elif isinstance(vessel, Sloop):
-                                self.total_score += 300
-                            elif isinstance(vessel, Ship):
-                                self.total_score += 500
-                            self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
-                            self.vessels.remove(vessel)
-                            print(explosion)
-                        elif isinstance(vessel, Lifeboat):
-                            self.total_score += 100
+                if explosion.type == "lifeboat":
+                    self.total_score += 5
+                elif explosion.type == "sloop":
+                    self.total_score += 10
+                elif explosion.type == "ship":
+                    self.total_score += 15
+                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
+
+                # if explosion.finished:
+                #     for vessel in self.vessels.copy():
+                #         if vessel.rect.colliderect(explosion.rect):
+                #             if isinstance(vessel, Lifeboat):
+                #                 self.total_score += 100
+                #             elif isinstance(vessel, Sloop):
+                #                 self.total_score += 300
+                #             elif isinstance(vessel, Ship):
+                #                 self.total_score += 500
+                #             self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
+                #             self.vessels.remove(vessel)
+                #             print(explosion)
+                #         elif isinstance(vessel, Lifeboat):
+                #             self.total_score += 100
 
                                     # coin_value = 0
                                 # coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
