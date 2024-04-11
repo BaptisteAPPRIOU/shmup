@@ -11,16 +11,16 @@ class CannonBallEnemy(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 5
 
-    def update(self):                   # Update method to move the cannon ball
+    def update(self):
         self.move()
         if self.rect.bottom < 0:
             self.kill()
 
-    def move(self):                     # Method to move the cannon ball
+    def move(self):
         self.rect.y += self.speed
 
-    def get_coordinates(self, a, b):    # Method dodged
+    def get_coordinates(self, a, b):
         pass
     
-    def get_spawn_value(self):          # Method dodged
+    def get_spawn_value(self):
         pass
