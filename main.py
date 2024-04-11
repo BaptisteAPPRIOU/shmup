@@ -21,6 +21,7 @@ class Main:
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.total_score = 0
         self.timer = 0
+        self.health = 100
 
         self.vessels = pygame.sprite.Group()
         self.explosions = pygame.sprite.Group()
@@ -37,6 +38,8 @@ class Main:
         self.user_label = self.font.render("User: user", 1, (0, 255, 255))
         self.score_label = self.font.render("SCORE : ", 1, (0, 255, 255))
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
+        self.health_label = self.font.render("HEALTH : ", 1, (0, 255, 255))
+        self.health = self.font.render(str(self.health), 1, (0, 255, 255))
 
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
@@ -157,6 +160,7 @@ class Main:
                         self.pirate.kill()
                         print("Game Over")
                         running = False
+                self.health = self.font.render(str(self.pirate.health), 1, (0, 255, 255))
             
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
@@ -207,6 +211,8 @@ class Main:
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))
             self.screen.blit(self.score_label2, (10, 130))
+            self.screen.blit(self.health_label, (10, 160))
+            self.screen.blit(self.health, (10, 190))
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
