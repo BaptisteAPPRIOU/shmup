@@ -2,11 +2,10 @@ import pygame
 import random
 from enemy import Enemy
 import os
-import time
+from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion
-from zombie import Zombie
-from zombie2 import Zombie_2 
+ 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 4
@@ -60,6 +59,8 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
             
     def destroy(self):
         explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
+        Bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+        self.vessels.add(Bonus)                                                                                             # Add the coin to the vessels group
         self.explosions.add(explosion)  # Add explosion to explosions group
         self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
