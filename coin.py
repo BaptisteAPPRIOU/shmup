@@ -6,10 +6,32 @@ class Coin(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
-        for num in range(1, 7):
-            img = pygame.image.load(f"images/coin{num}.png").convert_alpha()
-            img = pygame.transform.scale(img, (32, 32))
-            self.images.append(img)
+        randomvalue = random.randint(1, 10)
+        if randomvalue == (1 or 2 or 3):
+            self.value = 'red'
+            for num in range(1, 7):
+                img = pygame.image.load(f"images/red_coin{num}.png").convert_alpha()
+                img = pygame.transform.scale(img, (32, 32))
+                self.images.append(img)
+        elif randomvalue == (4 or 5 or 6):
+            self.value = 'green'
+            for num in range(1, 7):
+                img = pygame.image.load(f"images/green_coin{num}.png").convert_alpha()
+                img = pygame.transform.scale(img, (32, 32))
+                self.images.append(img)
+        elif randomvalue == (7 or 8 or 9):
+            self.value = 'blue'
+            for num in range(1, 7):
+                img = pygame.image.load(f"images/blue_coin{num}.png").convert_alpha()
+                img = pygame.transform.scale(img, (32, 32))
+                self.images.append(img)
+        elif randomvalue == 10:
+            self.value = 'black'
+            for num in range(1, 7):
+                img = pygame.image.load(f"images/black_coin{num}.png").convert_alpha()
+                img = pygame.transform.scale(img, (32, 32))
+                self.images.append(img)
+        
         self.index = 0
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
@@ -18,13 +40,6 @@ class Coin(pygame.sprite.Sprite):
         self.finished = False
         self.speed = 5
         self.mask = pygame.mask.from_surface(self.image)
-        randomvalue = random.randint(1, 3)
-        if randomvalue == 1:
-            self.value = 'rouge'
-        elif randomvalue == 2:
-            self.value = 'vert'
-        elif randomvalue == 3:
-            self.value = 'bleu'
 
     def update(self):
         self.move()
