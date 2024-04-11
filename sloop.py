@@ -6,7 +6,6 @@ import time
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
-
 class Sloop(Enemy, pygame.sprite.Sprite):
     speed = 3
     width = 45

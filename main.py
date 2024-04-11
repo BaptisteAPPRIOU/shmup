@@ -30,6 +30,7 @@ class Main:
         self.cannon_ball_enemies = pygame.sprite.Group()
         self.zombies = pygame.sprite.Group()
         self.poison_gas = pygame.sprite.Group()
+        self.blood = pygame.sprite.Group()
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         # FONTS AND LABELS
@@ -111,7 +112,7 @@ class Main:
 
             self.pirate_group.update()                                                                                              # Update pirate sprite
             self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
-            self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery)
+            self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery,self.blood)
             self.zombies.draw(self.screen)
             self.poison_gas.update()
             self.poison_gas.draw(self.screen)
@@ -119,6 +120,8 @@ class Main:
             self.cannon_ball_enemies.draw(self.screen)                                                                             # Draw cannon ball enemy sprites
             self.coins.update() 
             self.coins.draw(self.screen) 
+            self.blood.update()
+            self.blood.draw(self.screen)
 
             self.timer += dt
             
@@ -130,9 +133,9 @@ class Main:
                         if self.timer >= 4:
                             lucky_number = random.randint(1, 5)
                             if lucky_number == (1 or 2 or 3 or 4):
-                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 1, self.poison_gas)
+                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 1, self.poison_gas, self.blood)
                             elif lucky_number == 5:
-                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2, self.poison_gas)
+                                SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2, self.poison_gas, self.blood)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
             
@@ -175,14 +178,6 @@ class Main:
                             self.pirate.kill()
                             print("Game Over")
                             running = False
-
-            # for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
-            #     if pygame.sprite.collide_mask(coin, self.pirate):
-            #         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
-            #         self.coins.remove(coin)
-            #         self.coin_sound.play()
-            #         self.total_score += coin_value
-            #         # print("Total score",self.total_score)
 
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))

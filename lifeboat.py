@@ -16,6 +16,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
 
     def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
+        pygame.mixer.init()
         lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
         self.image = lifeboat_image
@@ -36,6 +37,8 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.explosions = explosions
         self.cannon_ball_enemy = cannon_ball_enemy
 
+        self.cannon_sound = pygame.mixer.Sound("sounds/enemy_cannon.mp3")
+
     def move(self):   
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
@@ -52,6 +55,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
                 self.cannon_ball_enemy.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
+                self.cannon_sound.play()                                                                                    # Play the cannon sound
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        
         self.hit_points -= damage
