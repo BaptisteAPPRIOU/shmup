@@ -1,9 +1,12 @@
 import pygame
 import random
-import os
 from enemy import Enemy
+import os
+import time
 from cannon_ball_enemy import CannonBallEnemy
-from explosion import Explosion 
+from explosion import Explosion
+from zombie import Zombie
+from zombie2 import Zombie_2 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 4
@@ -11,7 +14,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
     height = 55
     value = 100
 
-    def __init__(self, screen, vessels, cannon_ball_enemy, speed, x, y):
+    def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
@@ -21,7 +24,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.speed = speed
         self.vessels = vessels
         self.zombies = pygame.sprite.Group()
-        self.cannon_ball_enemy = cannon_ball_enemy
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
@@ -30,13 +32,15 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.hit_points = 200
         self.value = 100
         self.check_zombie_spawn = False
+        self.explosions = explosions
+        self.cannon_ball_enemy = cannon_ball_enemy
         
 
     def move(self):   
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
-            self. check_zombie_spawn = True
+            self.check_zombie_spawn = True
 
     def attack(self):
         if self.rect.y >=0:                                                                                                 # Check if the lifeboat is on the screen
@@ -54,10 +58,10 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero        
             self.destroy()
             
-    def destroy(self):                                                                                                      # Method to destroy the lifeboat      
-        explosion = Explosion(self.rect.centerx, self.rect.centery)
-        self.vessels.add(explosion)                                                                                         # Add explosion to vessels group
-        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
+    def destroy(self):
+        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
+        self.explosions.add(explosion)  # Add explosion to explosions group
+        self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
     
     def get_spawn_value(self):

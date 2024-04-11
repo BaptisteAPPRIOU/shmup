@@ -4,8 +4,6 @@ from sloop import Sloop
 from enemy_wave import Wave
 from ship import Ship
 from pirate import Pirate
-from bullet import Bullet
-import time
 from explosion import Explosion
 from water import Water
 from coin import Coin
@@ -19,7 +17,7 @@ class Main:
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.statistics_bar = pygame.Rect(0, 0, 100, 900)
         self.wall = pygame.Rect(60, 800, 540, 10)
-        self.total_score = 57
+        self.total_score = 0
         self.timer = 0
 
         self.vessels = pygame.sprite.Group()
@@ -68,17 +66,16 @@ class Main:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels, self.zombies, self.cannon_ball_enemies, self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate_group.add(self.pirate)
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Lifeboat], [2], 5),
-            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Sloop], [3], 5),
-            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Ship], [5], 5),
-            Wave(self.screen, self.vessels,self.cannon_ball_enemies, [Lifeboat], [8], 5),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [8], 5, self.explosions),
             #Wave(self.screen, self.vessels, [Sloop], [10], 5),
-
         ]
 
         clock = pygame.time.Clock()
@@ -106,14 +103,15 @@ class Main:
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
             self.background_sprites.draw(self.screen)                                                                               # Draw water sprites
+
             self.pirate_group.update()                                                                                              # Update pirate sprite
             self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
             self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery)
             self.zombies.draw(self.screen)
             self.poison_gas.update()
             self.poison_gas.draw(self.screen)
-            self.cannon_ball_enemies.update()
-            self.cannon_ball_enemies.draw(self.screen)
+            self.cannon_ball_enemies.update()                                                                                      # Update cannon ball enemy sprites
+            self.cannon_ball_enemies.draw(self.screen)                                                                             # Draw cannon ball enemy sprites
 
             self.timer += dt
             
@@ -134,47 +132,17 @@ class Main:
             if self.timer >= 4:
                 self.timer -= 4
 
-            for explosion in self.vessels.copy():                                                                                   # Use copy() to avoid modifying the original while iterating
-                if isinstance(explosion, Explosion):
-                    explosion.update()
-                    self.screen.blit(explosion.image, explosion.rect)
-                    if explosion.finished:                                                                                          # Check if explosion animation has finished
-                        for vessel in self.vessels:
-                            if isinstance(vessel, Ship) or isinstance(vessel, Sloop) or isinstance(vessel, Lifeboat):
-                                if vessel.rect.colliderect(explosion.rect):
-                                    self.vessels.remove(vessel)
-                                    self.vessels.remove(explosion)
-                                    coin_value = 0
-                                if isinstance(vessel, Lifeboat):
-                                    coin_value = 100
-                                elif isinstance(vessel, Sloop):
-                                    coin_value = 300
-                                elif isinstance(vessel, Ship):
-                                    coin_value = 500
-                                coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
-                                self.coins.add(coin)
-                            else:
-                                pass
+            for explosion in self.explosions.copy():
+                explosion.update()
+                self.screen.blit(explosion.image, explosion.rect)
+                if explosion.type == "lifeboat":
+                    self.total_score += 5
+                elif explosion.type == "sloop":
+                    self.total_score += 10
+                elif explosion.type == "ship":
+                    self.total_score += 15
+                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
 
-            for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
-                if pygame.sprite.collide_mask(coin, self.pirate):
-                    self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
-                    self.coins.remove(coin)
-                    self.coin_sound.play()
-                    self.total_score += coin_value
-                    # print("Total score",self.total_score)
-
-            for vessel in self.vessels:
-                if isinstance(vessel, Lifeboat):
-                    if isinstance(vessel, Lifeboat):
-                        if pygame.sprite.collide_rect(self.pirate, vessel):
-                            self.pirate.health -= 10
-                            if self.pirate.health <= 0:
-                                self.pirate.kill()
-                                print("Game Over")
-                                running = False
-                            print("Lifeboat collision")
-                    
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
                     self.pirate.health -= 10
@@ -194,6 +162,14 @@ class Main:
                         self.pirate.kill()
                         print("Game Over")
                         running = False
+
+            # for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
+            #     if pygame.sprite.collide_mask(coin, self.pirate):
+            #         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))                                    # Update score label
+            #         self.coins.remove(coin)
+            #         self.coin_sound.play()
+            #         self.total_score += coin_value
+            #         # print("Total score",self.total_score)
 
             self.coins.update()  # Update coin sprites
             self.coins.draw(self.screen)  # Draw coin sprites

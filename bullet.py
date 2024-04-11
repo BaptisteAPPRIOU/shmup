@@ -38,7 +38,7 @@ class Bullet(pygame.sprite.Sprite):
                 if isinstance(collision, (Lifeboat, Sloop, Ship)):                                                      # Check if the collision is with a lifeboat, sloop, or ship         
                     collision.update_hit_points(self.damage)
                     if collision.hit_points <= 0:
-                        explosion = Explosion(collision.rect.centerx, collision.rect.centery)                               # Create an explosion at the center of the vessel       
+                        explosion = Explosion(collision.rect.centerx, collision.rect.centery, type)                               # Create an explosion at the center of the vessel       
                         self.vessels.add(explosion)
                         collision.kill()
                     self.kill()
