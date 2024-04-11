@@ -1,7 +1,6 @@
 from enemy import Enemy
 import pygame
 import random
-import os
 from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
@@ -15,7 +14,7 @@ class Ship(Enemy, pygame.sprite.Sprite):
     def __init__(self, screen, vessels,cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((110, 150))
-        ship_image = pygame.image.load(os.path.join("images", "ship.png")).convert_alpha()
+        ship_image = pygame.image.load("images/ship.png").convert_alpha()
         self.image = ship_image
         self.rect = self.image.get_rect()
         self.screen = screen
