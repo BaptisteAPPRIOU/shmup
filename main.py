@@ -4,8 +4,6 @@ from sloop import Sloop
 from enemy_wave import Wave
 from ship import Ship
 from pirate import Pirate
-from bullet import Bullet
-import time
 from explosion import Explosion
 from water import Water
 from coin import Coin
@@ -22,7 +20,7 @@ class Main:
         self.total_score = 0
         self.timer = 0
         self.health = 100
-
+        # SPRITE GROUPS
         self.vessels = pygame.sprite.Group()
         self.explosions = pygame.sprite.Group()
         self.pirate_group = pygame.sprite.Group()
@@ -31,16 +29,16 @@ class Main:
         self.cannon_ball_enemies = pygame.sprite.Group()
         self.zombies = pygame.sprite.Group()
         self.poison_gas = pygame.sprite.Group()
-
+        # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
-
-        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 15)  # Create a font object
+        # FONTS AND LABELS
+        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 15) 
         self.user_label = self.font.render("User: user", 1, (0, 255, 255))
         self.score_label = self.font.render("SCORE : ", 1, (0, 255, 255))
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         self.health_label = self.font.render("HEALTH : ", 1, (0, 255, 255))
         self.health = self.font.render(str(self.health), 1, (0, 255, 255))
-
+        # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
 
@@ -86,7 +84,6 @@ class Main:
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
-        # coin = Coin(-100, -100, 0)
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         while running:
 
@@ -118,6 +115,8 @@ class Main:
             self.poison_gas.draw(self.screen)
             self.cannon_ball_enemies.update()                                                                                      # Update cannon ball enemy sprites
             self.cannon_ball_enemies.draw(self.screen)                                                                             # Draw cannon ball enemy sprites
+            self.coins.update() 
+            self.coins.draw(self.screen) 
 
             self.timer += dt
             
@@ -170,27 +169,7 @@ class Main:
                     if self.pirate.health <= 0:
                         self.pirate.kill()
                         print("Game Over")
-                        running = False  
-
-                # if explosion.finished:
-                #     for vessel in self.vessels.copy():
-                #         if vessel.rect.colliderect(explosion.rect):
-                #             if isinstance(vessel, Lifeboat):
-                #                 self.total_score += 100
-                #             elif isinstance(vessel, Sloop):
-                #                 self.total_score += 300
-                #             elif isinstance(vessel, Ship):
-                #                 self.total_score += 500
-                #             self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))  
-                #             self.vessels.remove(vessel)
-                #             print(explosion)
-                #         elif isinstance(vessel, Lifeboat):
-                #             self.total_score += 100
-
-                                    # coin_value = 0
-                                # coin = Coin(explosion.rect.centerx, explosion.rect.centery, coin_value)
-                                # self.coins.add(coin)
-                                # print(coin_value)
+                        running = False
 
             # for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
             #     if pygame.sprite.collide_mask(coin, self.pirate):
@@ -199,14 +178,6 @@ class Main:
             #         self.coin_sound.play()
             #         self.total_score += coin_value
             #         # print("Total score",self.total_score)
-
-            
-                    
-                # if pygame.sprite.collide_rect(self.pirate, poison_gas):
-                #     print("hit")
-
-            self.coins.update()  # Update coin sprites
-            self.coins.draw(self.screen)  # Draw coin sprites
 
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))

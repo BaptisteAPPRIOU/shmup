@@ -35,7 +35,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.check_zombie_spawn = False
         self.explosions = explosions
         self.cannon_ball_enemy = cannon_ball_enemy
-        
 
     def move(self):   
         self.rect.y += self.speed
@@ -60,16 +59,10 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
             self.destroy()
             
     def destroy(self):
-        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
-        self.explosions.add(explosion)  # Add explosion to explosions group
-        self.hit_points = 0  # Set hit points to zero to prevent further damage
+        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                             # Create an explosion at the center of the lifeboat
+        self.explosions.add(explosion)                                                                                      # Add explosion to explosions group
+        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
 
-
-    # def get_coordinates(self, piratex, piratey):
-    #     # if self.check_zombie_spawn == True:
-    #     #     self.spawn_zombie(0.1,piratex, piratey)
-    #     pass
-    
     def get_spawn_value(self):
         return self.check_zombie_spawn
