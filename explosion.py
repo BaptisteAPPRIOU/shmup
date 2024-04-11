@@ -1,7 +1,7 @@
 import pygame
 
 class Explosion(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, type):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         for num in range(1, 6):
@@ -14,6 +14,7 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.counter = 0
         self.finished = False
+        self.type = type
 
     def update(self):
         explosion_speed = 4
@@ -27,3 +28,6 @@ class Explosion(pygame.sprite.Sprite):
         if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:                          # Check if the index is greater than or equal to the length of the images list minus 1 and the counter is greater than or equal to the explosion speed
             self.finished = True
             self.kill()
+
+    def get_type(self):
+        return self.type
