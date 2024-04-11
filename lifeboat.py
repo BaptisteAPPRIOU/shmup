@@ -2,11 +2,10 @@ import pygame
 import random
 from enemy import Enemy
 import os
-import time
+from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion
-from zombie import Zombie
-from zombie2 import Zombie_2 
+ 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 4
@@ -16,7 +15,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
 
     def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
-        pygame.mixer.init()
         lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
         self.image = lifeboat_image
@@ -32,12 +30,10 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.shoot_delay = 1000
         self.hit_points = 200
         self.value = 100
-        self.timer = 0
         self.check_zombie_spawn = False
         self.explosions = explosions
         self.cannon_ball_enemy = cannon_ball_enemy
-
-        self.cannon_sound = pygame.mixer.Sound("sounds/enemy_cannon.mp3")
+        
 
     def move(self):   
         self.rect.y += self.speed
@@ -55,7 +51,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
                 self.cannon_ball_enemy.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
-                self.cannon_sound.play()                                                                                    # Play the cannon sound
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        
         self.hit_points -= damage
@@ -63,10 +58,14 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
             self.destroy()
             
     def destroy(self):
-        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                             # Create an explosion at the center of the lifeboat
-        self.explosions.add(explosion)                                                                                      # Add explosion to explosions group
-        self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
+        explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
+        bonus_luck = random.randint(1, 4)
+        if bonus_luck == 1:
+            bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+            self.vessels.add(bonus)                                                                                             # Add the coin to the vessels group
+        self.explosions.add(explosion)  # Add explosion to explosions group
+        self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
-
+    
     def get_spawn_value(self):
         return self.check_zombie_spawn

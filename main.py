@@ -58,7 +58,7 @@ class Main:
             for x in range(112, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
                 self.background_sprites.add(water_sprite)
-
+  
         for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites
             for x in range(100, 640, self.beach.get_width()):
                 beach_sprite = pygame.sprite.Sprite()
@@ -73,15 +73,23 @@ class Main:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group    
         self.pirate_group.add(self.pirate)
+
+        self.health_boost_duration = 0
+        self.damage_boost_duration = 0
+        self.speed_boost_duration = 0
+        self.original_health = self.pirate.health
+        self.original_damage = self.pirate.damage
+        self.original_speed = 1
+        self.speed = 1
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [8], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
         ]
 
         clock = pygame.time.Clock()
@@ -90,6 +98,7 @@ class Main:
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         while running:
 
+            counter = 0
             dt = clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -102,15 +111,14 @@ class Main:
 
             waves[current_wave].spawn_waves(dt)                                                                                     # Spawn waves of enemies
 
-            self.background_sprites.update()                                                                                        # Update water sprites
             self.screen.fill((0, 0, 0))                                                                                             # Fill the screen with black color
 
             pygame.draw.rect(self.screen, (0, 0, 0), self.statistics_bar)
             pygame.draw.rect(self.screen, "BLUE", self.wall)
 
-            self.background_sprites.draw(self.screen)                                                                               # Draw water sprites
-
-            self.pirate_group.update()                                                                                              # Update pirate sprite
+            self.background_sprites.update()                                                                                        # Update water sprites
+            self.background_sprites.draw(self.screen)                                                                               # Draw water sprite
+            self.pirate_group.update(self.speed)                                                                                              # Update pirate sprite
             self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
             self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery,self.blood)
             self.zombies.draw(self.screen)
@@ -178,6 +186,49 @@ class Main:
                             self.pirate.kill()
                             print("Game Over")
                             running = False
+
+            for vessel in self.vessels.copy():
+                if isinstance(vessel, Coin):
+                    if pygame.sprite.collide_mask(vessel, self.pirate):
+                        print("Coin value", vessel.get_value())
+                        if vessel.get_value() == 'blue':
+                            print("Speed boost")
+                            self.speed = 3
+                            self.speed_boost_duration = 5
+                        elif vessel.get_value() == 'red':
+                            print("Damage boost")
+                            self.pirate.damage += self.pirate.damage*4
+                            self.damage_boost_duration = 5
+                        elif vessel.get_value() == 'green':  
+                            print("Health boost")
+                            self.pirate.health += 50000  
+                            self.health_boost_duration = 5
+                        elif vessel.get_value() == 'black':
+                            print("Poison gas")
+                            for zombie in self.zombies:
+                                zombie.die()
+                            for gas in self.poison_gas:
+                                gas.kill()
+                        vessel.kill()
+                        counter = 1
+            
+            if self.health_boost_duration > 0:
+                self.health_boost_duration -= dt
+                if self.health_boost_duration <= 0:
+                    self.pirate.health = self.original_health    
+                    self.health_boost_duration = 0
+            
+            if self.damage_boost_duration > 0:
+                self.damage_boost_duration -= dt
+                if self.damage_boost_duration <= 0:
+                    self.pirate.damage = self.original_damage
+                    self.damage_boost_duration = 0
+            
+            if self.speed_boost_duration > 0:
+                self.speed_boost_duration -= dt
+                if self.speed_boost_duration <= 0:
+                    self.speed = 1
+                    self.speed_boost_duration = 0
 
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))

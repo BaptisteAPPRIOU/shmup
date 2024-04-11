@@ -2,7 +2,7 @@ from enemy import Enemy
 import pygame
 import random
 import os
-import time
+from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
@@ -31,7 +31,6 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.check_zombie_spawn = False
         self.cannon_ball_enemy = cannon_ball_enemy
 
-
     def move(self):
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
@@ -57,6 +56,10 @@ class Sloop(Enemy, pygame.sprite.Sprite):
 
     def destroy(self):                                                                                                      # Method to destroy the sloop
         explosion = Explosion(self.rect.centerx, self.rect.centery, "sloop")
+        bonus_luck = random.randint(1, 4)
+        if bonus_luck == 1:
+            bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+            self.vessels.add(bonus)
         self.explosions.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()

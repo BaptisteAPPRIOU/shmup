@@ -2,7 +2,7 @@ from enemy import Enemy
 import pygame
 import random
 import os
-import time
+from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion 
 
@@ -56,6 +56,10 @@ class Ship(Enemy, pygame.sprite.Sprite):
 
     def destroy(self):                                                                                                      # Method to destroy the ship
         explosion = Explosion(self.rect.centerx, self.rect.centery, "ship")
+        bonus_luck = random.randint(1, 4)
+        if bonus_luck == 1:
+            bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+            self.vessels.add(bonus) 
         self.explosions.add(explosion)                                                                                         # Add explosion to vessels group
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
