@@ -7,7 +7,7 @@ from ship import Ship
 from cannon_ball_enemy import CannonBallEnemy
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, vessels, zombies, cannon_ball_enemy):
+    def __init__(self, x, y, vessels, zombies, cannon_ball_enemy, damage):
         pygame.sprite.Sprite.__init__(self)
         cannon_ball = pygame.image.load("images/cannon_ball.png").convert_alpha()
         self.image = cannon_ball
@@ -19,9 +19,9 @@ class Bullet(pygame.sprite.Sprite):
         self.vessels = vessels
         self.zombies = zombies
         self.mask = pygame.mask.from_surface(self.image)
-        self.damage = 100
+        self.damage = damage
         
-    def update(self):
+    def update(self,a):
         self.rect.y += self.speedy
         if self.rect.bottom < 0 or self.rect.top > 1000:
             self.kill()
