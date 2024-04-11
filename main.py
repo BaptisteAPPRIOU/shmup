@@ -20,6 +20,7 @@ class Main:
         self.total_score = 0
         self.timer = 0
         self.health = 100
+        self.life = 3
         # SPRITE GROUPS
         self.vessels = pygame.sprite.Group()
         self.explosions = pygame.sprite.Group()
@@ -38,6 +39,8 @@ class Main:
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 255, 255))
         self.health_label = self.font.render("HEALTH : ", 1, (0, 255, 255))
         self.health = self.font.render(str(self.health), 1, (0, 255, 255))
+        self.life_label = self.font.render("LIVES : ", 1, (0, 255, 255))
+        self.life = self.font.render(str(self.life), 1, (0, 255, 255))
         # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
@@ -78,7 +81,6 @@ class Main:
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [8], 5, self.explosions),
-            #Wave(self.screen, self.vessels, [Sloop], [10], 5),
         ]
 
         clock = pygame.time.Clock()
@@ -121,10 +123,8 @@ class Main:
             self.timer += dt
             
             for vessel in self.vessels:                                                                                             # Loop through all vessels
-                #print (vessel)
                 if not isinstance(vessel, Explosion):
                     vessel.move()                                                              # Move the vessel
-                    # vessel.get_coordinates(self.pirate.rect.centerx, self.pirate.rect.centery)
                     self.screen.blit(vessel.image, vessel.rect)
                     if vessel.get_spawn_value() == True:
                         if self.timer >= 4:
@@ -153,23 +153,28 @@ class Main:
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
                     self.pirate.health -= 10
-                    bullet.kill()  
-                    print("Pirate health", self.pirate.health)
+                    bullet.kill()
                     if self.pirate.health <= 0:
-                        self.pirate.kill()
-                        print("Game Over")
-                        running = False
-                self.health = self.font.render(str(self.pirate.health), 1, (0, 255, 255))
+                        self.pirate.life -= 1
+                        self.pirate.health = 100
+                        if self.pirate.life == 0:
+                            self.pirate.kill()
+                            print("Game Over")
+                            running = False
+            self.health = self.font.render(str(self.pirate.health), 1, (0, 255, 255))
+            self.life = self.font.render(str(self.pirate.life), 1, (0, 255, 255))
             
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
                     self.pirate.health -= 10
                     gas.kill()  
-                    print("Pirate health", self.pirate.health)
                     if self.pirate.health <= 0:
-                        self.pirate.kill()
-                        print("Game Over")
-                        running = False
+                        self.pirate.life -= 1
+                        self.pirate.health = 100
+                        if self.pirate.life == 0:
+                            self.pirate.kill()
+                            print("Game Over")
+                            running = False
 
             # for coin in self.coins.copy():                                                                                          # Check collision between coins and pirate using masks
             #     if pygame.sprite.collide_mask(coin, self.pirate):
@@ -184,6 +189,8 @@ class Main:
             self.screen.blit(self.score_label2, (10, 130))
             self.screen.blit(self.health_label, (10, 160))
             self.screen.blit(self.health, (10, 190))
+            self.screen.blit(self.life_label, (10, 220))
+            self.screen.blit(self.life, (10, 250))
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)

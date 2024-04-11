@@ -15,6 +15,7 @@ class Pirate(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT
         self.speedx = 0
         self.health = 100
+        self.life = 3
         self.all_sprites = all_sprites
         self.bullets = bullets
         self.WIDTH = WIDTH
