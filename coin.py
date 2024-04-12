@@ -1,31 +1,30 @@
 import pygame
 import random
 
-
 class Coin(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         randomvalue = random.randint(1, 10)
-        if randomvalue == (1 or 2 or 3):
+        if randomvalue in [1 , 2 , 3]:
             self.value = 'red'
             for num in range(1, 7):
                 img = pygame.image.load(f"images/red_coin{num}.png").convert_alpha()
                 img = pygame.transform.scale(img, (32, 32))
                 self.images.append(img)
-        elif randomvalue == (4 or 5 or 6):
+        elif randomvalue in [4 , 5 , 6]:
             self.value = 'green'
             for num in range(1, 7):
                 img = pygame.image.load(f"images/green_coin{num}.png").convert_alpha()
                 img = pygame.transform.scale(img, (32, 32))
                 self.images.append(img)
-        elif randomvalue == (7 or 8 or 9):
+        elif randomvalue in [7 , 8 , 9]:
             self.value = 'blue'
             for num in range(1, 7):
                 img = pygame.image.load(f"images/blue_coin{num}.png").convert_alpha()
                 img = pygame.transform.scale(img, (32, 32))
                 self.images.append(img)
-        elif randomvalue == 10:
+        elif randomvalue in [10]:
             self.value = 'black'
             for num in range(1, 7):
                 img = pygame.image.load(f"images/black_coin{num}.png").convert_alpha()
