@@ -1,9 +1,12 @@
 import pygame
 import sys
 from menu_test import Menu
-from tuto_test import Tuto
+from leaderboard import Leaderboard
+from tutorial import Tutorial
+from game_over_page import GameOverPage
+from level import Level1
+from credits import Credits
 from GameState import GameStateManager
-from main import Main
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 1000
 FPS = 60
@@ -13,11 +16,14 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME)
         self.clock = pygame.time.Clock()
-        self.gameStateManager = GameStateManager('tuto')
+        self.gameStateManager = GameStateManager('menu')
         self.menu = Menu(self.screen, self.gameStateManager)
-        self.tuto = Tuto(self.screen, self.gameStateManager)
-        self.gameplay = Main(self.screen, self.gameStateManager)
-        self.states = {'menu':self.menu, 'tuto':self.tuto, 'game':self.gameplay}
+        self.leaderboard = Leaderboard(self.screen, self.gameStateManager)
+        self.credits = Credits(self.screen, self.gameStateManager)
+        self.tuto = Tutorial(self.screen, self.gameStateManager)
+        self.gameover = GameOverPage(self.screen, self.gameStateManager)
+        self.gameplay = Level1(self.screen, self.gameStateManager)
+        self.states = {'menu':self.menu, 'leaderboard':self.leaderboard, 'game':self.gameplay, 'tuto':self.tuto, 'gameover':self.gameover, 'credits':self.credits}
         
     def run(self):
         while True:
@@ -26,7 +32,6 @@ class Game:
                     pygame.quit()
                     sys.exit()
             self.states[self.gameStateManager.get_state()].run()
-            # pygame.init()
             pygame.display.update()
             self.clock.tick(FPS)
             
