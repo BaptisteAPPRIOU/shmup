@@ -1,7 +1,4 @@
 import pygame
-import pygame_gui
-import sys
-from GameState import GameStateManager
 
 class Tuto:
     def __init__(self,display,gameStateManager):

@@ -1,7 +1,5 @@
 import pygame
 import pygame_gui
-import sys
-from GameState import GameStateManager
 
 FPS = 60
 
@@ -25,25 +23,33 @@ class Menu:
             for event in pygame.event.get():
                 if keys[pygame.K_a]:
                     self.gameStateManager.set_state('tuto')
+                    running = False
                 if event.type == pygame.QUIT:
                     running = False
+                    pygame.quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                        pygame.quit()
                 if event.type == pygame.USEREVENT:
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == button_play:
                             print("Play button clicked")
+                            self.gameStateManager.set_state('tuto')
+                            running = False
                         elif event.ui_element == button_leaderboard:
                             print("Leaderboard button clicked")
+                            self.gameStateManager.set_state('tuto')
+                            running = False
                         elif event.ui_element == button_quit:
                             print("Quit button clicked")
                             running = False
+                            pygame.quit()
                 MANAGER.process_events(event)
             MANAGER.update(clock.tick(60))
             self.display.fill((255, 255, 255))
             MANAGER.draw_ui(self.display)
             pygame.display.flip()
-        pygame.quit()
+        
         
         

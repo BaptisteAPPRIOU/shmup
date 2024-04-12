@@ -12,7 +12,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.gameStateManager = GameStateManager('menu')
+        self.gameStateManager = GameStateManager('tuto')
         self.menu = Menu(self.screen, self.gameStateManager)
         self.tuto = Tuto(self.screen, self.gameStateManager)
         self.states = {'menu':self.menu, 'tuto':self.tuto}
