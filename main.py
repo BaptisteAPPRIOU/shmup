@@ -17,7 +17,7 @@ class Main:
         pygame.mixer.init()
 
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
-        self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA) 
+        self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA)
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.total_score = 0
         self.timer = 0
@@ -39,7 +39,7 @@ class Main:
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
-        self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15) 
+        self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
         self.user_label = self.font.render("User: user", 1, (0, 0, 0))
         # self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.damage_label = self.font2.render("DAMAGE", 1, (0, 0, 0))
@@ -54,6 +54,8 @@ class Main:
         self.health_bar = pygame.transform.scale(self.health_bar, (100, 15))
         self.life_heart = pygame.image.load("images/life_3.png").convert_alpha()
         self.life_heart = pygame.transform.scale(self.life_heart, (96, 32))
+        self.wall = pygame.image.load("images/wall.png").convert_alpha()
+        self.ground = pygame.transform.scale(pygame.image.load("images/ground.png").convert_alpha(),(16,16))
         self.health_images = {
         100: pygame.transform.scale(pygame.image.load("images/health_10.png").convert_alpha(),(100, 15)),
         90: pygame.transform.scale(pygame.image.load("images/health_9.png").convert_alpha(),(100, 15)),
@@ -83,7 +85,7 @@ class Main:
             for x in range(0, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
                 self.background_sprites.add(water_sprite)
-  
+
         # Draw beach sprites
         for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites
             for x in range(0, 640, self.beach.get_width()):
@@ -94,13 +96,28 @@ class Main:
 
         # Draw dock sprites
         dock_width = self.dock.get_width()
-        for x in range(100, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
+        for x in range(0, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
             dock_sprite = pygame.sprite.Sprite()
             dock_sprite.image = self.dock
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
-        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group    
+        wall_width = self.wall.get_width()
+        for x in range(0, 640, wall_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
+            wall_sprite = pygame.sprite.Sprite()
+            wall_sprite.image = self.wall
+            wall_sprite.rect = wall_sprite.image.get_rect(topleft=(x, 900))
+            self.background_sprites.add(wall_sprite)
+
+        ground_width = self.ground.get_width()
+        for x in range(0, 640, ground_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
+            for y in range(927, 1000, ground_width):
+                ground_sprite = pygame.sprite.Sprite()
+                ground_sprite.image = self.ground
+                ground_sprite.rect = ground_sprite.image.get_rect(topleft=(x, y))
+                self.background_sprites.add(ground_sprite)
+
+        self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate_group.add(self.pirate)
 
         self.ui_elements = UI()                                                          # Create UI instance and add it to sprite group
@@ -143,7 +160,6 @@ class Main:
             self.screen.fill((0, 0, 0))                                                                                             # Fill the screen with black color
             self.screen.blit(self.surface, (0, 0))                                                                                  # Blit the surface with transparency to the screen
 
-            pygame.draw.rect(self.screen, "BLUE", self.wall)
             self.statiscs_bar = pygame.draw.rect(self.surface,(255,255,255,33),(0,0,100,1000))
 
             self.background_sprites.update()                                                                                        # Update water sprites
@@ -156,15 +172,15 @@ class Main:
             self.poison_gas.draw(self.screen)
             self.cannon_ball_enemies.update()                                                                                      # Update cannon ball enemy sprites
             self.cannon_ball_enemies.draw(self.screen)                                                                             # Draw cannon ball enemy sprites
-            self.coins.update() 
-            self.coins.draw(self.screen) 
+            self.coins.update()
+            self.coins.draw(self.screen)
             self.blood.update()
             self.blood.draw(self.screen)
             self.ui_elements.update()
             self.ui_elements.show(self.screen)
 
             self.timer += dt
-            
+
             # Spawn zombies if the vessels reach the dock
             for vessel in self.vessels:                                                                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
@@ -179,7 +195,7 @@ class Main:
                                 SpawnZombie(vessel.rect.centerx, vessel.rect.bottom, self.zombies, 2, self.poison_gas, self.blood)
                     if isinstance(vessel, Lifeboat) or isinstance(vessel, Sloop) or isinstance(vessel, Ship):
                         vessel.attack()
-            
+
             if self.timer >= 4:
                 self.timer -= 4
 
@@ -202,7 +218,7 @@ class Main:
                     self.total_score += 15
                     counter += 1
                 self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
-        
+
             # Update health of pirate if collides with cannon ball enemies
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
@@ -218,27 +234,27 @@ class Main:
             self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
 
             # Change UI elements image based on pirate health
-            if self.pirate.health > 100:
+            if self.pirate.health > 10000:
                 self.health_bar = self.health_images[110]
-            elif self.pirate.health == 100:
+            elif self.pirate.health >= 0.9*self.original_health and self.pirate.health <= self.original_health:
                 self.health_bar = self.health_images[100]
-            elif self.pirate.health == 90:
+            elif self.pirate.health >= 0.8*self.original_health and self.pirate.health < 0.9*self.original_health:
                 self.health_bar = self.health_images[90]
-            elif self.pirate.health == 80:
+            elif self.pirate.health >= 0.7*self.original_health and self.pirate.health < 0.8*self.original_health:
                 self.health_bar = self.health_images[80]
-            elif self.pirate.health == 70:
+            elif self.pirate.health >= 0.6*self.original_health and self.pirate.health < 0.7*self.original_health:
                 self.health_bar = self.health_images[70]
-            elif self.pirate.health == 60:
+            elif self.pirate.health >= 0.5*self.original_health and self.pirate.health < 0.6*self.original_health:
                 self.health_bar = self.health_images[60]
-            elif self.pirate.health == 50:
+            elif self.pirate.health >= 0.4*self.original_health and self.pirate.health < 0.5*self.original_health:
                 self.health_bar = self.health_images[50]
-            elif self.pirate.health == 40:
+            elif self.pirate.health >= 0.3*self.original_health and self.pirate.health < 0.4*self.original_health:
                 self.health_bar = self.health_images[40]
-            elif self.pirate.health == 30:
+            elif self.pirate.health >= 0.2*self.original_health and self.pirate.health < 0.3*self.original_health:
                 self.health_bar = self.health_images[30]
-            elif self.pirate.health == 20:
+            elif self.pirate.health >= 0.1*self.original_health and self.pirate.health < 0.2*self.original_health:
                 self.health_bar = self.health_images[20]
-            elif self.pirate.health == 10:
+            elif self.pirate.health > 0 and self.pirate.health < 0.1*self.original_health:
                 self.health_bar = self.health_images[10]
 
             # Change UI elements image based on pirate number of lives
@@ -250,12 +266,12 @@ class Main:
                 self.life_heart = self.life_images[1]
             elif self.pirate.life == 0:
                 self.life_heart = self.life_images[0]
-            
+
             # Update health of pirate if collides with poison gas
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
                     self.pirate.health -= 10
-                    gas.kill()  
+                    gas.kill()
                     if self.pirate.health <= 0:
                         self.pirate.life -= 1
                         self.pirate.health = 100
@@ -277,9 +293,9 @@ class Main:
                             print("Damage boost")
                             self.pirate.damage += self.pirate.damage*4
                             self.damage_boost_duration = 5
-                        elif vessel.get_value() == 'green':  
+                        elif vessel.get_value() == 'green':
                             print("Health boost")
-                            self.pirate.health += 50000  
+                            self.pirate.health += 50000
                             self.health_boost_duration = 5
                         elif vessel.get_value() == 'black':
                             print("Poison gas")
@@ -287,20 +303,20 @@ class Main:
                                 zombie.die()
                             for gas in self.poison_gas:
                                 gas.kill()
-                        vessel.kill() 
-            
+                        vessel.kill()
+
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
                 if self.health_boost_duration <= 0:
-                    self.pirate.health = self.original_health    
+                    self.pirate.health = self.original_health
                     self.health_boost_duration = 0
-            
+
             if self.damage_boost_duration > 0:
                 self.damage_boost_duration -= dt
                 if self.damage_boost_duration <= 0:
                     self.pirate.damage = self.original_damage
                     self.damage_boost_duration = 0
-            
+
             if self.speed_boost_duration > 0:
                 self.speed_boost_duration -= dt
                 if self.speed_boost_duration <= 0:
@@ -321,7 +337,7 @@ class Main:
             pygame.time.Clock().tick(60)
             if counter == 400:
                 print("You win")
-                
+
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
 
