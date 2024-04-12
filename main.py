@@ -54,7 +54,6 @@ class Main:
         self.health_bar = pygame.transform.scale(self.health_bar, (100, 15))
         self.life_heart = pygame.image.load("images/life_3.png").convert_alpha()
         self.life_heart = pygame.transform.scale(self.life_heart, (96, 32))
-
         self.health_images = {
         100: pygame.transform.scale(pygame.image.load("images/health_10.png").convert_alpha(),(100, 15)),
         90: pygame.transform.scale(pygame.image.load("images/health_9.png").convert_alpha(),(100, 15)),
@@ -66,28 +65,26 @@ class Main:
         30: pygame.transform.scale(pygame.image.load("images/health_3.png").convert_alpha(),(100, 15)),
         20: pygame.transform.scale(pygame.image.load("images/health_2.png").convert_alpha(),(100, 15)),
         10: pygame.transform.scale(pygame.image.load("images/health_1.png").convert_alpha(),(100, 15)),
-        110: pygame.transform.scale(pygame.image.load("images/health_immune.png").convert_alpha(),(100, 15))
-    }
+        110: pygame.transform.scale(pygame.image.load("images/health_immune.png").convert_alpha(),(100, 15))}
         self.life_images = {
             3: pygame.transform.scale(pygame.image.load("images/life_3.png").convert_alpha(), (96, 32)),
             2: pygame.transform.scale(pygame.image.load("images/life_2.png").convert_alpha(), (96, 32)),
             1: pygame.transform.scale(pygame.image.load("images/life_1.png").convert_alpha(), (96, 32)),
-            0: pygame.transform.scale(pygame.image.load("images/life_0.png").convert_alpha(), (96, 32))
-        }
-
+            0: pygame.transform.scale(pygame.image.load("images/life_0.png").convert_alpha(), (96, 32))}
         self.water_images = [
             pygame.transform.scale(pygame.image.load("images/water.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water1.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water2.png").convert_alpha(), (24, 24)),
-            pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),
-        ]
+            pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),]
 
+        # Draw water sprites
         self.background_sprites = pygame.sprite.Group()
         for y in range(0, 540, 24):
             for x in range(0, 650, 24):                                                                                       # Loop through the screen width in steps of 24 and create water sprites
                 water_sprite = Water(x, y, self.water_images)
                 self.background_sprites.add(water_sprite)
   
+        # Draw beach sprites
         for y in range(540, 1000, self.beach.get_height()):                                                                     # Loop through the screen height in steps of the beach image height and create beach sprites
             for x in range(0, 640, self.beach.get_width()):
                 beach_sprite = pygame.sprite.Sprite()
@@ -95,6 +92,7 @@ class Main:
                 beach_sprite.rect = beach_sprite.image.get_rect(topleft=(x, y))
                 self.background_sprites.add(beach_sprite)
 
+        # Draw dock sprites
         dock_width = self.dock.get_width()
         for x in range(100, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
             dock_sprite = pygame.sprite.Sprite()
@@ -105,7 +103,7 @@ class Main:
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group    
         self.pirate_group.add(self.pirate)
 
-        self.ui_elements = UI(self.pirate.life, self.pirate.health)                                                          # Create UI instance and add it to sprite group
+        self.ui_elements = UI()                                                          # Create UI instance and add it to sprite group
 
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
@@ -167,6 +165,7 @@ class Main:
 
             self.timer += dt
             
+            # Spawn zombies if the vessels reach the dock
             for vessel in self.vessels:                                                                                             # Loop through all vessels
                 if not isinstance(vessel, Explosion):
                     vessel.move()                                                              # Move the vessel
@@ -184,6 +183,12 @@ class Main:
             if self.timer >= 4:
                 self.timer -= 4
 
+            # Update score for killing zombies
+            for blood in self.blood.copy():
+                blood.update()
+                self.total_score += 1
+                self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
+            # Update score for destroying vessels
             for explosion in self.explosions.copy():
                 explosion.update()
                 self.screen.blit(explosion.image, explosion.rect)
@@ -198,7 +203,7 @@ class Main:
                     counter += 1
                 self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
         
-
+            # Update health of pirate if collides with cannon ball enemies
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
                     self.pirate.health -= 10
@@ -212,6 +217,7 @@ class Main:
                             running = False
             self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
 
+            # Change UI elements image based on pirate health
             if self.pirate.health > 100:
                 self.health_bar = self.health_images[110]
             elif self.pirate.health == 100:
@@ -235,6 +241,7 @@ class Main:
             elif self.pirate.health == 10:
                 self.health_bar = self.health_images[10]
 
+            # Change UI elements image based on pirate number of lives
             if self.pirate.life == 3:
                 self.life_heart = self.life_images[3]
             elif self.pirate.life == 2:
@@ -244,6 +251,7 @@ class Main:
             elif self.pirate.life == 0:
                 self.life_heart = self.life_images[0]
             
+            # Update health of pirate if collides with poison gas
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
                     self.pirate.health -= 10
@@ -256,6 +264,7 @@ class Main:
                             print("Game Over")
                             running = False
 
+            # Update pirate caracteristics if collects coins for a limited time
             for vessel in self.vessels.copy():
                 if isinstance(vessel, Coin):
                     if pygame.sprite.collide_mask(vessel, self.pirate):
@@ -278,8 +287,7 @@ class Main:
                                 zombie.die()
                             for gas in self.poison_gas:
                                 gas.kill()
-                        vessel.kill()
-                        
+                        vessel.kill() 
             
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
@@ -314,11 +322,11 @@ class Main:
             if counter == 400:
                 print("You win")
                 
-            if all(count == 0 for count in waves[current_wave].counts):  # Check if all enemies in the current wave have been spawned
+            if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
 
-            if current_wave == len(waves):  # Check if all waves have been spawned
-                if any(w.current_wave < len(w.enemy_types) for w in waves):  # Check if there are more waves to spawn
+            if current_wave == len(waves):                                      # Check if all waves have been spawned
+                if any(w.current_wave < len(w.enemy_types) for w in waves):     # Check if there are more waves to spawn
                     current_wave -= 1
                 else:
                     print("Game Over")

@@ -1,7 +1,7 @@
 import pygame
 
 class UI():
-    def __init__(self, life, health,):
+    def __init__(self):
 
         self.image_red_coin = pygame.Surface((32, 32))
         self.rect = self.image_red_coin.get_rect()
@@ -57,7 +57,6 @@ class UI():
         self.animate_blue()
         self.animate_black()
         self.animate_yellow()
-        self.pirate_health_bar()
 
     def animate_red(self):
         self.red_coin_counter += 1
