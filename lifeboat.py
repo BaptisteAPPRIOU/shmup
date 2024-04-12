@@ -1,11 +1,9 @@
 import pygame
 import random
 from enemy import Enemy
-import os
 from coin import Coin
 from cannon_ball_enemy import CannonBallEnemy
 from explosion import Explosion
- 
 
 class Lifeboat(Enemy, pygame.sprite.Sprite):
     speed = 4
@@ -15,7 +13,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
 
     def __init__(self, screen, vessels, cannon_ball_enemy, explosions, speed, x, y):
         pygame.sprite.Sprite.__init__(self)
-        lifeboat_image = pygame.image.load(os.path.join("images", "lifeboat.png")).convert_alpha()
+        lifeboat_image = pygame.image.load("images/lifeboat.png").convert_alpha()
         lifeboat_image = pygame.transform.scale(lifeboat_image, (45, 55))
         self.image = lifeboat_image
         self.rect = self.image.get_rect()
@@ -59,10 +57,10 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
             
     def destroy(self):
         explosion = Explosion(self.rect.centerx, self.rect.centery, "lifeboat")                                           # Create an explosion at the center of the lifeboat
-        Bonus_luck = random.randint(1, 4)
-        if Bonus_luck == 1:
-            Bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
-            self.vessels.add(Bonus)                                                                                             # Add the coin to the vessels group
+        bonus_luck = random.randint(1, 4)
+        if bonus_luck == 1:
+            bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
+            self.vessels.add(bonus)                                                                                             # Add the coin to the vessels group
         self.explosions.add(explosion)  # Add explosion to explosions group
         self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
