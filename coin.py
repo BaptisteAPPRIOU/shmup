@@ -25,7 +25,7 @@ class Coin(pygame.sprite.Sprite):
                 img = pygame.image.load(f"images/blue_coin{num}.png").convert_alpha()
                 img = pygame.transform.scale(img, (32, 32))
                 self.images.append(img)
-        elif randomvalue in [1,3,4,5,6,7,10]:
+        elif randomvalue in [10]:
             self.value = 'black'
             for num in range(1, 7):
                 img = pygame.image.load(f"images/black_coin{num}.png").convert_alpha()

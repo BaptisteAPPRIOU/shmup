@@ -32,7 +32,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.check_zombie_spawn = False
         self.explosions = explosions
         self.cannon_ball_enemy = cannon_ball_enemy
-        
 
     def move(self):   
         self.rect.y += self.speed
@@ -65,6 +64,6 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.explosions.add(explosion)  # Add explosion to explosions group
         self.hit_points = 0  # Set hit points to zero to prevent further damage
         self.kill()
-    
+
     def get_spawn_value(self):
         return self.check_zombie_spawn
