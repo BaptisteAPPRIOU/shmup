@@ -8,6 +8,7 @@ from explosion import Explosion
 from water import Water
 from coin import Coin
 from spawn import SpawnZombie
+from ui import UI
 import random
 
 class Main:
@@ -33,6 +34,7 @@ class Main:
         self.poison_gas = pygame.sprite.Group()
         self.blood = pygame.sprite.Group()
         self.static_coin = pygame.sprite.Group()
+        self.ui_sprites = pygame.sprite.Group()
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         # FONTS AND LABELS
@@ -40,10 +42,6 @@ class Main:
         self.user_label = self.font.render("User: user", 1, (0, 0, 0))
         self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
-        # self.health_label = self.font.render("HEALTH : ", 1, (0, 0, 0))
-        # self.health = self.font.render(str(self.health), 1, (0, 0, 0))
-        # self.life_label = self.font.render("LIVES : ", 1, (0, 0, 0))
-        # self.life = self.font.render(str(self.life), 1, (0, 0, 0))
         # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
@@ -104,6 +102,9 @@ class Main:
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group    
         self.pirate_group.add(self.pirate)
 
+        self.ui_elements = UI(self.ui_sprites, self.pirate.life, self.pirate.health)                                                          # Create UI instance and add it to sprite group
+        self.ui_sprites.add(self.ui_elements)
+
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
         self.speed_boost_duration = 0
@@ -127,10 +128,10 @@ class Main:
         clock = pygame.time.Clock()
         running = True
         current_wave = 0
+        counter = 0
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
         while running:
 
-            counter = 0
             dt = clock.tick(60)/1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -165,6 +166,8 @@ class Main:
             self.blood.draw(self.screen)
             self.static_coin.update()
             self.static_coin.draw(self.screen)
+            self.ui_sprites.update()
+            self.ui_sprites.draw(self.screen)
 
             self.timer += dt
             
@@ -190,10 +193,13 @@ class Main:
                 self.screen.blit(explosion.image, explosion.rect)
                 if explosion.type == "lifeboat":
                     self.total_score += 5
+                    counter += 1
                 elif explosion.type == "sloop":
                     self.total_score += 10
+                    counter += 1
                 elif explosion.type == "ship":
                     self.total_score += 15
+                    counter += 1
                 self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
 
             for bullet in self.cannon_ball_enemies:
@@ -277,7 +283,7 @@ class Main:
                             for gas in self.poison_gas:
                                 gas.kill()
                         vessel.kill()
-                        counter = 1
+                        
             
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
@@ -300,10 +306,6 @@ class Main:
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label, (10, 100))
             self.screen.blit(self.score_label2, (10, 130))
-            # self.screen.blit(self.health_label, (10, 160))
-            # self.screen.blit(self.health, (10, 190))
-            # self.screen.blit(self.life_label, (10, 220))
-            # self.screen.blit(self.life, (10, 250))
             self.screen.blit(self.surface, (0, 0))
             self.screen.blit(self.health_bar, (2, 190))
             self.screen.blit(self.life_heart, (5, 210))
@@ -311,7 +313,10 @@ class Main:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-
+            print("Counter", counter)
+            if counter == 400:
+                print("You win")
+                
             if all(count == 0 for count in waves[current_wave].counts):  # Check if all enemies in the current wave have been spawned
                 current_wave += 1
 
