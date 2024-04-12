@@ -1,0 +1,13 @@
+{
+    "button":
+    {
+        "font":
+        {
+            "name": "Minecraft",
+             "size": "22",
+             "bold": "0",
+             "italic": "0",
+             "regular_path": "Fonts/Minecraft.ttf"
+        }
+    }
+}

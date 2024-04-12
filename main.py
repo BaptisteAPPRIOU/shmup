@@ -8,15 +8,15 @@ from explosion import Explosion
 from water import Water
 from coin import Coin
 from spawn import SpawnZombie
-from ui import UI
+#from ui import UI
 import random
 
 class Main:
-    def __init__(self):
+    def __init__(self, screen, gameStateManager):
         pygame.init()
         pygame.mixer.init()
-
-        self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
+        self.gameStateManager = gameStateManager
+        self.screen = screen
         self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA) 
         self.wall = pygame.Rect(60, 800, 540, 10)
         self.total_score = 0
@@ -102,8 +102,8 @@ class Main:
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group    
         self.pirate_group.add(self.pirate)
 
-        self.ui_elements = UI(self.ui_sprites, self.pirate.life, self.pirate.health)                                                          # Create UI instance and add it to sprite group
-        self.ui_sprites.add(self.ui_elements)
+        # self.ui_elements = UI(self.ui_sprites, self.pirate.life, self.pirate.health)                                                          # Create UI instance and add it to sprite group
+        # self.ui_sprites.add(self.ui_elements)
 
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
@@ -116,9 +116,9 @@ class Main:
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
         ]
 
         if not self.static_coin:
@@ -313,9 +313,11 @@ class Main:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-            print("Counter", counter)
-            if counter == 400:
+            if counter == 160:
                 print("You win")
+                self.gameStateManager.set_state('tuto')
+                running = False
+                
                 
             if all(count == 0 for count in waves[current_wave].counts):  # Check if all enemies in the current wave have been spawned
                 current_wave += 1
