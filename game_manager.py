@@ -22,7 +22,17 @@ class GameManager:
         exit_page = ExitPage(parent_screen)
         exit_page.run()
 
-    def show_level1_page(self):
+    def show_level1_page(self, username):
         from level1 import Level1
-        level1_page = Level1()
+        level1_page = Level1(username)
         level1_page.run()
+
+    def show_credits_page(self):
+        from credits_page import CreditsPage
+        credits_page = CreditsPage()
+        credits_page.run()
+
+    def show_user_creation_page(self):
+        from user_creation_page import UserCreationPage
+        user_creation_page = UserCreationPage()
+        user_creation_page.run()
