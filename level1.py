@@ -238,6 +238,7 @@ class Level1:
                         self.pirate.health = 100
                         if self.pirate.life == 0:
                             self.pirate.kill()
+                            game_manager.show_game_over_page(self.screen, self.total_score, self.username)
                             print("Game Over")
                             running = False
             self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
@@ -286,6 +287,7 @@ class Level1:
                         self.pirate.health = 100
                         if self.pirate.life == 0:
                             self.pirate.kill()
+                            game_manager.show_game_over_page(self.screen, self.total_score, self.username)
                             print("Game Over")
                             running = False
 
@@ -360,16 +362,18 @@ class Level1:
                     print("Game Over")
                     break
 
+        return self.total_score, self.username
+
         # pygame.quit()
 
 # if __name__ == "__main__":
 #     Level1().run()
 
-if __name__ == "__main__":
-    # Add code to retrieve the username from the user creation page
-    user_creation_page = UserCreationPage()
-    user_creation_page.run()
+# if __name__ == "__main__":
+#     # Add code to retrieve the username from the user creation page
+#     user_creation_page = UserCreationPage()
+#     user_creation_page.run()
 
-    # Pass the username to the Level1 instance
-    level1 = Level1(user_creation_page.get_username())
-    level1.run()
+#     # Pass the username to the Level1 instance
+#     level1 = Level1(user_creation_page.get_username())
+#     level1.run()

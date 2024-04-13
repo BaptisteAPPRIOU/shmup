@@ -32,7 +32,7 @@ class UserCreationPage():
         back_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 930), (196, 36)),
             text="",
-            manager=self.MANAGER,
+            manager=self.MANAGER, 
             object_id="back_button")
         
         label_tutorial = pygame_gui.elements.UILabel(

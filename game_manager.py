@@ -36,3 +36,8 @@ class GameManager:
         from user_creation_page import UserCreationPage
         user_creation_page = UserCreationPage()
         user_creation_page.run()
+
+    def show_game_over_page(self, parent_screen, total_score, username):
+        from game_over_page import GameOverPage
+        game_over_page = GameOverPage(parent_screen, total_score, username)
+        game_over_page.run()
