@@ -10,6 +10,7 @@ from coin import Coin
 from spawn import SpawnZombie
 from ui import UI
 import random
+from game_manager import GameManager
 
 class Level1:
     def __init__(self):
@@ -143,6 +144,7 @@ class Level1:
         current_wave = 0
         counter = 0
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
+        game_manager = GameManager()
         while running:
 
             dt = clock.tick(60)/1000
@@ -151,7 +153,9 @@ class Level1:
                     running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        running = False
+                        game_manager.show_exit_page(self.screen)
+                        # running = False
+                        # pygame.quit()
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
@@ -350,5 +354,5 @@ class Level1:
 
         # pygame.quit()
 
-if __name__ == "__main__":
-    Level1().run()
+# if __name__ == "__main__":
+#     Level1().run()
