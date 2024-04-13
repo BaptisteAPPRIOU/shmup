@@ -180,5 +180,22 @@
             "rounded_rectangle_radius": "10",
             "tool_tip_delay": "5.0"
         }
+    },
+    "entry_name":{
+        "colours": {
+            "normal_bg": "#FFFFFF",
+            "normal_text": "#000000",
+            "dark_bg": "#FFFFFF",
+            "selected_bg": "#EEEEEE",
+            "selected_text": "#EEEEEE",
+            "hovered_bg": "#000000",
+            "text_cursor": "#393E46"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "300",
+            "border_width":"0",
+            "shadow_width": "0"
+        }
     }
 }
