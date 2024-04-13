@@ -2,6 +2,7 @@ import pygame
 import pygame_gui
 from game_manager import GameManager
 from level1 import Level1
+import json
 
 FPS = 60
 
@@ -13,13 +14,26 @@ class GameOverPage:
         self.overlay_surface.set_alpha(58)
         self.total_score = total_score
         self.username = username
-        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 25)        
+        self.font = pygame.font.Font("Fonts/Minecraft.ttf", 25)
 
-  
+        self.leaderboard_file = "leaderboard.json"        
+
         self.game_over = pygame.image.load("images/game_over.png").convert_alpha() 
         pygame.mouse.set_visible(True)
         self.coin_image = pygame.transform.scale(pygame.image.load("images/yellow_coin4.png").convert_alpha(), (40,40))
 
+    def save_to_leaderboard(self):
+        try:
+            with open(self.leaderboard_file, "r") as file:
+                leaderboard_data = json.load(file)
+        except FileNotFoundError:
+            leaderboard_data = []
+
+        leaderboard_data.append({"username": self.username, "score": self.total_score})
+
+        with open(self.leaderboard_file, "w") as file:
+            json.dump(leaderboard_data, file)
+    
     def run(self):
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager(self.parent_screen.get_size(), "theme.json")
@@ -70,7 +84,8 @@ class GameOverPage:
                         self.running = False  # Stop running if ESC key is pressed
                 elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == quit_button:
-                            print("Yes button clicked")
+                            print("Quit button clicked")
+                            self.save_to_leaderboard()
                             game_manager.show_landing_page() 
 
                 MANAGER.process_events(event)
