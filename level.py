@@ -11,7 +11,7 @@ from spawn import SpawnZombie
 from ui import UI
 import random
 
-class Main:
+class Level1:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
@@ -348,7 +348,7 @@ class Main:
                     print("Game Over")
                     break
 
-        pygame.quit()
+        # pygame.quit()
 
 if __name__ == "__main__":
-    Main().run()
+    Level1().run()
