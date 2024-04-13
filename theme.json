@@ -1,0 +1,184 @@
+{
+    "button":
+    {
+        "font":
+        {
+            "name": "Minecraft",
+             "size": "22",
+             "bold": "0",
+             "italic": "0",
+             "regular_path": "Fonts/Minecraft.ttf"
+        }
+    },
+    "play_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/play_button.png"
+            },
+            "hovered_image": {
+                "path": "images/play_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/play_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "leaderboard_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/leaderboard_button.png"
+            },
+            "hovered_image": {
+                "path": "images/leaderboard_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/leaderboard_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "credits_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/credits_button.png"
+            },
+            "hovered_image": {
+                "path": "images/credits_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/credits_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "quit_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/quit_button.png"
+            },
+            "hovered_image": {
+                "path": "images/quit_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/quit_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "back_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/back_button.png"
+            },
+            "hovered_image": {
+                "path": "images/back_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/back_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "continue_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/continue_button.png"
+            },
+            "hovered_image": {
+                "path": "images/continue_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/continue_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "confirm_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/confirm_button.png"
+            },
+            "hovered_image": {
+                "path": "images/confirm_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/confirm_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "label": {
+        "colours": {
+            "normal_text": "#000000"
+        },
+        "misc":{
+            "shadow_width": "0",
+            "border_width": "0"
+        }
+    },
+    "yes_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/yes_button.png"
+            },
+            "hovered_image": {
+                "path": "images/yes_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/yes_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    },
+    "no_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/no_button.png"
+            },
+            "hovered_image": {
+                "path": "images/no_button_hover.png"
+            },
+            "selected_image": {
+                "path": "images/no_button_hover.png"
+            }
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "rounded_rectangle_radius": "10",
+            "tool_tip_delay": "5.0"
+        }
+    }
+}
