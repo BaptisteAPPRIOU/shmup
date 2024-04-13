@@ -11,11 +11,14 @@ from spawn import SpawnZombie
 from ui import UI
 import random
 from game_manager import GameManager
+from user_creation_page import UserCreationPage
 
 class Level1:
-    def __init__(self):
+    def __init__(self, username):
         pygame.init()
         pygame.mixer.init()
+
+        self.username = username
 
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA)
@@ -34,14 +37,13 @@ class Level1:
         self.zombies = pygame.sprite.Group()
         self.poison_gas = pygame.sprite.Group()
         self.blood = pygame.sprite.Group()
-        self.static_coin = pygame.sprite.Group()
         self.ui_sprites = pygame.sprite.Group()
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
         self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
-        self.user_label = self.font.render("User: user", 1, (0, 0, 0))
+        # self.user_label = self.font.render("User: user", 1, (0, 0, 0))
         # self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.damage_label = self.font2.render("DAMAGE", 1, (0, 0, 0))
         self.health_label = self.font2.render("HEALTH", 1, (0, 0, 0))
@@ -56,6 +58,9 @@ class Level1:
         self.life_heart = pygame.image.load("images/life_3.png").convert_alpha()
         self.life_heart = pygame.transform.scale(self.life_heart, (96, 32))
         self.wall = pygame.image.load("images/wall.png").convert_alpha()
+        self.new_cursor = pygame.image.load("images/mouse_cursor.png").convert_alpha()
+        pygame.mouse.set_visible(False)
+
         self.ground = pygame.transform.scale(pygame.image.load("images/ground.png").convert_alpha(),(16,16))
         self.health_images = {
         100: pygame.transform.scale(pygame.image.load("images/health_10.png").convert_alpha(),(100, 15)),
@@ -146,7 +151,7 @@ class Level1:
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
         game_manager = GameManager()
         while running:
-
+            pos = pygame.mouse.get_pos()
             dt = clock.tick(60)/1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -327,6 +332,7 @@ class Level1:
                     self.speed = 1
                     self.speed_boost_duration = 0
 
+            self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label2, (10, 130))
             self.screen.blit(self.surface, (0, 0))
@@ -336,6 +342,8 @@ class Level1:
             self.screen.blit(self.health_label, (37, 340))
             self.screen.blit(self.speed_label, (37, 370))
             self.screen.blit(self.bomb_label, (37, 400))
+            self.screen.blit(self.new_cursor, pos)
+
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
@@ -356,3 +364,12 @@ class Level1:
 
 # if __name__ == "__main__":
 #     Level1().run()
+
+if __name__ == "__main__":
+    # Add code to retrieve the username from the user creation page
+    user_creation_page = UserCreationPage()
+    user_creation_page.run()
+
+    # Pass the username to the Level1 instance
+    level1 = Level1(user_creation_page.get_username())
+    level1.run()

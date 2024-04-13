@@ -11,6 +11,7 @@ class ExitPage:
         self.running = True  # Flag to control the running state of the exit page
         self.overlay_surface.set_alpha(58)  # Set the transparency of the overlay surface
         self.exit_sign = pygame.image.load("images/exit_sign.png").convert_alpha()  # Load the exit sign image
+        pygame.mouse.set_visible(True)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -31,6 +32,7 @@ class ExitPage:
         game_manager = GameManager() 
 
         while self.running:  # Run the exit page while the running flag is True
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False  # Stop running if the window is closed
@@ -52,6 +54,8 @@ class ExitPage:
             self.overlay_surface.blit(self.exit_sign, (170, 250))
             MANAGER.draw_ui(self.overlay_surface)  # Draw UI elements on the overlay surface
             self.parent_screen.blit(self.overlay_surface, (0, 0))  # Draw the overlay surface on the parent screen
+
+
             pygame.display.flip()
 
         # After the loop, clear the overlay surface

@@ -9,6 +9,8 @@ class LandingPage:
         pygame.init()
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.background = pygame.image.load("images/splash_art.png").convert_alpha()
+        self.new_cursor = pygame.image.load("images/mouse_cursor.png").convert_alpha()
+        pygame.mouse.set_visible(False)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -39,30 +41,28 @@ class LandingPage:
             manager=MANAGER,
             object_id="quit_button")
         
-        game_manager = GameManager()  # Create an instance of GameManager
+        game_manager = GameManager()  
         
         running = True
         while running:
+            pos = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left mouse button
-                        if button_play.rect.collidepoint(event.pos):
+                elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                        if event.ui_element == button_play:
                             print("Play button clicked")
                             game_manager.show_tutorial_page()
-                        elif button_leaderboard.rect.collidepoint(event.pos):
+                        elif event.ui_element == button_leaderboard:
                             print("Leaderboard button clicked")
                             game_manager.show_leaderboard_page()
-
-                            # Perform action for leaderboard button click
-                        elif button_credits.rect.collidepoint(event.pos):
+                        elif event.ui_element == button_credits:
                             print("Credits button clicked")
-                            # Perform action for credits button click
-                        elif button_quit.rect.collidepoint(event.pos):
+                            game_manager.show_credits_page()
+                        elif event.ui_element == button_quit:
                             print("Quit button clicked")
                             running = False
                             pygame.quit()
@@ -71,6 +71,8 @@ class LandingPage:
             MANAGER.update(clock.tick(FPS))
             self.screen.blit(self.background, (0, 0))
             MANAGER.draw_ui(self.screen)
+            self.screen.blit(self.new_cursor, pos)
+
             pygame.display.flip()
         # pygame.quit()
 

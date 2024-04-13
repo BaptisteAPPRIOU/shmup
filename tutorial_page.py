@@ -9,6 +9,8 @@ class TutorialPage():
         pygame.init()
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.background = pygame.image.load("images/tutorial.png").convert_alpha()
+        self.new_cursor = pygame.image.load("images/mouse_cursor.png").convert_alpha()
+        pygame.mouse.set_visible(False)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -62,6 +64,7 @@ class TutorialPage():
 
         running = True
         while running:
+            pos = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -75,7 +78,7 @@ class TutorialPage():
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == continue_button:
                             print("Start button clicked")
-                            game_manager.show_level1_page()
+                            game_manager.show_user_creation_page()
                             # running = False
                         if event.ui_element == back_button:
                             print("Back button clicked")
@@ -87,10 +90,11 @@ class TutorialPage():
             all_sprites.update()
             all_sprites.draw(self.screen)
             self.MANAGER.draw_ui(self.screen)
+            self.screen.blit(self.new_cursor, pos)
+
             pygame.display.flip()
         pygame.quit()
 
 if __name__ == "__main__":
     tutorial_page = TutorialPage()
     tutorial_page.run()
-
