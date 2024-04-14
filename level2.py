@@ -371,12 +371,14 @@ class Level2:
                 if self.damage_boost_duration <= 0:
                     self.pirate.damage = self.original_damage
                     self.damage_boost_duration = 0
-
-            if self.speed_boost_duration > 0:
-                self.speed_boost_duration -= dt
-                if self.speed_boost_duration <= 0:
-                    self.speed = 1
-                    self.speed_boost_duration = 0
+            if self.upgrade == "speed_upgrade":
+                if self.speed_boost_duration > 0:
+                    self.speed_boost_duration -= dt
+                    if self.speed_boost_duration <= 0:
+                        self.speed = self.upgraded_speed
+                        self.speed_boost_duration = 0
+            else:
+                self.speed = self.original_speed
 
             self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
@@ -407,9 +409,9 @@ class Level2:
                 else:
                     print("Game Over")
                     break
-            # print("SPEED", self.speed)
+            print("SPEED", self.speed)
             # print("DAMAGE", self.pirate.damage)
-            print("HEALTH", self.pirate.health)
+            # print("HEALTH", self.pirate.health)
 
 
         return self.total_score, self.username
