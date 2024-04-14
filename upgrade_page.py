@@ -1,16 +1,22 @@
 import pygame
 import pygame_gui
 from game_manager import GameManager
+# from level1 import Level1
 
 FPS = 60
 
 class UpgradePage:
-    def __init__(self, parent_screen):
+    def __init__(self, parent_screen, username, total_score, health,life):
         self.parent_screen = parent_screen  
         self.overlay_surface = pygame.Surface((640, 1000), pygame.SRCALPHA)  
         self.running = True  
         self.overlay_surface.set_alpha(58)
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 25)
+        self.disabled_button = None
+        self.username = username
+        self.total_score = total_score
+        self.health = health
+        self.life = life
 
         self.game_over = pygame.image.load("images/upgrades.png").convert_alpha() 
         pygame.mouse.set_visible(True)
@@ -89,21 +95,32 @@ class UpgradePage:
                             game_manager.show_landing_page()
                         elif event.ui_element == confirm_button:
                             print("Confirm button clicked")
-                            #level2
+                            print(self.disabled_button)
+                            print(self.username)
+                            print(self.total_score)
+                            print(self.health)
+                            print(self.life)
+                            game_manager.show_level2_page(self.username, self.total_score, self.health, self.life, self.disabled_button)
+                            # print(self.username)
+                            # print(self.total_score) 
+                            # return self.disabled_button, self.username, self.total_score
                         elif event.ui_element == self.speed_upgrade_button:
                             print("Speed upgrade button clicked")
+                            self.disabled_button = "speed_upgrade"
                             self.speed_upgrade_button.disable()
                             self.health_upgrade_button.enable()
                             self.damage_upgrade_button.enable()
                             #level2
                         elif event.ui_element == self.damage_upgrade_button:
                             print("Damage upgrade button clicked")
+                            self.disabled_button = "damage_upgrade"
                             self.damage_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
                             self.health_upgrade_button.enable()
                             #level2
                         elif event.ui_element == self.health_upgrade_button:
                             print("Health upgrade button clicked")
+                            self.disabled_button = "health_upgrade"
                             self.health_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
                             self.damage_upgrade_button.enable()
@@ -116,6 +133,7 @@ class UpgradePage:
             self.parent_screen.blit(self.overlay_surface, (0, 0))  
 
             pygame.display.flip()
+        
 
 if __name__ == "__main__":
     pygame.init()
