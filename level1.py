@@ -376,8 +376,9 @@ class Level1:
                 else:
                     print("Game Over")
                     break
-
-        return self.total_score, self.username
+            # print("SPPEED", self.speed)
+            # print("DAMAGE", self.pirate.damage)
+            print("HEALTH", self.pirate.health)
 
         # pygame.quit()
 

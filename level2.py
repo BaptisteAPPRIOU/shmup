@@ -30,9 +30,13 @@ class Level2:
 
         self.username = username
         self.total_score = int(total_score)
-        self.health = health
+        # self.health = health
         self.life = life
         self.upgrade = upgrade
+        if self.upgrade == "health_upgrade":
+            self.health = 110
+        else:
+            self.health = health
 
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA)
@@ -41,8 +45,6 @@ class Level2:
         self.pirate_group = pygame.sprite.Group()
 
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
-        self.pirate.health = self.health
-        print("Health", self.health)
         self.pirate.life = self.life
         print("Life", self.life)
   
@@ -62,7 +64,7 @@ class Level2:
         # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
-        self.health_bar = pygame.image.load("images/health_1.png").convert_alpha()
+        self.health_bar = pygame.image.load("images/health_10.png").convert_alpha()
         self.health_bar = pygame.transform.scale(self.health_bar, (100, 15))
         self.life_heart = pygame.image.load("images/life_3.png").convert_alpha()
         self.life_heart = pygame.transform.scale(self.life_heart, (96, 32))
@@ -144,24 +146,27 @@ class Level2:
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
         self.speed_boost_duration = 0
-        self.original_health = self.pirate.health
+        self.original_health = self.health
         self.original_damage = self.pirate.damage
         self.original_speed = 1
         self.speed = 1
 
 
         if self.upgrade == "speed_upgrade":
-            self.upgraded_speed = 1 + self.speed*0.3
+            self.upgraded_speed = 1.8
             self.speed = self.upgraded_speed
+            self.original_speed = self.speed
             print("Upgraded Speed", self.speed)
         elif self.upgrade == "damage_upgrade":
-            self.upgraded_damage = 100 + self.pirate.damage*0.1
+            self.upgraded_damage = 110
             self.pirate.damage = self.upgraded_damage
+            self.original_damage = self.pirate.damage
             print("Upgraded Damage", self.pirate.damage)
         elif self.upgrade == "health_upgrade":
-            self.upgraded_health = 100 + self.pirate.health*0.1
-            self.pirate.health = self.upgraded_health
+            self.upgraded_health = self.pirate.health = self.original_health = 110
+
             print("Upgraded Health", self.pirate.health)
+
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
@@ -274,7 +279,7 @@ class Level2:
                     bullet.kill()
                     if self.pirate.health <= 0:
                         self.pirate.life -= 1
-                        self.pirate.health = 100
+                        self.pirate.health = self.health
                         if self.pirate.life == 0:
                             self.pirate.kill()
                             game_manager.show_game_over_page(self.screen, self.total_score, self.username)
@@ -283,50 +288,27 @@ class Level2:
             self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
 
             # Change UI elements image based on pirate health
-            # if self.pirate.health > 10000:
-            #     self.health_bar = self.health_images[110]
-            # elif self.pirate.health >= 0.9*self.original_health and self.pirate.health < self.original_health:
-            #     self.health_bar = self.health_images[100]
-            # elif self.pirate.health >= 0.8*self.original_health and self.pirate.health < 0.9*self.original_health:
-            #     self.health_bar = self.health_images[90]
-            # elif self.pirate.health >= 0.7*self.original_health and self.pirate.health < 0.8*self.original_health:
-            #     self.health_bar = self.health_images[80]
-            # elif self.pirate.health >= 0.6*self.original_health and self.pirate.health < 0.7*self.original_health:
-            #     self.health_bar = self.health_images[70]
-            # elif self.pirate.health >= 0.5*self.original_health and self.pirate.health < 0.6*self.original_health:
-            #     self.health_bar = self.health_images[60]
-            # elif self.pirate.health >= 0.4*self.original_health and self.pirate.health < 0.5*self.original_health:
-            #     self.health_bar = self.health_images[50]
-            # elif self.pirate.health >= 0.3*self.original_health and self.pirate.health < 0.4*self.original_health:
-            #     self.health_bar = self.health_images[40]
-            # elif self.pirate.health >= 0.2*self.original_health and self.pirate.health < 0.3*self.original_health:
-            #     self.health_bar = self.health_images[30]
-            # elif self.pirate.health >= 0.1*self.original_health and self.pirate.health < 0.2*self.original_health:
-            #     self.health_bar = self.health_images[20]
-            # elif self.pirate.health > 0 and self.pirate.health < 0.1*self.original_health:
-            #     self.health_bar = self.health_images[10]
-
-            if self.pirate.health > 100:
+            if self.pirate.health > 10000:
                 self.health_bar = self.health_images[110]
-            elif self.pirate.health == 100:
+            elif self.pirate.health >= 0.9*self.original_health and self.pirate.health < self.original_health:
                 self.health_bar = self.health_images[100]
-            elif self.pirate.health == 90:
+            elif self.pirate.health >= 0.8*self.original_health and self.pirate.health < 0.9*self.original_health:
                 self.health_bar = self.health_images[90]
-            elif self.pirate.health == 80:
+            elif self.pirate.health >= 0.7*self.original_health and self.pirate.health < 0.8*self.original_health:
                 self.health_bar = self.health_images[80]
-            elif self.pirate.health == 70:
+            elif self.pirate.health >= 0.6*self.original_health and self.pirate.health < 0.7*self.original_health:
                 self.health_bar = self.health_images[70]
-            elif self.pirate.health == 60:
+            elif self.pirate.health >= 0.5*self.original_health and self.pirate.health < 0.6*self.original_health:
                 self.health_bar = self.health_images[60]
-            elif self.pirate.health == 50:
+            elif self.pirate.health >= 0.4*self.original_health and self.pirate.health < 0.5*self.original_health:
                 self.health_bar = self.health_images[50]
-            elif self.pirate.health == 40:
+            elif self.pirate.health >= 0.3*self.original_health and self.pirate.health < 0.4*self.original_health:
                 self.health_bar = self.health_images[40]
-            elif self.pirate.health == 30:
+            elif self.pirate.health >= 0.2*self.original_health and self.pirate.health < 0.3*self.original_health:
                 self.health_bar = self.health_images[30]
-            elif self.pirate.health == 20:
+            elif self.pirate.health >= 0.1*self.original_health and self.pirate.health < 0.2*self.original_health:
                 self.health_bar = self.health_images[20]
-            elif self.pirate.health == 10:
+            elif self.pirate.health > 0 and self.pirate.health < 0.1*self.original_health:
                 self.health_bar = self.health_images[10]
 
             # Change UI elements image based on pirate number of lives
@@ -346,7 +328,7 @@ class Level2:
                     gas.kill()
                     if self.pirate.health <= 0:
                         self.pirate.life -= 1
-                        self.pirate.health = 100
+                        self.pirate.health = self.health
                         if self.pirate.life == 0:
                             self.pirate.kill()
                             game_manager.show_game_over_page(self.screen, self.total_score, self.username)
@@ -377,12 +359,12 @@ class Level2:
                             for gas in self.poison_gas:
                                 gas.kill()
                         vessel.kill()
-
-            if self.health_boost_duration > 0:
-                self.health_boost_duration -= dt
-                if self.health_boost_duration <= 0:
-                    self.pirate.health = self.original_health
-                    self.health_boost_duration = 0
+            if self.upgrade == "health_upgrade":
+                if self.health_boost_duration > 0:
+                    self.health_boost_duration -= dt
+                    if self.health_boost_duration <= 0:
+                        self.pirate.health = 110
+                        self.health_boost_duration = 0
 
             if self.damage_boost_duration > 0:
                 self.damage_boost_duration -= dt
@@ -425,6 +407,10 @@ class Level2:
                 else:
                     print("Game Over")
                     break
+            # print("SPEED", self.speed)
+            # print("DAMAGE", self.pirate.damage)
+            print("HEALTH", self.pirate.health)
+
 
         return self.total_score, self.username
 

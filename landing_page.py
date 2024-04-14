@@ -43,7 +43,7 @@ class LandingPage:
         
         game_manager = GameManager()  
         
-        running = True
+        running = True  
         while running:
             pos = pygame.mouse.get_pos()
             for event in pygame.event.get():

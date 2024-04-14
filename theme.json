@@ -181,6 +181,45 @@
             "tool_tip_delay": "5.0"
         }
     },
+    "speed_upgrade_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/speed_upgrade_button.png"
+            },
+            "hovered_image": {
+                "path": "images/speed_upgrade_button_hover.png"
+            },
+            "disabled_image": {
+                "path": "images/speed_upgrade_button_disabled.png"
+            }
+        }
+    },
+    "health_upgrade_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/health_upgrade_button.png"
+            },
+            "hovered_image": {
+                "path": "images/health_upgrade_button_hover.png"
+            },
+            "disabled_image": {
+                "path": "images/health_upgrade_button_disabled.png"
+            }
+        }
+    },
+    "damage_upgrade_button":{
+        "images": {
+            "normal_image": {
+                "path": "images/damage_upgrade_button.png"
+            },
+            "hovered_image": {
+                "path": "images/damage_upgrade_button_hover.png"
+            },
+            "disabled_image": {
+                "path": "images/damage_upgrade_button_disabled.png"
+            }
+        }
+    },
     "entry_name":{
         "colours": {
             "normal_bg": "#FFFFFF",
