@@ -110,7 +110,7 @@ class CreditsPage:
             object_id="label")
         special_thanks_text_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 370), (500, 400)),
-            text="Professors, and fellow adventurers who supported us",
+            text="Alicia CORDIAL for her guidance and support in this adventure",
             manager=MANAGER,
             object_id="label")
         
