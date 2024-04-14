@@ -1,7 +1,6 @@
 import pygame
 import pygame_gui
 from game_manager import GameManager
-# from level1 import Level1
 
 FPS = 60
 
@@ -91,35 +90,22 @@ class UpgradePage:
                         self.running = False  
                 elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == quit_button:
-                            print("Quit button clicked")
                             game_manager.show_landing_page()
                         elif event.ui_element == confirm_button:
-                            print("Confirm button clicked")
-                            print(self.disabled_button)
-                            print(self.username)
-                            print(self.total_score)
-                            print(self.health)
-                            print(self.life)
                             game_manager.show_level2_page(self.username, self.total_score, self.health, self.life, self.disabled_button)
-                            # print(self.username)
-                            # print(self.total_score) 
-                            # return self.disabled_button, self.username, self.total_score
                         elif event.ui_element == self.speed_upgrade_button:
-                            print("Speed upgrade button clicked")
                             self.disabled_button = "speed_upgrade"
                             self.speed_upgrade_button.disable()
                             self.health_upgrade_button.enable()
                             self.damage_upgrade_button.enable()
                             #level2
                         elif event.ui_element == self.damage_upgrade_button:
-                            print("Damage upgrade button clicked")
                             self.disabled_button = "damage_upgrade"
                             self.damage_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
                             self.health_upgrade_button.enable()
                             #level2
                         elif event.ui_element == self.health_upgrade_button:
-                            print("Health upgrade button clicked")
                             self.disabled_button = "health_upgrade"
                             self.health_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
