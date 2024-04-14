@@ -3,6 +3,7 @@ import os
 from poison_gas import PoisonGas
 import random
 from blood import Blood
+from pirate import Pirate
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, zombies, poison_gas, blood):
@@ -32,8 +33,6 @@ class Zombie(pygame.sprite.Sprite):
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-        if self.rect.bottom > 1000:
-            self.kill()
         self.attack()
 
     def move(self):                                                                                                         # Method to move the zombie

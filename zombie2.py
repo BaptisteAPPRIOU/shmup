@@ -4,6 +4,7 @@ import math
 import random
 from poison_gas import PoisonGas
 from blood import Blood
+from pirate import Pirate
 
 class Zombie_2(pygame.sprite.Sprite):
     def __init__(self, x, y, zombies, poison_gas,blood):
@@ -34,8 +35,6 @@ class Zombie_2(pygame.sprite.Sprite):
             self.animation_counter = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-        if self.rect.bottom > 1000:
-            self.kill()
         self.attack(pirate_x, pirate_y)
 
     def update_hit_points(self, damage):                                # Update the hit points of the zombie
