@@ -29,29 +29,54 @@ class TutorialPage():
             manager=self.MANAGER,
             object_id="back_button")
         
-        label_tutorial = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((70, 20), (500, 400)),
-            text="TUTORIAL",
-            manager=self.MANAGER,
-            object_id="label")
         label_tutorial_text = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((70, 60), (500, 400)),
-            text="This is a tutorial on how to play the game.",
+            relative_rect=pygame.Rect((30, 40), (600, 400)),
+            text="Take control of the mighty cannon and defend the village harbor from the ",
             manager=self.MANAGER,
             object_id="label")
         label_tutorial_text_3 = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((70, 100), (500, 400)),
-            text="Use the keys 'q' and 'd' or '←'and '→' to move the pirate",
+            relative_rect=pygame.Rect((30, 60), (600, 400)),
+            text="relentless onslaught of zombie pirates.Use 'Q' and 'D' or '←' and '→'",
             manager=self.MANAGER,
             object_id="label")
         label_tutorial_text_4 = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((70, 120), (500, 400)),
-            text="Press the space key to shoot the pirate's cannon.",
+            relative_rect=pygame.Rect((30, 80), (600, 400)),
+            text="to aim your cannon and fend off the undead horde.",
             manager=self.MANAGER,
             object_id="label")
         label_tutorial_text_5 = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((70, 140), (500, 400)),
-            text="Press the escape key to quit the game.",
+            relative_rect=pygame.Rect((30, 100), (600, 400)),
+            text="As enemy ships approach, they'll unleash waves of undead pirates",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_6 = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((30, 120), (600, 400)),
+            text="hell-bent on reaching the village gates. ",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_7 = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((30, 160), (600, 400)),
+            text="Blast them to bits with the 'SPACE BAR' before they breach the walls!",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_8 = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((30, 180), (600, 400)),
+            text="and unleash chaos upon the unsuspecting villagers.",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_9 = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((30, 220), (600, 400)),
+            text="After each victorious battle, choose wisely from a selection of upgrades.",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_10 = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((30, 240), (600, 400)),
+            text="Upgrade your cannon's damage, speed, and health to face the zombie pirates.",
+            manager=self.MANAGER,
+            object_id="label")
+        label_tutorial_text_11 = pygame_gui.elements.UILabel(  
+            relative_rect=pygame.Rect((20, 260), (620, 400)),
+            text="Test yourself against other daring captains and etch your name in the annals",
             manager=self.MANAGER,
             object_id="label")
         
@@ -71,7 +96,6 @@ class TutorialPage():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_manager.show_exit_page(self.screen)
-                        # running = False
                     if event.key == pygame.K_SPACE:
                         pirate.shoot()
                 if event.type == pygame.USEREVENT:
@@ -79,7 +103,6 @@ class TutorialPage():
                         if event.ui_element == continue_button:
                             print("Start button clicked")
                             game_manager.show_user_creation_page()
-                            # running = False
                         if event.ui_element == back_button:
                             print("Back button clicked")
                             game_manager.show_landing_page()
