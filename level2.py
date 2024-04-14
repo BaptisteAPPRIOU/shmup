@@ -33,10 +33,19 @@ class Level2:
         # self.health = health
         self.life = life
         self.upgrade = upgrade
+
         if self.upgrade == "health_upgrade":
-            self.health = 110
-        else:
-            self.health = health
+            self.health = self.original_health = 110
+            self.speed = self.original_speed = 1
+            self.damage = self.original_damage = 100
+        elif self.upgrade == "damage_upgrade":
+            self.damage = self.original_damage = 110
+            self.speed = self.original_speed = 1
+            self.health = self.original_health = 100
+        elif self.upgrade == "speed_upgrade":
+            self.speed = self.original_speed = 1.8
+            self.damage = self.original_damage = 100
+            self.health = self.original_health = 100
 
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
         self.surface = pygame.Surface((640, 1000),pygame.SRCALPHA)
@@ -46,6 +55,7 @@ class Level2:
 
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate.life = self.life
+        self.pirate.health = self.health
         print("Life", self.life)
   
         # SOUNDS
@@ -146,26 +156,26 @@ class Level2:
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
         self.speed_boost_duration = 0
-        self.original_health = self.health
-        self.original_damage = self.pirate.damage
-        self.original_speed = 1
-        self.speed = 1
+        # self.original_health = 100
+        # self.original_damage = 100
+        # self.original_speed = 1
+        # self.speed = 1
 
 
-        if self.upgrade == "speed_upgrade":
-            self.upgraded_speed = 1.8
-            self.speed = self.upgraded_speed
-            self.original_speed = self.speed
-            print("Upgraded Speed", self.speed)
-        elif self.upgrade == "damage_upgrade":
-            self.upgraded_damage = 110
-            self.pirate.damage = self.upgraded_damage
-            self.original_damage = self.pirate.damage
-            print("Upgraded Damage", self.pirate.damage)
-        elif self.upgrade == "health_upgrade":
-            self.upgraded_health = self.pirate.health = self.original_health = 110
+        # if self.upgrade == "speed_upgrade":
+        #     self.upgraded_speed = 1.8
+        #     self.speed = self.upgraded_speed
+        #     self.original_speed = self.speed
+        #     print("Upgraded Speed", self.speed)
+        # elif self.upgrade == "damage_upgrade":
+        #     self.upgraded_damage = 110
+        #     self.pirate.damage = self.upgraded_damage
+        #     self.original_damage = self.pirate.damage
+        #     print("Upgraded Damage", self.pirate.damage)
+        # elif self.upgrade == "health_upgrade":
+        #     self.upgraded_health = self.pirate.health = self.original_health = 110
 
-            print("Upgraded Health", self.pirate.health)
+        #     print("Upgraded Health", self.pirate.health)
 
 
     def run(self):                                                                                                              # Main game loop
@@ -290,7 +300,7 @@ class Level2:
             # Change UI elements image based on pirate health
             if self.pirate.health > 10000:
                 self.health_bar = self.health_images[110]
-            elif self.pirate.health >= 0.9*self.original_health and self.pirate.health < self.original_health:
+            elif self.pirate.health >= 0.9*self.original_health and self.pirate.health <= self.original_health:
                 self.health_bar = self.health_images[100]
             elif self.pirate.health >= 0.8*self.original_health and self.pirate.health < 0.9*self.original_health:
                 self.health_bar = self.health_images[90]
@@ -359,27 +369,24 @@ class Level2:
                             for gas in self.poison_gas:
                                 gas.kill()
                         vessel.kill()
-            if self.upgrade == "health_upgrade":
-                if self.health_boost_duration > 0:
-                    self.health_boost_duration -= dt
-                    if self.health_boost_duration <= 0:
-                        self.pirate.health = 110
-                        self.health_boost_duration = 0
-            elif self.upgrade == "damage_upgrade":
-                if self.damage_boost_duration > 0:
-                    self.damage_boost_duration -= dt
-                    if self.damage_boost_duration <= 0:
-                        self.pirate.damage = self.original_damage
-                        self.damage_boost_duration = 0
 
-            elif self.upgrade == "speed_upgrade":
-                if self.speed_boost_duration > 0:
-                    self.speed_boost_duration -= dt
-                    if self.speed_boost_duration <= 0:
-                        self.speed = self.upgraded_speed
-                        self.speed_boost_duration = 0
-            else:
-                self.speed = self.original_speed
+            if self.health_boost_duration > 0:
+                self.health_boost_duration -= dt
+                if self.health_boost_duration <= 0:
+                    self.pirate.health = self.original_health
+                    self.health_boost_duration = 0
+            if self.damage_boost_duration > 0:
+                self.damage_boost_duration -= dt
+                if self.damage_boost_duration <= 0:
+                    self.pirate.damage = self.original_damage
+                    self.damage_boost_duration = 0
+
+            if self.speed_boost_duration > 0:
+                self.speed_boost_duration -= dt
+                if self.speed_boost_duration <= 0:
+                    self.speed = self.original_speed
+                    self.speed_boost_duration = 0
+
 
             self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
@@ -399,7 +406,7 @@ class Level2:
             pygame.time.Clock().tick(60)
             if counter == 400:
                 print("You win")
-                game_manager.show_upgrade_page(self.screen, self.total_score, self.username, self.pirate.health, self.pirate.life)
+                game_manager.show_upgrade_page2(self.screen, self.total_score, self.username, self.pirate.health, self.pirate.life)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
@@ -411,7 +418,7 @@ class Level2:
                     print("Game Over")
                     break
             # print("SPEED", self.speed)
-            print("DAMAGE", self.pirate.damage)
+            print("DAMAGE", self.pirate.damage , "HEALTH", self.pirate.health, "SPEED", self.speed)
             # print("HEALTH", self.pirate.health)
 
 
