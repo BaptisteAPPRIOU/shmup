@@ -55,6 +55,7 @@ class Level2:
 
         self.pirate = Pirate(self.pirate_group, self.bullets, self.vessels,self.zombies, self.cannon_ball_enemies, 100,self.screen.get_width(), self.screen.get_height())    # Create player pirate instance and add it to sprite group
         self.pirate.life = self.life
+        self.pirate.damage = self.damage
         self.pirate.health = self.health
         print("Life", self.life)
   
@@ -149,41 +150,18 @@ class Level2:
                 ground_sprite.rect = ground_sprite.image.get_rect(topleft=(x, y))
                 self.background_sprites.add(ground_sprite)
 
-
-
         self.ui_elements = UI()                                                          # Create UI instance and add it to sprite group
 
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
         self.speed_boost_duration = 0
-        # self.original_health = 100
-        # self.original_damage = 100
-        # self.original_speed = 1
-        # self.speed = 1
-
-
-        # if self.upgrade == "speed_upgrade":
-        #     self.upgraded_speed = 1.8
-        #     self.speed = self.upgraded_speed
-        #     self.original_speed = self.speed
-        #     print("Upgraded Speed", self.speed)
-        # elif self.upgrade == "damage_upgrade":
-        #     self.upgraded_damage = 110
-        #     self.pirate.damage = self.upgraded_damage
-        #     self.original_damage = self.pirate.damage
-        #     print("Upgraded Damage", self.pirate.damage)
-        # elif self.upgrade == "health_upgrade":
-        #     self.upgraded_health = self.pirate.health = self.original_health = 110
-
-        #     print("Upgraded Health", self.pirate.health)
-
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
         ]
 
         clock = pygame.time.Clock()
@@ -404,9 +382,9 @@ class Level2:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-            if counter == 400:
+            if counter == 160:
                 print("You win")
-                game_manager.show_upgrade_page2(self.screen, self.total_score, self.username, self.pirate.health, self.pirate.life)
+                game_manager.show_upgrade_page2(self.screen, self.username, self.total_score, self.pirate.health, self.pirate.life, self.original_damage, self.original_speed, self.original_health)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
@@ -420,8 +398,5 @@ class Level2:
             # print("SPEED", self.speed)
             print("DAMAGE", self.pirate.damage , "HEALTH", self.pirate.health, "SPEED", self.speed)
             # print("HEALTH", self.pirate.health)
-
-
-        return self.total_score, self.username
 
         # pygame.quit()
