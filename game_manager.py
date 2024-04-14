@@ -61,3 +61,8 @@ class GameManager:
         from upgrade_page2 import UpgradePage2
         upgrade_page2 = UpgradePage2(parent_screen, username, total_score, health, life, original_damage, original_speed, original_health)
         upgrade_page2.run()
+
+    def show_game_win_page(self, parent_screen, total_score, username):
+        from game_win_page import GameWinPage
+        game_win_page = GameWinPage(parent_screen, total_score, username)
+        game_win_page.run()

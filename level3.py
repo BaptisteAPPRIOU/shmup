@@ -415,7 +415,7 @@ class Level3:
             pygame.display.flip()
             pygame.time.Clock().tick(60)
             if counter == 400:
-                print("You win")
+                game_manager.show_game_win_page(self.screen, self.total_score, self.username)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
