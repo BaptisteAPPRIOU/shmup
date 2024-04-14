@@ -51,3 +51,13 @@ class GameManager:
         from level2 import Level2
         level2_page = Level2(username, total_score, health, life, upgrade)
         level2_page.run()
+
+    def show_level3_page(self, parent_screen, username, total_score, health, life, damage_lvl2, speed_lvl2, health_lvl2):
+        from level3 import Level3
+        level3_page = Level3(parent_screen, username, total_score, health, life, damage_lvl2, speed_lvl2, health_lvl2)
+        level3_page.run()
+
+    def show_upgrade_page2(self, parent_screen, username, total_score, health, life, original_damage, original_speed, original_health):
+        from upgrade_page2 import UpgradePage2
+        upgrade_page2 = UpgradePage2(parent_screen, username, total_score, health, life, original_damage, original_speed, original_health)
+        upgrade_page2.run()
