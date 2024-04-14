@@ -213,6 +213,16 @@ class Level1:
                 blood.update()
                 self.total_score += 1
                 self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
+                
+            #Updates the life of the pirate if the zombie reaches the wall
+            for zombie in self.zombies.copy():
+                if zombie.rect.bottom > 900:
+                    print(self.pirate.life)
+                    self.pirate.life -= 1
+                    zombie.kill()
+                    if self.pirate.life == 0:
+                        game_manager.show_game_over_page(self.screen, self.total_score, self.username)
+
             # Update score for destroying vessels
             for explosion in self.explosions.copy():
                 explosion.update()
@@ -351,6 +361,7 @@ class Level1:
             pygame.time.Clock().tick(60)
             if counter == 400:
                 print("You win")
+                game_manager.show_upgrade_page(self.screen)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
                 current_wave += 1
