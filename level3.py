@@ -92,6 +92,12 @@ class Level3:
   
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
+        self.background_music = pygame.mixer.Sound("sounds/background_music.wav")
+        self.background_music.set_volume(0.1)
+        self.background_music.play(-1)
+        self.pirate_hit = pygame.mixer.Sound("sounds/pirate_hit.mp3")
+        self.pirate_hit.set_volume(0.2)
+        self.game_over_sound = pygame.mixer.Sound("sounds/game_over.mp3")
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
         self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
@@ -273,9 +279,11 @@ class Level3:
                 if zombie.rect.bottom > 900:
                     print(self.pirate.life)
                     self.pirate.life -= 1
+                    self.pirate_hit.play()
                     zombie.kill()
                     if self.pirate.life == 0:
                         game_manager.show_game_over_page(self.screen, self.total_score, self.username)
+                        self.game_over_sound.play()
 
             # Update score for destroying vessels
             for explosion in self.explosions.copy():
@@ -296,13 +304,16 @@ class Level3:
             for bullet in self.cannon_ball_enemies:
                 if pygame.sprite.collide_mask(bullet, self.pirate):
                     self.pirate.health -= 10
+                    self.pirate_hit.play()
                     bullet.kill()
                     if self.pirate.health <= 0:
                         self.pirate.life -= 1
+                        self.pirate_hit.play()
                         self.pirate.health = self.health
                         if self.pirate.life == 0:
                             self.pirate.kill()
                             game_manager.show_game_over_page(self.screen, self.total_score, self.username)
+                            self.game_over_sound.play()
                             print("Game Over")
                             running = False
             self.life = self.font.render(str(self.pirate.life), 1, (0, 0, 0))
@@ -345,13 +356,16 @@ class Level3:
             for gas in self.poison_gas:
                 if pygame.sprite.collide_mask(gas, self.pirate):
                     self.pirate.health -= 10
+                    self.pirate_hit.play()
                     gas.kill()
                     if self.pirate.health <= 0:
                         self.pirate.life -= 1
+                        self.pirate_hit.play()
                         self.pirate.health = self.health
                         if self.pirate.life == 0:
                             self.pirate.kill()
                             game_manager.show_game_over_page(self.screen, self.total_score, self.username)
+                            self.game_over_sound.play()
                             print("Game Over")
                             running = False
 
@@ -359,6 +373,7 @@ class Level3:
             for vessel in self.vessels.copy():
                 if isinstance(vessel, Coin):
                     if pygame.sprite.collide_mask(vessel, self.pirate):
+                        self.coin_sound.play()
                         print("Coin value", vessel.get_value())
                         if vessel.get_value() == 'blue':
                             print("Speed boost")

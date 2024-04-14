@@ -6,6 +6,8 @@ class Pirate(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         pirate_image = pygame.image.load("images/pirate.png").convert_alpha()
         pirate_image = pygame.transform.scale(pirate_image, (64, 64))
+        self.cannon_sound = pygame.mixer.Sound("sounds/pirate_cannon.mp3")
+        self.cannon_sound.set_volume(0.1)
 
         self.image = pirate_image
         self.rect = self.image.get_rect()
@@ -40,3 +42,4 @@ class Pirate(pygame.sprite.Sprite):
         bullet = Bullet(self.rect.centerx, self.rect.top, self.vessels, self.zombies, self.cannon_ball_enemy, self.damage)
         self.all_sprites.add(bullet)
         self.bullets.add(bullet)
+        self.cannon_sound.play()

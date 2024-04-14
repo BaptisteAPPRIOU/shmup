@@ -4,7 +4,7 @@ from game_manager import GameManager
 
 FPS = 60
 
-class LandingPage:
+class LandingPage: 
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)

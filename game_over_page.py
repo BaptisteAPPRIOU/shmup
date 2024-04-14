@@ -16,7 +16,9 @@ class GameOverPage:
         self.username = username
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 25)
 
-        self.leaderboard_file = "leaderboard.json"        
+        self.leaderboard_file = "leaderboard.json"
+        self.game_over_sound = pygame.mixer.Sound("sounds/game_over.mp3")
+        self.game_over_sound.play()       
 
         self.game_over = pygame.image.load("images/game_over.png").convert_alpha() 
         pygame.mouse.set_visible(True)

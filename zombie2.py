@@ -26,7 +26,10 @@ class Zombie_2(pygame.sprite.Sprite):
         self.hit_points = 350
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
         self.blood = blood
-        self.blood_sound = pygame.mixer.Sound("sounds/blood.mp3")
+        self.blood_sound = pygame.mixer.Sound("sounds/blood.wav")
+        self.blood_sound.set_volume(0.2)
+        self.zombie_sound = pygame.mixer.Sound("sounds/zombie2.mp3")
+        self.zombie_sound.set_volume(0.1)
 
     def update(self, pirate_x, pirate_y, blood):                                 # Update the zombie and attack
         self.rect.y += self.speed
@@ -50,6 +53,8 @@ class Zombie_2(pygame.sprite.Sprite):
             self.shoot_poison_gas(pirate_x, pirate_y)
 
     def shoot_poison_gas(self, pirate_x, pirate_y):                     # Shoot poison gas
+        self.zombie_sound.play()
+
         target_x = pirate_x - self.rect.centerx
         target_y = pirate_y - self.rect.centery
         angle = math.atan2(target_y, target_x)
@@ -69,3 +74,4 @@ class Zombie_2(pygame.sprite.Sprite):
         self.hit_points = 0
         self.kill()
         self.blood_sound.play()
+        self.zombie_sound.stop()

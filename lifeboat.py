@@ -32,6 +32,8 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.check_zombie_spawn = False
         self.explosions = explosions
         self.cannon_ball_enemy = cannon_ball_enemy
+        self.cannon_sound = pygame.mixer.Sound("sounds/enemy_cannon.mp3")
+        self.cannon_sound.set_volume(0.1)
 
     def move(self):   
         self.rect.y += self.speed
@@ -49,6 +51,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
                 self.cannon_ball_enemy.add(bullet)                                                                                    # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
+                self.cannon_sound.play()                                                                                    # Play the cannon sound
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the lifeboat        
         self.hit_points -= damage

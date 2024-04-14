@@ -29,6 +29,9 @@ class Sloop(Enemy, pygame.sprite.Sprite):
         self.explosions = explosions
         self.check_zombie_spawn = False
         self.cannon_ball_enemy = cannon_ball_enemy
+        self.cannon_sound = pygame.mixer.Sound("sounds/enemy_cannon.mp3")
+        self.cannon_sound.set_volume(0.1)
+
 
     def move(self):
         self.rect.y += self.speed
@@ -47,6 +50,7 @@ class Sloop(Enemy, pygame.sprite.Sprite):
                     bullet.rect.bottom = self.rect.bottom + 15
                     self.cannon_ball_enemy.add(bullet)
                 self.last_shot = now
+                self.cannon_sound.play()
 
     def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the sloop
         self.hit_points -= damage

@@ -24,7 +24,10 @@ class Zombie(pygame.sprite.Sprite):
         self.poison_gas = poison_gas
         self.blood = blood
 
-        self.blood_sound = pygame.mixer.Sound("sounds/blood.mp3")
+        self.blood_sound = pygame.mixer.Sound("sounds/blood.wav")
+        self.blood_sound.set_volume(0.2)
+        self.zombie_sound = pygame.mixer.Sound("sounds/zombie2.mp3")
+        self.zombie_sound.set_volume(0.1)
 
     def update(self, player_x, player_y, blood):                                                                                   # Method to update the zombie
         self.move()  
@@ -44,6 +47,8 @@ class Zombie(pygame.sprite.Sprite):
             self.shoot_delay = random.randint(1000, 3000)
             self.last_shot = now
             self.shoot_poison_gas()
+            self.zombie_sound.play()
+
 
     def shoot_poison_gas(self):                                                                                             # Method to make the zombie shoot poison gas
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
@@ -61,3 +66,4 @@ class Zombie(pygame.sprite.Sprite):
         self.hit_points = 0
         self.kill()
         self.blood_sound.play()
+        self.zombie_sound.stop()
