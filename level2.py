@@ -365,13 +365,14 @@ class Level2:
                     if self.health_boost_duration <= 0:
                         self.pirate.health = 110
                         self.health_boost_duration = 0
+            elif self.upgrade == "damage_upgrade":
+                if self.damage_boost_duration > 0:
+                    self.damage_boost_duration -= dt
+                    if self.damage_boost_duration <= 0:
+                        self.pirate.damage = self.original_damage
+                        self.damage_boost_duration = 0
 
-            if self.damage_boost_duration > 0:
-                self.damage_boost_duration -= dt
-                if self.damage_boost_duration <= 0:
-                    self.pirate.damage = self.original_damage
-                    self.damage_boost_duration = 0
-            if self.upgrade == "speed_upgrade":
+            elif self.upgrade == "speed_upgrade":
                 if self.speed_boost_duration > 0:
                     self.speed_boost_duration -= dt
                     if self.speed_boost_duration <= 0:
@@ -409,8 +410,8 @@ class Level2:
                 else:
                     print("Game Over")
                     break
-            print("SPEED", self.speed)
-            # print("DAMAGE", self.pirate.damage)
+            # print("SPEED", self.speed)
+            print("DAMAGE", self.pirate.damage)
             # print("HEALTH", self.pirate.health)
 
 
