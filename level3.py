@@ -38,6 +38,7 @@ class Level3:
         self.upgrade = upgrade
         self.damage = 100
     
+        # Upgrade pirate caracteristics based on the upgrade selected
         if self.upgrade == "health_upgrade":
             if self.health_lvl2 == 150:
                 self.health = self.original_health = 200
@@ -88,8 +89,6 @@ class Level3:
         self.pirate.life = self.life
         self.pirate.health = self.health
         self.pirate.damage = self.damage
-        print("Life", self.life)
-  
         # SOUNDS
         self.coin_sound = pygame.mixer.Sound("sounds/coins.mp3")
         self.background_music = pygame.mixer.Sound("sounds/background_music.wav")
@@ -101,8 +100,6 @@ class Level3:
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
         self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
-        # self.user_label = self.font.render("User: user", 1, (0, 0, 0))
-        # self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.damage_label = self.font2.render("DAMAGE", 1, (0, 0, 0))
         self.health_label = self.font2.render("HEALTH", 1, (0, 0, 0))
         self.speed_label = self.font2.render("SPEED", 1, (0, 0, 0))
@@ -121,7 +118,6 @@ class Level3:
         pygame.mouse.set_visible(False)
 
         self.pirate_group.add(self.pirate)
-
 
         self.ground = pygame.transform.scale(pygame.image.load("images/ground.png").convert_alpha(),(16,16))
         self.health_images = {
@@ -146,8 +142,6 @@ class Level3:
             pygame.transform.scale(pygame.image.load("images/water1.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water2.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),]
-        
-
 
         # Draw water sprites
         self.background_sprites = pygame.sprite.Group()
@@ -172,6 +166,7 @@ class Level3:
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
+        # Draw wall sprites
         wall_width = self.wall.get_width()
         for x in range(0, 640, wall_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
             wall_sprite = pygame.sprite.Sprite()
@@ -179,6 +174,7 @@ class Level3:
             wall_sprite.rect = wall_sprite.image.get_rect(topleft=(x, 900))
             self.background_sprites.add(wall_sprite)
 
+        # Draw ground sprites
         ground_width = self.ground.get_width()
         for x in range(0, 640, ground_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
             for y in range(927, 1000, ground_width):
@@ -187,14 +183,11 @@ class Level3:
                 ground_sprite.rect = ground_sprite.image.get_rect(topleft=(x, y))
                 self.background_sprites.add(ground_sprite)
 
-
-
         self.ui_elements = UI()                                                          # Create UI instance and add it to sprite group
 
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
         self.speed_boost_duration = 0
-
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
@@ -225,8 +218,6 @@ class Level3:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_manager.show_exit_page(self.screen)
-                        # running = False
-                        # pygame.quit()
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
@@ -401,6 +392,7 @@ class Level3:
                                 gas.kill()
                         vessel.kill()
 
+            # Duration of the pirate caracteristics boost
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
                 if self.health_boost_duration <= 0:
@@ -411,14 +403,13 @@ class Level3:
                 if self.damage_boost_duration <= 0:
                     self.pirate.damage = self.original_damage
                     self.damage_boost_duration = 0
-
             if self.speed_boost_duration > 0:
                 self.speed_boost_duration -= dt
                 if self.speed_boost_duration <= 0:
                     self.speed = self.original_speed
                     self.speed_boost_duration = 0
 
-
+            # Blit UI elements on the screen
             self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label2, (10, 130))
@@ -431,7 +422,6 @@ class Level3:
             self.screen.blit(self.bomb_label, (37, 400))
             self.screen.blit(self.level2, (10, 10))
             self.screen.blit(self.new_cursor, pos)
-
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)

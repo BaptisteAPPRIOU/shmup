@@ -17,18 +17,18 @@ class TutorialPage():
         self.screen.blit(self.background, (0, 0))
         self.MANAGER = pygame_gui.UIManager((640, 1000), "theme.json")
 
+        # Create buttons
         continue_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 890), (196, 36)),
             text="",
             manager=self.MANAGER,
             object_id="continue_button")
-        
         back_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 930), (196, 36)),
             text="",
             manager=self.MANAGER,
             object_id="back_button")
-        
+        # Create labels
         label_tutorial_text = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((30, 40), (600, 400)),
             text="Take control of the mighty cannon and defend the village harbor from the ",
@@ -101,10 +101,8 @@ class TutorialPage():
                 if event.type == pygame.USEREVENT:
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == continue_button:
-                            print("Start button clicked")
                             game_manager.show_user_creation_page()
                         if event.ui_element == back_button:
-                            print("Back button clicked")
                             game_manager.show_landing_page()
 
                 self.MANAGER.process_events(event)

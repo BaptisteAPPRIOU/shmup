@@ -6,7 +6,6 @@ class Blood(pygame.sprite.Sprite):
         self.images = []
         for num in range(1, 8):
             img = pygame.image.load(f"images/blood_splatter{num}.png").convert_alpha()
-            # img = pygame.transform.scale(img, (50, 50))
             self.images.append(img)
         self.index = 0
         self.image = self.images[self.index]
@@ -15,6 +14,7 @@ class Blood(pygame.sprite.Sprite):
         self.counter = 0
         self.finished = False
 
+    # Method to update the explosion animation
     def update(self):
         blood_speed = 4
         self.counter += 1

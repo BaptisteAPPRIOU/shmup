@@ -16,6 +16,7 @@ class Wave:
         self.timer = 0
         self.current_wave = 0
 
+    # Method to spawn waves of enemies
     def spawn_waves(self, dt):                                                      # Spawn waves of enemies
         if self.current_wave < len(self.enemy_types):                               # Check if there are more waves to spawn
             enemy_type = self.enemy_types[self.current_wave]                        # Get the enemy type for the current wave       
@@ -42,6 +43,7 @@ class Wave:
                     self.timer = 0
                     self.current_wave += 1
 
+    # Method to check if enemies overlap
     def check_overlap(self, x, y, enemy_type):
         for vessel in self.vessels:
             if isinstance(vessel, enemy_type) and vessel.rect.colliderect(pygame.Rect(x, y, enemy_type.width, enemy_type.height)):

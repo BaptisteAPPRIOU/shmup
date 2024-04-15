@@ -24,6 +24,7 @@ class UpgradePage:
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager(self.parent_screen.get_size(), "theme.json")
         
+        # Create buttons
         quit_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 580), (196, 36)),
             text="",
@@ -50,18 +51,17 @@ class UpgradePage:
             manager=MANAGER,
             object_id="health_upgrade_button")
         
+        # Create labels
         self.label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((135, 170), (350, 200)),
             text="After each victorious battle",
             manager=MANAGER,
             object_id="label")
-        
         self.label_2 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((135, 190), (370, 200)),
             text="choose wisely from a selection of upgrades to",
             manager=MANAGER,
             object_id="label")
-        
         self.label_3 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((125, 210), (390, 200)),
             text="enhance your firepower and fortify your defenses.",
@@ -98,19 +98,16 @@ class UpgradePage:
                             self.speed_upgrade_button.disable()
                             self.health_upgrade_button.enable()
                             self.damage_upgrade_button.enable()
-                            #level2
                         elif event.ui_element == self.damage_upgrade_button:
                             self.disabled_button = "damage_upgrade"
                             self.damage_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
                             self.health_upgrade_button.enable()
-                            #level2
                         elif event.ui_element == self.health_upgrade_button:
                             self.disabled_button = "health_upgrade"
                             self.health_upgrade_button.disable()
                             self.speed_upgrade_button.enable()
                             self.damage_upgrade_button.enable()
-                            #level2
 
                 MANAGER.process_events(event)
             MANAGER.update(clock.tick(FPS))
@@ -119,7 +116,6 @@ class UpgradePage:
             self.parent_screen.blit(self.overlay_surface, (0, 0))  
 
             pygame.display.flip()
-        
 
 if __name__ == "__main__":
     pygame.init()

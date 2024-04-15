@@ -29,7 +29,8 @@ class Zombie(pygame.sprite.Sprite):
         self.zombie_sound = pygame.mixer.Sound("sounds/zombie2.mp3")
         self.zombie_sound.set_volume(0.1)
 
-    def update(self, player_x, player_y, blood):                                                                                   # Method to update the zombie
+    # Method to update the zombie movement, animation, and attack
+    def update(self, player_x, player_y, blood):                                                                                   
         self.move()  
         self.animation_counter += 1
         if self.animation_counter >= self.animation_delay:
@@ -38,9 +39,11 @@ class Zombie(pygame.sprite.Sprite):
             self.image = self.images[self.index]
         self.attack()
 
-    def move(self):                                                                                                         # Method to move the zombie
+    # Method to move the zombie
+    def move(self):                                                                                                         
         self.rect.y += self.speed                                                                                           # Update the y position of the zombie to move downward
 
+    # Method to make the zombie attack
     def attack(self):                                                                                                       # Method to make the zombie attack             
         now = pygame.time.get_ticks()
         if now - self.last_shot > self.shoot_delay:                                                                         
@@ -49,18 +52,20 @@ class Zombie(pygame.sprite.Sprite):
             self.shoot_poison_gas()
             self.zombie_sound.play()
 
-
-    def shoot_poison_gas(self):                                                                                             # Method to make the zombie shoot poison gas
+    # Method to make the zombie shoot poison gas
+    def shoot_poison_gas(self):                                                                                             
         poison_gas = PoisonGas(self.rect.centerx, self.rect.bottom)
         poison_gas.change_y = 5
         self.poison_gas.add(poison_gas)
 
-    def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the zombie
+    # Method to update the hit points of the zombie
+    def update_hit_points(self, damage):                                                                                   
         self.hit_points -= damage
         if self.hit_points <= 0:
             self.die()
 
-    def die(self):                                                                                                      # Method to destroy the zombie
+    # Method to kill the zombie
+    def die(self):                                                                                                      
         blood = Blood(self.rect.centerx, self.rect.centery)
         self.blood.add(blood)
         self.hit_points = 0

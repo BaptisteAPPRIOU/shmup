@@ -14,7 +14,7 @@ class LeaderboardPage:
         self.new_cursor = pygame.image.load("images/mouse_cursor.png").convert_alpha()
         pygame.mouse.set_visible(False)
 
-        
+    # Display the top 5 scores in the leaderboard    
     def display_leaderboard(self):
         try:
             with open("leaderboard.json", "r") as file:

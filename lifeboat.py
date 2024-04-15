@@ -49,7 +49,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
                 bullet = CannonBallEnemy(self.rect.centerx, self.rect.bottom)                                               # Create a new bullet instance
                 bullet.rect.centerx = self.rect.centerx                                                                     # Center the bullet horizontally
                 bullet.rect.bottom = self.rect.bottom + 10                                                                  # Position the bullet at the bottom of the lifeboat
-                self.cannon_ball_enemy.add(bullet)                                                                                    # Add the bullet to the vessels group
+                self.cannon_ball_enemy.add(bullet)                                                                           # Add the bullet to the vessels group
                 self.last_shot = now                                                                                        # Update the time of the last shot
                 self.cannon_sound.play()                                                                                    # Play the cannon sound
 
@@ -64,8 +64,8 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         if bonus_luck == 1:
             bonus = Coin(self.rect.centerx, self.rect.centery)                                                                 # Create a coin at the center of the lifeboat
             self.vessels.add(bonus)                                                                                             # Add the coin to the vessels group
-        self.explosions.add(explosion)  # Add explosion to explosions group
-        self.hit_points = 0  # Set hit points to zero to prevent further damage
+        self.explosions.add(explosion) 
+        self.hit_points = 0  
         self.kill()
 
     def get_spawn_value(self):

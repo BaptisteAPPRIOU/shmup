@@ -15,26 +15,23 @@ class LandingPage:
     def run(self):
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager((640, 1000), "theme.json")
-
+        # Create buttons
         button_play = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 480), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="play_button"
             )
-
         button_leaderboard = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 530), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="leaderboard_button")
-
         button_credits = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 580), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="credits_button")
-        
         button_quit = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 630), (196, 36)),
             text="",
@@ -54,16 +51,12 @@ class LandingPage:
                         running = False
                 elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == button_play:
-                            print("Play button clicked")
                             game_manager.show_tutorial_page()
                         elif event.ui_element == button_leaderboard:
-                            print("Leaderboard button clicked")
                             game_manager.show_leaderboard_page()
                         elif event.ui_element == button_credits:
-                            print("Credits button clicked")
                             game_manager.show_credits_page()
                         elif event.ui_element == button_quit:
-                            print("Quit button clicked")
                             running = False
                             pygame.quit()
 

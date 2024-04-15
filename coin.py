@@ -41,17 +41,20 @@ class Coin(pygame.sprite.Sprite):
         self.speed = 5
         self.mask = pygame.mask.from_surface(self.image)
 
+    # Method to update the coin animation and movement
     def update(self):
         self.move()
         self.animate()
 
+    # Method to move the coin
     def move(self):
         self.rect.y += self.speed
         self.animate()
 
+    # Method to animate the coin
     def animate(self):
         self.counter += 1
-        if self.counter >= 3:  # Adjust the speed of animation by changing this value
+        if self.counter >= 3: 
             self.counter = 0
             self.index += 1
             if self.index >= len(self.images):

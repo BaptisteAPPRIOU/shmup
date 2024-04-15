@@ -44,6 +44,7 @@ class UI():
 
         self.animation_speed = 5
 
+    # Method to show the coins on the screen
     def show(self, screen):
         screen.blit(self.image_red_coin, self.red_coin_rect)
         screen.blit(self.image_green_coin, self.green_coin_rect)
@@ -51,6 +52,7 @@ class UI():
         screen.blit(self.image_black_coin, self.black_coin_rect)
         screen.blit(self.image_yellow_coin, self.yellow_coin_rect)
  
+    # Method to update the coins
     def update(self):
         self.animate_red()
         self.animate_green()
@@ -58,6 +60,7 @@ class UI():
         self.animate_black()
         self.animate_yellow()
 
+    # Method to animate the red coin
     def animate_red(self):
         self.red_coin_counter += 1
         if self.red_coin_counter >= self.animation_speed:
@@ -66,6 +69,7 @@ class UI():
             self.image_red_coin = self.red_coin_images[self.red_coin_index]
             self.rect = self.red_coin_rect
 
+    # Method to animate the green coin
     def animate_green(self):
         self.green_coin_counter += 1
         if self.green_coin_counter >= self.animation_speed:
@@ -74,6 +78,7 @@ class UI():
             self.image_green_coin = self.green_coin_images[self.green_coin_index]
             self.rect = self.green_coin_rect
 
+    # Method to animate the blue coin
     def animate_blue(self):
         self.blue_coin_counter += 1
         if self.blue_coin_counter >= self.animation_speed:
@@ -82,6 +87,7 @@ class UI():
             self.image_blue_coin = self.blue_coin_images[self.blue_coin_index]
             self.rect = self.blue_coin_rect
 
+    # Method to animate the black coin
     def animate_black(self):
         self.black_coin_counter += 1
         if self.black_coin_counter >= self.animation_speed:
@@ -90,6 +96,7 @@ class UI():
             self.image_black_coin = self.black_coin_images[self.black_coin_index]
             self.rect = self.black_coin_rect
 
+    # Method to animate the yellow coin
     def animate_yellow(self):
         self.yellow_coin_counter += 1
         if self.yellow_coin_counter >= self.animation_speed:

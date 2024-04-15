@@ -24,6 +24,7 @@ class Pirate(pygame.sprite.Sprite):
         self.cannon_ball_enemy = cannon_ball_enemy
         self.life = 3
 
+    # Method to update the pirate
     def update(self,i):
         self.speedx = 0
         keystate = pygame.key.get_pressed()
@@ -38,6 +39,7 @@ class Pirate(pygame.sprite.Sprite):
         elif self.rect.left < 100:                                               # Adjusted to start movement from x = 60
             self.rect.left = 100
 
+    # Method to shoot the cannon
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top, self.vessels, self.zombies, self.cannon_ball_enemy, self.damage)
         self.all_sprites.add(bullet)

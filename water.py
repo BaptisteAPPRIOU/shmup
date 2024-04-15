@@ -10,6 +10,7 @@ class Water(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.counter = 0
 
+    # Method to update the water animation
     def update(self):
         water_animation_speed = 6
         self.counter += 1

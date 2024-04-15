@@ -31,7 +31,8 @@ class Zombie_2(pygame.sprite.Sprite):
         self.zombie_sound = pygame.mixer.Sound("sounds/zombie2.mp3")
         self.zombie_sound.set_volume(0.1)
 
-    def update(self, pirate_x, pirate_y, blood):                                 # Update the zombie and attack
+    # Method to update the zombie movement, animation, and attack
+    def update(self, pirate_x, pirate_y, blood):                                 
         self.rect.y += self.speed
         self.animation_counter += 1
         if self.animation_counter >= self.animation_delay:
@@ -40,12 +41,14 @@ class Zombie_2(pygame.sprite.Sprite):
             self.image = self.images[self.index]
         self.attack(pirate_x, pirate_y)
 
-    def update_hit_points(self, damage):                                # Update the hit points of the zombie
+    # Method to move the zombie
+    def update_hit_points(self, damage):                                
         self.hit_points -= damage
         if self.hit_points <= 0:
             self.kill()
 
-    def attack(self, pirate_x, pirate_y):                                 # Attack the player
+    # Method to make the zombie attack
+    def attack(self, pirate_x, pirate_y):                                 
         now = pygame.time.get_ticks()
         if now - self.last_shot > self.shoot_delay:
             self.shoot_delay = random.randint(1000, 3000)               # Randomize the shoot delay

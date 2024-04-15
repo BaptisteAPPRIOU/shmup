@@ -10,6 +10,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.speedy = -10
         
+    # Method to update the bullet
     def update(self):
         self.rect.y += self.speedy
         if self.rect.bottom < 0:

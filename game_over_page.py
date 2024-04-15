@@ -24,6 +24,7 @@ class GameOverPage:
         pygame.mouse.set_visible(True)
         self.coin_image = pygame.transform.scale(pygame.image.load("images/yellow_coin4.png").convert_alpha(), (40,40))
 
+    # Save the player's score to the leaderboard
     def save_to_leaderboard(self):
         try:
             with open(self.leaderboard_file, "r") as file:
@@ -40,24 +41,23 @@ class GameOverPage:
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager(self.parent_screen.get_size(), "theme.json")
         
+        # Create buttons
         quit_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 580), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="quit_button")
-        
+        # Create labels
         self.label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((155, 270), (350, 200)),
             text="Swallowed by the depths of the Dead Tide",
             manager=MANAGER,
             object_id="label")
-        
         self.label_2 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((155, 290), (350, 200)),
             text="your valiant stand ends here.",
             manager=MANAGER,
             object_id="label")
-        
         self.label_3 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((145, 310), (370, 200)),
             text="The village mourns as darkness claims its hero.",

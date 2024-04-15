@@ -32,13 +32,14 @@ class Ship(Enemy, pygame.sprite.Sprite):
         self.cannon_sound = pygame.mixer.Sound("sounds/enemy_cannon.mp3")
         self.cannon_sound.set_volume(0.1)
 
-
+    # Method to move the ship
     def move(self):
         self.rect.y += self.speed
         if self.rect.bottom >= 480:
             self.speed = 0
             self.check_zombie_spawn = True
 
+    # Method to attack the player
     def attack(self, y_offsets=[-20, 15, -20]):
         if self.rect.y >= 0:
             now = pygame.time.get_ticks()
@@ -52,12 +53,14 @@ class Ship(Enemy, pygame.sprite.Sprite):
                 self.last_shot = now
                 self.cannon_sound.play()
 
-    def update_hit_points(self, damage):                                                                                    # Method to update the hit points of the ship
+    # Method to update the hit points of the ship
+    def update_hit_points(self, damage):                                                                                   
         self.hit_points -= damage
         if self.hit_points <= 0:                                                                                            # Check if the hit points are less than or equal to zero
             self.destroy()
 
-    def destroy(self):                                                                                                      # Method to destroy the ship
+    # Method to destroy the ship
+    def destroy(self):                                                                                                      
         explosion = Explosion(self.rect.centerx, self.rect.centery, "ship")
         bonus_luck = random.randint(1, 4)
         if bonus_luck == 1:
@@ -67,5 +70,6 @@ class Ship(Enemy, pygame.sprite.Sprite):
         self.hit_points = 0                                                                                                 # Set hit points to zero to prevent further damage
         self.kill()
 
+    # Method to get the spawn of the zombies on the ship
     def get_spawn_value(self):
         return self.check_zombie_spawn

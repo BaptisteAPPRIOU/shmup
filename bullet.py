@@ -51,5 +51,6 @@ class Bullet(pygame.sprite.Sprite):
                     zombie.kill()
                 self.kill()
 
+    # Method to set the damage of the bullet
     def set_damage(self, damage):
         self.damage = damage

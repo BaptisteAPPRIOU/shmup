@@ -27,6 +27,7 @@ class UpgradePage2:
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager(self.parent_screen.get_size(), "theme.json")
         
+        # Create buttons
         quit_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 580), (196, 36)),
             text="",
@@ -52,19 +53,17 @@ class UpgradePage2:
             text="",
             manager=MANAGER,
             object_id="health_upgrade_button")
-        
+        # Create labels
         self.label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((135, 170), (350, 200)),
             text="After each victorious battle",
             manager=MANAGER,
             object_id="label")
-        
         self.label_2 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((135, 190), (370, 200)),
             text="choose wisely from a selection of upgrades to",
             manager=MANAGER,
             object_id="label")
-        
         self.label_3 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((125, 210), (390, 200)),
             text="enhance your firepower and fortify your defenses.",

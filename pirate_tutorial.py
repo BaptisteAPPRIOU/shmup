@@ -29,9 +29,9 @@ class Pirate(pygame.sprite.Sprite):
             self.speedx = 8
         self.rect.x += self.speedx
 
-        if self.rect.right > self.WIDTH:                    # Adjusted to allow the pirate to move up to x = 540
+        if self.rect.right > self.WIDTH:                            # Adjusted to allow the pirate to move up to x = 540
             self.rect.right = self.WIDTH
-        elif self.rect.left < 60:                           # Adjusted to start movement from x = 60
+        elif self.rect.left < 60:                                   # Adjusted to start movement from x = 60
             self.rect.left = 60
 
     def shoot(self):

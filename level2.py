@@ -30,7 +30,6 @@ class Level2:
 
         self.username = username
         self.total_score = int(total_score)
-        # self.health = health
         self.life = life
         self.upgrade = upgrade
 
@@ -70,8 +69,6 @@ class Level2:
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
         self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
-        # self.user_label = self.font.render("User: user", 1, (0, 0, 0))
-        # self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.damage_label = self.font2.render("DAMAGE", 1, (0, 0, 0))
         self.health_label = self.font2.render("HEALTH", 1, (0, 0, 0))
         self.speed_label = self.font2.render("SPEED", 1, (0, 0, 0))
@@ -90,7 +87,6 @@ class Level2:
         pygame.mouse.set_visible(False)
 
         self.pirate_group.add(self.pirate)
-
 
         self.ground = pygame.transform.scale(pygame.image.load("images/ground.png").convert_alpha(),(16,16))
         self.health_images = {
@@ -116,8 +112,6 @@ class Level2:
             pygame.transform.scale(pygame.image.load("images/water2.png").convert_alpha(), (24, 24)),
             pygame.transform.scale(pygame.image.load("images/water3.png").convert_alpha(), (24, 24)),]
         
-
-
         # Draw water sprites
         self.background_sprites = pygame.sprite.Group()
         for y in range(0, 540, 24):
@@ -135,14 +129,14 @@ class Level2:
 
         # Draw dock sprites
         dock_width = self.dock.get_width()
-        for x in range(0, 640, dock_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
+        for x in range(0, 640, dock_width):                                                                                     # Loop through the screen width in steps of the dock image width and create dock sprites
             dock_sprite = pygame.sprite.Sprite()
             dock_sprite.image = self.dock
             dock_sprite.rect = dock_sprite.image.get_rect(topleft=(x, 480))
             self.background_sprites.add(dock_sprite)
 
         wall_width = self.wall.get_width()
-        for x in range(0, 640, wall_width):                                                                                   # Loop through the screen width in steps of the dock image width and create dock sprites
+        for x in range(0, 640, wall_width):                                                                                     # Loop through the screen width in steps of the dock image width and create dock sprites
             wall_sprite = pygame.sprite.Sprite()
             wall_sprite.image = self.wall
             wall_sprite.rect = wall_sprite.image.get_rect(topleft=(x, 900))
@@ -156,7 +150,7 @@ class Level2:
                 ground_sprite.rect = ground_sprite.image.get_rect(topleft=(x, y))
                 self.background_sprites.add(ground_sprite)
 
-        self.ui_elements = UI()                                                          # Create UI instance and add it to sprite group
+        self.ui_elements = UI()                                                                                                 # Create UI instance and add it to sprite group
 
         self.health_boost_duration = 0
         self.damage_boost_duration = 0
@@ -188,8 +182,6 @@ class Level2:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_manager.show_exit_page(self.screen)
-                        # running = False
-                        # pygame.quit()
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
@@ -202,7 +194,7 @@ class Level2:
 
             self.background_sprites.update()                                                                                        # Update water sprites
             self.background_sprites.draw(self.screen)                                                                               # Draw water sprite
-            self.pirate_group.update(self.speed)                                                                                              # Update pirate sprite
+            self.pirate_group.update(self.speed)                                                                                    # Update pirate sprite
             self.pirate_group.draw(self.screen)                                                                                     # Draw pirate sprites
             self.zombies.update(self.pirate.rect.centerx, self.pirate.rect.centery,self.blood)
             self.zombies.draw(self.screen)
@@ -218,8 +210,6 @@ class Level2:
             self.ui_elements.show(self.screen)
 
             self.timer += dt
-
-
 
             # Spawn zombies if the vessels reach the dock
             for vessel in self.vessels:                                                                                             # Loop through all vessels
@@ -366,6 +356,7 @@ class Level2:
                                 gas.kill()
                         vessel.kill()
 
+            # Duration of the pirate caracteristics boost
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
                 if self.health_boost_duration <= 0:
@@ -376,14 +367,13 @@ class Level2:
                 if self.damage_boost_duration <= 0:
                     self.pirate.damage = self.original_damage
                     self.damage_boost_duration = 0
-
             if self.speed_boost_duration > 0:
                 self.speed_boost_duration -= dt
                 if self.speed_boost_duration <= 0:
                     self.speed = self.original_speed
                     self.speed_boost_duration = 0
 
-
+            # Blit of UI elements to the screen
             self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label2, (10, 130))
@@ -397,11 +387,9 @@ class Level2:
             self.screen.blit(self.level2, (10, 10))
             self.screen.blit(self.new_cursor, pos)
 
-
             pygame.display.flip()
             pygame.time.Clock().tick(60)
             if counter == 1020:
-                print("You win")
                 game_manager.show_upgrade_page2(self.screen, self.username, self.total_score, self.pirate.health, self.pirate.life, self.original_damage, self.original_speed, self.original_health)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
@@ -413,8 +401,6 @@ class Level2:
                 else:
                     print("Game Over")
                     break
-            # print("SPEED", self.speed)
             print("DAMAGE", self.pirate.damage , "HEALTH", self.pirate.health, "SPEED", self.speed)
-            # print("HEALTH", self.pirate.health)
 
         # pygame.quit()

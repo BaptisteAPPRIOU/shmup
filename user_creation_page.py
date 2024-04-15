@@ -23,18 +23,19 @@ class UserCreationPage():
         self.screen.blit(self.background, (0, 0))
         self.MANAGER = pygame_gui.UIManager((640, 1000), "theme.json")
 
+        # Create buttons
         continue_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 890), (196, 36)),
             text="",
             manager=self.MANAGER,
             object_id="continue_button")
-        
         back_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 930), (196, 36)),
             text="",
             manager=self.MANAGER, 
             object_id="back_button")
         
+        # Create labels
         label_tutorial = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 30), (500, 400)),
             text="Join the captain's last stand against the tides of darkness ",
@@ -66,6 +67,7 @@ class UserCreationPage():
             manager=self.MANAGER,
             object_id="label")
         
+        # Create text entry
         entry_name = pygame_gui.elements.UITextEntryLine(
             relative_rect=pygame.Rect((120, 450), (400, 36)),
             manager=self.MANAGER,

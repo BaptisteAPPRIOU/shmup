@@ -21,24 +21,22 @@ class CreditsPage:
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager((640, 1000), "theme.json")
         
+        # Create buttons
         button_back = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 930), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="back_button")
-        
         creators_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 20), (500, 350)),
             text="Creators of Dead Tide:",
             manager=MANAGER,
             object_id="label")
-        
         baptiste_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 60), (500, 400)),
             text="Baptiste APPRIOU - Captain of creativity and code",
             manager=MANAGER,
             object_id="label")
-        
         baptiste_text_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 80), (500, 400)),
             text="With your resilience, we sailed through stormy code",
@@ -66,7 +64,6 @@ class CreditsPage:
             text="and gave it depth and beauty.",
             manager=MANAGER,
             object_id="label")
-        
         ali_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 220), (500, 400)),
             text="Abakar ISSA ALI - Navigator of narrative and nuance",
@@ -82,7 +79,6 @@ class CreditsPage:
             text="making it a world worth saving.",
             manager=MANAGER,
             object_id="label")
-        
         fellow_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((70, 550), (500, 400)),
             text="Fellow sailors:",
@@ -115,7 +111,6 @@ class CreditsPage:
             object_id="label")
         
         game_manager = GameManager()  
-
         
         running = True
         while running:

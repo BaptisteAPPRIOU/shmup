@@ -49,13 +49,12 @@ class Level1:
         # FONTS AND LABELS
         self.font = pygame.font.Font("Fonts/Minecraft.ttf", 20)
         self.font2 = pygame.font.Font("Fonts/Minecraft.ttf", 15)
-        # self.user_label = self.font.render("User: user", 1, (0, 0, 0))
-        # self.score_label = self.font.render("SCORE : ", 1, (0, 0, 0))
         self.damage_label = self.font2.render("DAMAGE", 1, (0, 0, 0))
         self.health_label = self.font2.render("HEALTH", 1, (0, 0, 0))
         self.speed_label = self.font2.render("SPEED", 1, (0, 0, 0))
         self.bomb_label = self.font2.render("BOMB", 1, (0, 0, 0))
         self.score_label2 = self.font.render(str(self.total_score), 1, (0, 0, 0))
+        self.level2 = self.font.render("LEVEL 1", 1, (0, 0, 0))
         # IMAGES
         self.beach = pygame.image.load("images/beach.png").convert_alpha()
         self.dock = pygame.image.load("images/dock.png").convert_alpha()
@@ -141,9 +140,6 @@ class Level1:
         self.original_damage = self.pirate.damage
         self.original_speed = 1
         self.speed = 1
-    
-    def return_data(self):
-        return (self.total_score, self.username, self.health, self.life)
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
@@ -169,8 +165,6 @@ class Level1:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_manager.show_exit_page(self.screen)
-                        # running = False
-                        # pygame.quit()
                     if event.key == pygame.K_SPACE:
                         self.pirate.shoot()
 
@@ -233,7 +227,6 @@ class Level1:
                     if self.pirate.life == 0:
                         self.game_over_sound.play()
                         game_manager.show_game_over_page(self.screen, self.total_score, self.username)
-
 
             # Update score for destroying vessels
             for explosion in self.explosions.copy():
@@ -345,6 +338,7 @@ class Level1:
                                 gas.kill()
                         vessel.kill()
 
+            # Duration of the pirate caracteristics boost
             if self.health_boost_duration > 0:
                 self.health_boost_duration -= dt
                 if self.health_boost_duration <= 0:
@@ -363,6 +357,7 @@ class Level1:
                     self.speed = 1
                     self.speed_boost_duration = 0
 
+            # Blits of UI elements on the screen
             self.user_label = self.font.render(str(self.username), 1, (0, 0, 0))
             self.screen.blit(self.user_label, (10, 50))
             self.screen.blit(self.score_label2, (10, 130))
@@ -373,14 +368,13 @@ class Level1:
             self.screen.blit(self.health_label, (37, 340))
             self.screen.blit(self.speed_label, (37, 370))
             self.screen.blit(self.bomb_label, (37, 400))
+            self.screen.blit(self.level2, (10, 10))
             self.screen.blit(self.new_cursor, pos)
-
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
             if counter == 860:
                 print("You win")
-                self.return_data()
                 game_manager.show_upgrade_page(self.screen, self.username, self.total_score, self.pirate.health, self.pirate.life)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned
@@ -396,14 +390,3 @@ class Level1:
 
         # pygame.quit()
 
-# if __name__ == "__main__":
-#     Level1().run()
-
-# if __name__ == "__main__":
-#     # Add code to retrieve the username from the user creation page
-#     user_creation_page = UserCreationPage()
-#     user_creation_page.run()
-
-#     # Pass the username to the Level1 instance
-#     level1 = Level1(user_creation_page.get_username())
-#     level1.run()

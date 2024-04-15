@@ -18,6 +18,7 @@ class Explosion(pygame.sprite.Sprite):
         self.explosion_sound = pygame.mixer.Sound("sounds/explosion.mp3")
         self.explosion_sound.set_volume(0.1)
 
+    # Method to update the explosion animation
     def update(self):
         self.explosion_sound.play()
         explosion_speed = 4
@@ -32,5 +33,6 @@ class Explosion(pygame.sprite.Sprite):
             self.finished = True
             self.kill()
 
+    # Method to get the type of explosion
     def get_type(self):
         return self.type

@@ -37,24 +37,23 @@ class GameWinPage:
         clock = pygame.time.Clock()
         MANAGER = pygame_gui.UIManager(self.parent_screen.get_size(), "theme.json")
         
+        # Create buttons
         quit_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((222, 580), (196, 36)),
             text="",
             manager=MANAGER,
             object_id="quit_button")
-        
+        # Create labels
         self.label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((170, 120), (350, 200)),
             text="Ahoy, ye valiant buccaneers! ",
             manager=MANAGER,
             object_id="label")
-        
         self.label_2 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((115, 140), (450, 200)),
             text="With cannons blazing and swords flashing, ye have ",
             manager=MANAGER,
             object_id="label")
-        
         self.label_3 = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((125, 160), (450, 200)),
             text="emerged victorious from the tempestuous seas,",
