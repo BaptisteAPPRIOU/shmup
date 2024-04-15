@@ -39,43 +39,43 @@ class Level3:
         self.damage = 100
     
         if self.upgrade == "health_upgrade":
-            if self.health_lvl2 == 110:
-                self.health = self.original_health = 120
+            if self.health_lvl2 == 150:
+                self.health = self.original_health = 200
                 self.speed = self.original_speed = 1
                 self.damage = self.original_damage = 100
-            elif self.damage_lvl2 == 110:
-                self.damage = self.original_damage = 110
+            elif self.damage_lvl2 == 150:
+                self.damage = self.original_damage = 150
                 self.speed = self.original_speed = 1
-                self.health = self.original_health = 110
-            elif self.speed_lvl2 == 1.8:
-                self.speed = self.original_speed = 1.8
+                self.health = self.original_health = 150
+            elif self.speed_lvl2 == 1.5:
+                self.speed = self.original_speed = 1.5
                 self.damage = self.original_damage = 100
                 self.health = self.original_health = 110
         elif self.upgrade == "damage_upgrade":
-            if self.damage_lvl2 == 110:
-                self.damage = self.original_damage = 120
+            if self.damage_lvl2 == 150:
+                self.damage = self.original_damage = 200
                 self.speed = self.original_speed = 1
                 self.health = self.original_health = 100
-            elif self.health_lvl2 == 110:
-                self.health = self.original_health = 110
+            elif self.health_lvl2 == 150:
+                self.health = self.original_health = 150
                 self.speed = self.original_speed = 1
-                self.damage = self.original_damage = 110
-            elif self.speed_lvl2 == 1.8:
-                self.speed = self.original_speed = 1.8
-                self.damage = self.original_damage = 110
+                self.damage = self.original_damage = 150
+            elif self.speed_lvl2 == 1.5:
+                self.speed = self.original_speed = 1.5
+                self.damage = self.original_damage = 150
                 self.health = self.original_health = 100
         elif self.upgrade == "speed_upgrade":
-            if self.speed_lvl2 == 1.8:
+            if self.speed_lvl2 == 1.5:
                 self.speed = self.original_speed = 2
                 self.damage = self.original_damage = 100
                 self.health = self.original_health = 100
-            elif self.health_lvl2 == 110:
-                self.health = self.original_health = 110
-                self.speed = self.original_speed = 1.8
+            elif self.health_lvl2 == 150:
+                self.health = self.original_health = 150
+                self.speed = self.original_speed = 1.5
                 self.damage = self.original_damage = 100
-            elif self.damage_lvl2 == 110:
-                self.damage = self.original_damage = 110
-                self.speed = self.original_speed = 1.8
+            elif self.damage_lvl2 == 150:
+                self.damage = self.original_damage = 150
+                self.speed = self.original_speed = 1.5
                 self.health = self.original_health = 100
 
         self.screen = pygame.display.set_mode((640, 1000), pygame.NOFRAME)
@@ -198,10 +198,16 @@ class Level3:
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [5], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [1], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [15], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [8], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [4], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [12], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [7], 5, self.explosions),
         ]
 
         clock = pygame.time.Clock()
@@ -429,7 +435,7 @@ class Level3:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-            if counter == 400:
+            if counter == 1540:
                 game_manager.show_game_win_page(self.screen, self.total_score, self.username)
 
             if all(count == 0 for count in waves[current_wave].counts):         # Check if all enemies in the current wave have been spawned

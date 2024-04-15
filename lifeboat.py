@@ -27,7 +27,7 @@ class Lifeboat(Enemy, pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)                                                                    # Create a mask from the image to use for collision detection
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = 1000
-        self.hit_points = 200
+        self.hit_points = 150
         self.value = 100
         self.check_zombie_spawn = False
         self.explosions = explosions

@@ -147,10 +147,11 @@ class Level1:
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [1], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [1], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [1], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [1], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [5], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [20], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [3], 5, self.explosions),
         ]
 
         clock = pygame.time.Clock()
@@ -377,7 +378,7 @@ class Level1:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-            if counter == 80:
+            if counter == 860:
                 print("You win")
                 self.return_data()
                 game_manager.show_upgrade_page(self.screen, self.username, self.total_score, self.pirate.health, self.pirate.life)

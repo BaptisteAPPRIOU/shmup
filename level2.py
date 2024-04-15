@@ -35,15 +35,15 @@ class Level2:
         self.upgrade = upgrade
 
         if self.upgrade == "health_upgrade":
-            self.health = self.original_health = 110
+            self.health = self.original_health = 150
             self.speed = self.original_speed = 1
             self.damage = self.original_damage = 100
         elif self.upgrade == "damage_upgrade":
-            self.damage = self.original_damage = 110
+            self.damage = self.original_damage = 150
             self.speed = self.original_speed = 1
             self.health = self.original_health = 100
         elif self.upgrade == "speed_upgrade":
-            self.speed = self.original_speed = 1.8
+            self.speed = self.original_speed = 1.5
             self.damage = self.original_damage = 100
             self.health = self.original_health = 100
 
@@ -164,10 +164,13 @@ class Level2:
 
     def run(self):                                                                                                              # Main game loop
         waves = [                                                                                                               # List of waves
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [5], 5, self.explosions),
             Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [2], 5, self.explosions),
-            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [2], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [10], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [4], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Lifeboat], [20], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Sloop], [6], 5, self.explosions),
+            Wave(self.screen, self.vessels, self.cannon_ball_enemies, [Ship], [4], 5, self.explosions),
         ]
 
         clock = pygame.time.Clock()
@@ -397,7 +400,7 @@ class Level2:
 
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-            if counter == 160:
+            if counter == 1020:
                 print("You win")
                 game_manager.show_upgrade_page2(self.screen, self.username, self.total_score, self.pirate.health, self.pirate.life, self.original_damage, self.original_speed, self.original_health)
 
