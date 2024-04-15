@@ -1,3 +1,6 @@
+![app_logo](https://github.com/BaptisteAPPRIOU/shmup/assets/163514769/c7a1a2d9-0727-4762-9c43-46ef871795d4)
+
+
 # shmup
 Project Shoot'em up
 Requirements for the app: Installation of - pygame 
