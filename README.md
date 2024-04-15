@@ -1,5 +1,6 @@
-![app_logo_white](https://github.com/BaptisteAPPRIOU/shmup/assets/163514769/609bc8ed-7592-4db9-a8b0-c1b0358569ae)
-
+<p align="center">
+  <img src="https://github.com/BaptisteAPPRIOU/shmup/tree/main/Images/app_logo_white.png" alt="Dead Tide logo image"/>
+</p>
 
 
 # shmup
@@ -37,5 +38,6 @@ Requirements for the app: Installation of - pygame
 
 - Developed by Baptiste APPRIOU, Oussema Fatnassi and Ali Abakar Issa
 - Graphics by Oussema Fatnassi
+
 
 
