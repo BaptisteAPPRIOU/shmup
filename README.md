@@ -1,4 +1,5 @@
-![app_logo](https://github.com/BaptisteAPPRIOU/shmup/assets/163514769/c7a1a2d9-0727-4762-9c43-46ef871795d4)
+![app_logo_white](https://github.com/BaptisteAPPRIOU/shmup/assets/163514769/609bc8ed-7592-4db9-a8b0-c1b0358569ae)
+
 
 
 # shmup
