@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/BaptisteAPPRIOU/shmup/tree/main/Images/app_logo_white.png" alt="Dead Tide logo image"/>
+  <img src="https://github.com/BaptisteAPPRIOU/shmup/blob/main/Images/app_logo_white.png" alt="Dead Tide logo image"/>
 </p>
 
 
